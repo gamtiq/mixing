@@ -1,0 +1,30 @@
+{
+  "name": "mixing",
+  "version": "0.0.1",
+  "description": "Functions to mix objects",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gamtiq/mixing.git"
+  },
+  "keywords": [
+    "mix",
+    "merge",
+    "mixin",
+    "object"
+  ],
+  "homepage": "https://github.com/gamtiq/mixing",
+  "author": "Denis Sikuler",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/gamtiq/mixing/issues"
+  }
+}

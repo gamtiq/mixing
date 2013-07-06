@@ -1,0 +1,21 @@
+{
+    "name": "mixing",
+    "repo": "gamtiq/mixing",
+    "description": "Functions to mix objects",
+    "version": "0.0.1",
+    "keywords": [
+        "mix",
+        "merge",
+        "mixin",
+        "object"
+    ],
+    "dependencies": {
+        "gamtiq/isarray-shim": "*"
+    },
+    "development": {},
+    "license": "MIT",
+    "main": "index.js",
+    "scripts": [
+        "index.js"
+    ]
+}
