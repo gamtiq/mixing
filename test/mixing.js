@@ -181,6 +181,9 @@ describe("mixing", function() {
             it("should change field values in the destination object", function() {
                 var dest = {a: 1, b: 2, c: 3};
                 
+                expect( mixing({a: 1, b: 2, z: 100}, {a: "a", b: emptyObj, c: 3, d: 4}, settings) )
+                    .eql({a: "a", b: emptyObj, c: 3, d: 4, z: 100});
+                
                 expect( mixing(dest, {a: str, b: num, d: obj, m1: emptyFunc}, settings) )
                     .eql({a: str, b: num, c: 3, d: obj, m1: emptyFunc});
                 
@@ -350,6 +353,29 @@ describe("mixing", function() {
                     .have.property("met2", method2);
                 expect(dest)
                     .have.property("d", num);
+            });
+            
+            it("should copy fields under other names except those that are specified in the exceptions", function() {
+                var dest = {alpha: "a", beta: "b", gamma: "g"};
+                
+                expect( mixing(dest, {a: 1, b: 2, c: 3, d: 4, e: 5}, 
+                                {
+                                    otherName: {a: "alpha", b: "beta", c: "gamma", d: "delta"}, 
+                                    except: ["a", "c", "e"], 
+                                    overwrite: true
+                                    }) )
+                    .eql({alpha: "a", beta: 2, gamma: "g", delta: 4});
+            
+                expect(dest)
+                    .have.property("alpha", "a");
+                expect(dest)
+                    .have.property("beta", 2);
+                expect(dest)
+                    .have.property("gamma", "g");
+                expect(dest)
+                    .have.property("delta", 4);
+                expect(dest)
+                    .not.have.property("e");
             });
         });
     });
