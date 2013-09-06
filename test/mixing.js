@@ -22,20 +22,20 @@ describe("mixing", function() {
         obj = {a: str, b: num, c: emptyArray, d: nullVal, e: sEmpty, f: undef, g: list},
         couple = [list, obj],
         source = {a: list, b: obj, c: couple, d: {e: str, f: obj, g: couple, m1: method1}, met2: method2},
-        expect, mixing;
+        expect, mixin;
     
     couple.a = sEmpty;
     couple.g = emptyObj;
     couple.met = method2;
     
     // node
-    if (typeof chai === "undefined") {
-        mixing = require("../index");
+    if (typeof mixing === "undefined") {
+        mixin = require("../index");
         expect = require("./lib/chai").expect;
     }
     // browser
     else {
-        mixing = require("mixing");
+        mixin = mixing;
         expect = chai.expect;
     }
     
@@ -43,7 +43,7 @@ describe("mixing", function() {
         
         describe("mixing({}, {})", function() {
             it("should return empty object", function() {
-                expect( mixing({}, {}) )
+                expect( mixin({}, {}) )
                     .eql({});
             });
         });
@@ -51,17 +51,17 @@ describe("mixing", function() {
         describe("mixing(destination, {} | [] | [{}] | [{}, {}] | destination)", function() {
             it("should return unmodified destination object", function() {
                 var dest = {a: 1, b: 2, c: {d: 4, e: {f: 5, g: "text"}}};
-                expect( mixing(dest, {}) )
+                expect( mixin(dest, {}) )
                     .eql(dest);
-                expect( mixing(dest, []) )
+                expect( mixin(dest, []) )
                     .eql(dest);
-                expect( mixing(dest, [{}]) )
+                expect( mixin(dest, [{}]) )
                     .eql(dest);
-                expect( mixing(dest, [{}, {}]) )
+                expect( mixin(dest, [{}, {}]) )
                     .eql(dest);
-                expect( mixing(dest, dest) )
+                expect( mixin(dest, dest) )
                     .eql(dest);
-                expect( mixing(source, source) )
+                expect( mixin(source, source) )
                     .eql(source);
             });
         });
@@ -70,12 +70,12 @@ describe("mixing", function() {
             it("should copy all fields from the source object into the destination object", function() {
                 var dest = {a: str, b: num, f1: str, f2: num};
                 
-                expect( mixing({}, source) )
+                expect( mixin({}, source) )
                     .eql(source);
-                expect( mixing({a: 1, b: 2}, {c: 3, d: 4}) )
+                expect( mixin({a: 1, b: 2}, {c: 3, d: 4}) )
                     .eql({a: 1, b: 2, c: 3, d: 4});
                 
-                expect( mixing(dest, {c: list, d: obj, f3: method1, f4: source}) )
+                expect( mixin(dest, {c: list, d: obj, f3: method1, f4: source}) )
                     .eql({a: str, b: num, f1: str, f2: num, c: list, d: obj, f3: method1, f4: source});
                 
                 expect(dest)
@@ -91,10 +91,10 @@ describe("mixing", function() {
             it("should copy all fields from the source object that are absent in the destination object", function() {
                 var dest = {a: list, "very long field name": couple, empty: sEmpty};
                 
-                expect( mixing({a: 1, b: 2}, {a: "a", b: emptyObj, c: 3, d: 4}) )
+                expect( mixin({a: 1, b: 2}, {a: "a", b: emptyObj, c: 3, d: 4}) )
                     .eql({a: 1, b: 2, c: 3, d: 4});
                 
-                expect( mixing(dest, {m1: method1, empty: nullVal, a: source}) )
+                expect( mixin(dest, {m1: method1, empty: nullVal, a: source}) )
                     .eql({a: list, "very long field name": couple, empty: sEmpty, m1: method1});
                 
                 expect(dest)
@@ -103,20 +103,20 @@ describe("mixing", function() {
             
             it("should copy nothing", function() {
                 var dest = {a: 1, b: 2};
-                expect( mixing(obj, source) )
+                expect( mixin(obj, source) )
                     .eql(obj);
-                expect( mixing({a: 1, b: 2}, {b: new Date()}) )
+                expect( mixin({a: 1, b: 2}, {b: new Date()}) )
                     .eql(dest);
             });
         });
         
         describe("mixing(destination, [source1, source2, ...])", function() {
             it("should copy all fields from source objects into the destination object", function() {
-                expect( mixing({}, [source, source, source]) )
+                expect( mixin({}, [source, source, source]) )
                     .eql(source);
-                expect( mixing({a: 1, b: 2}, [{c: 3}, {d: 4}, {e: couple, f: source, g: list}]) )
+                expect( mixin({a: 1, b: 2}, [{c: 3}, {d: 4}, {e: couple, f: source, g: list}]) )
                     .eql({a: 1, b: 2, c: 3, d: 4, e: couple, f: source, g: list});
-                expect( mixing({"a b c": method1, "d e f": method2}, [{"g h i": list}]) )
+                expect( mixin({"a b c": method1, "d e f": method2}, [{"g h i": list}]) )
                     .eql({"a b c": method1, "d e f": method2, "g h i": list});
             });
         });
@@ -126,14 +126,14 @@ describe("mixing", function() {
             it("should copy all non-functional fields from the source object into the destination object", function() {
                 var dest = {m1: method1, m2: method2, m3: "method3"};
                 
-                expect( mixing({}, source, settings) )
+                expect( mixin({}, source, settings) )
                     .eql({a: source.a, b: source.b, c: source.c, d: source.d});
-                expect( mixing({}, dest, settings) )
+                expect( mixin({}, dest, settings) )
                     .eql({m3: "method3"});
-                expect( mixing(dest, {m1: method1, m2: method2, m3: emptyFunc, m4: function() {return this;}}, settings) )
+                expect( mixin(dest, {m1: method1, m2: method2, m3: emptyFunc, m4: function() {return this;}}, settings) )
                     .eql(dest);
                 
-                expect( mixing(dest, {gamma: obj, a: method1, b: method2, delta: couple, c: emptyFunc}, settings) )
+                expect( mixin(dest, {gamma: obj, a: method1, b: method2, delta: couple, c: emptyFunc}, settings) )
                     .eql({m1: method1, m2: method2, m3: "method3", gamma: obj, delta: couple});
                 
                 expect(dest)
@@ -157,7 +157,7 @@ describe("mixing", function() {
                 var dest = new Klass(),
                     proto = Klass.prototype;
                 
-                expect( mixing(dest, {a: str, b: num, m1: source, m2: method2, c: list, delta: couple, m3: emptyFunc}, settings) )
+                expect( mixin(dest, {a: str, b: num, m1: source, m2: method2, c: list, delta: couple, m3: emptyFunc}, settings) )
                     .eql({a: couple, b: source, m1: method1, m2: method2, c: list, delta: couple, m3: emptyFunc});
                 
                 expect(dest)
@@ -181,10 +181,10 @@ describe("mixing", function() {
             it("should change field values in the destination object", function() {
                 var dest = {a: 1, b: 2, c: 3};
                 
-                expect( mixing({a: 1, b: 2, z: 100}, {a: "a", b: emptyObj, c: 3, d: 4}, settings) )
+                expect( mixin({a: 1, b: 2, z: 100}, {a: "a", b: emptyObj, c: 3, d: 4}, settings) )
                     .eql({a: "a", b: emptyObj, c: 3, d: 4, z: 100});
                 
-                expect( mixing(dest, {a: str, b: num, d: obj, m1: emptyFunc}, settings) )
+                expect( mixin(dest, {a: str, b: num, d: obj, m1: emptyFunc}, settings) )
                     .eql({a: str, b: num, c: 3, d: obj, m1: emptyFunc});
                 
                 expect(dest)
@@ -205,7 +205,7 @@ describe("mixing", function() {
             it("should copy fields recursively", function() {
                 var dest = {a: 1, b: {c: 3, o: {f1: str, f2: num, f3: obj}}, x: method1, y: {y3: str}};
                 
-                expect( mixing(dest, 
+                expect( mixin(dest, 
                                 {a: list, b: {c: undef, d: 4, o: {f1: emptyArray, f3: nullVal, f7: emptyObj}}, 
                                     e: obj, y: {y1: num, y2: couple}}, 
                                 settings) )
@@ -235,10 +235,10 @@ describe("mixing", function() {
             it("should copy fields from array object", function() {
                 var dest = {a: obj, met: undef, c: 3};
                 
-                expect( mixing({}, couple, settings) )
+                expect( mixin({}, couple, settings) )
                     .eql({"0": list, "1": obj, a: couple.a, g: couple.g, met: couple.met});
                 
-                expect( mixing(dest, couple, settings) )
+                expect( mixin(dest, couple, settings) )
                     .eql({"0": list, "1": obj, a: obj, met: undef, c: 3, g: couple.g});
             
                 expect(dest)
@@ -263,7 +263,7 @@ describe("mixing", function() {
                 it("should copy all fields from the source object except one that is specified", function() {
                     var dest = {a: 1, z: 100};
                     
-                    expect( mixing(dest, {list: list, "long name": "long name", couple: couple, obj: obj}, settings) )
+                    expect( mixin(dest, {list: list, "long name": "long name", couple: couple, obj: obj}, settings) )
                         .eql({a: 1, z: 100, list: list, couple: couple, obj: obj});
                 
                     expect(dest)
@@ -282,10 +282,10 @@ describe("mixing", function() {
                 it("should copy all fields from the source object except those that are mentioned in the array", function() {
                     var dest = {b: null, beta: 3, d: couple};
                     
-                    expect( mixing({}, {a: 4, b: 3, c: 2, d: 1}, settings) )
+                    expect( mixin({}, {a: 4, b: 3, c: 2, d: 1}, settings) )
                         .eql({b: 3, d: 1});
                     
-                    expect( mixing(dest, {m1: str, a: obj, m2: method1, f: list}, settings) )
+                    expect( mixin(dest, {m1: str, a: obj, m2: method1, f: list}, settings) )
                         .eql({b: null, beta: 3, d: couple, m1: str, m2: method1});
                 
                     expect(dest)
@@ -306,10 +306,10 @@ describe("mixing", function() {
                 it("should copy all fields from the source object except those that are in the exception object", function() {
                     var dest = {a: null, beta: 3, dream: "win"};
                     
-                    expect( mixing({}, {alpha: 1, beta: 2, gamma: 3, delta: 4}, settings) )
+                    expect( mixin({}, {alpha: 1, beta: 2, gamma: 3, delta: 4}, settings) )
                         .eql({gamma: 3, delta: 4});
                     
-                    expect( mixing(dest, {star: "super", a: list, beta: 100, bet: couple, alpha: true}, settings) )
+                    expect( mixin(dest, {star: "super", a: list, beta: 100, bet: couple, alpha: true}, settings) )
                         .eql({a: null, beta: 3, dream: "win", star: "super", bet: couple});
                 
                     expect(dest)
@@ -331,10 +331,10 @@ describe("mixing", function() {
             it("should copy fields under other names", function() {
                 var dest = {a: obj, b: 2, c: emptyArray};
                 
-                expect( mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}}) )
+                expect( mixin({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}}) )
                     .eql({prop: 1, method: "no-func"});
                 
-                expect( mixing(dest, {a: null, b: list, c: couple, met1: emptyFunc, met2: method2, d: num}, settings) )
+                expect( mixin(dest, {a: null, b: list, c: couple, met1: emptyFunc, met2: method2, d: num}, settings) )
                     .eql({a: obj, b: 2, c: emptyArray, alpha: null, beta: list, smeta: emptyFunc, met2: method2, d: num});
             
                 expect(dest)
@@ -358,7 +358,7 @@ describe("mixing", function() {
             it("should copy fields under other names except those that are specified in the exceptions", function() {
                 var dest = {alpha: "a", beta: "b", gamma: "g"};
                 
-                expect( mixing(dest, {a: 1, b: 2, c: 3, d: 4, e: 5}, 
+                expect( mixin(dest, {a: 1, b: 2, c: 3, d: 4, e: 5}, 
                                 {
                                     otherName: {a: "alpha", b: "beta", c: "gamma", d: "delta"}, 
                                     except: ["a", "c", "e"], 
@@ -387,7 +387,7 @@ describe("mixing", function() {
             var dest = {
                 a: 1,
                 b: 2,
-                mix: mixing.mix
+                mix: mixin.mix
             };
             
             expect( dest.mix({a: str, c: couple, obj: obj}, {overwrite: true}) )
@@ -402,7 +402,7 @@ describe("mixing", function() {
             expect(dest)
                 .have.property("obj", obj);
             expect(dest)
-                .have.property("mix", mixing.mix);
+                .have.property("mix", mixin.mix);
         });
     });
 });

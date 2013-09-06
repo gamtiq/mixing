@@ -1,6 +1,6 @@
 # mixing
 
-Functions to mix objects
+Functions to mix objects.
 
 ## Installation
 
@@ -18,21 +18,50 @@ Then:
 
     component install gamtiq/mixing
 
+### AMD, &lt;script&gt;
+
+Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
+
 ## Usage
 
 ### Node, Component
 
 ```js
+var mixin = require("mixing");
+...
+```
 
-    var mixing = require("mixing");
+### AMD
+
+```js
+define(["path/to/dist/mixing.js"], function(mixin) {
     ...
-    var copy = mixing({}, source);   // Make a shallow copy of source
-    var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
-    mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
-    mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
+});
+```
+
+### &lt;script&gt;
+
+```html
+<script type="text/javascript" src="path/to/dist/mixing.js"></script>
+<script type="text/javascript">
+    // mixing is available via mixing field of window object
+    var mixin = mixing;
+    ...
+</script>
+```
+
+### Example
+
+```js
+var copy = mixin({}, source);   // Make a shallow copy of source
+var result = mixin({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
+mixin({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
+mixin({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 ```
 
 ## API
+
+See `doc` directory for details.
 
 ### mixing(destination: Object, source: Array | Object, [settings: Object]);
 
@@ -56,8 +85,7 @@ As a result `this` object may be modified.
 This function can be transferred to an object to use as a method.
 For example:
 ```js
-
-    SomeClass.prototype.mix = mixing.mix;
+SomeClass.prototype.mix = mixing.mix;
 ```
 
 ## Licence

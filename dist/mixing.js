@@ -1,11 +1,32 @@
+
+(function(root, factory) {
+    if(typeof exports === 'object') {
+        module.exports = factory(require, exports, module);
+    }
+    else if(typeof define === 'function' && define.amd) {
+        define(['require', 'exports', 'module'], factory);
+    }
+    else {
+        var req = function(id) {return root[id];},
+            exp = root,
+            mod = {exports: exp};
+        root.mixing = factory(req, exp, mod);
+    }
+}(this, function(require, exports, module) {
 /**
  * @module mixing 
  */
 
-// Load shim only in component+browser environment. Array.isArray is defined in node
+// Based on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+
 if (! Array.isArray) {
-    require("isarray-shim");
+    Array.isArray = function(obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+    };
 }
+
+
+
 
 /**
  * Copy/add all fields and functions from source objects into the target object.
@@ -199,3 +220,6 @@ mixing.mix = function(source, settings) {
 };
 
 module.exports = mixing;
+
+    return mixing;
+}));
