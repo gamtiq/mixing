@@ -1,0 +1,26 @@
+{
+  "name": "mixing",
+  "main": ["dist/mixing.js", "dist/mixing.min.js"],
+  "version": "0.0.2",
+  "homepage": "https://github.com/gamtiq/mixing",
+  "authors": [
+    "Denis Sikuler"
+  ],
+  "description": "Functions to mix objects",
+  "keywords": [
+    "mixin",
+    "mix",
+    "merge",
+    "object"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "build",
+    "components",
+    "test",
+    "tests"
+  ]
+}

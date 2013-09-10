@@ -10,15 +10,17 @@ Functions to mix objects.
 
 ### Component
 
-Install component:
-
-    npm install -g component
-
-Then:
-
     component install gamtiq/mixing
 
-### AMD, &lt;script&gt;
+### Jam
+
+    jam install mixing
+
+### Bower
+
+    bower install mixing
+
+### AMD, script tag
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
@@ -31,6 +33,14 @@ var mixin = require("mixing");
 ...
 ```
 
+### Jam
+
+```js
+require(["mixing"], function(mixin) {
+    ...
+});
+```
+
 ### AMD
 
 ```js
@@ -39,9 +49,10 @@ define(["path/to/dist/mixing.js"], function(mixin) {
 });
 ```
 
-### &lt;script&gt;
+### Bower, script tag
 
 ```html
+<!-- Use bower_components/mixing/dist/mixing.js if the library was installed via Bower -->
 <script type="text/javascript" src="path/to/dist/mixing.js"></script>
 <script type="text/javascript">
     // mixing is available via mixing field of window object
