@@ -2,21 +2,23 @@
 
 Functions to mix objects.
 
+[![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
+
 ## Installation
 
 ### Node
 
     npm install mixing
 
-### Component
+### [Component](https://github.com/component/component)
 
     component install gamtiq/mixing
 
-### Jam
+### [Jam](http://jamjs.org)
 
     jam install mixing
 
-### Bower
+### [Bower](http://bower.io)
 
     bower install mixing
 
@@ -97,6 +99,10 @@ This function can be transferred to an object to use as a method.
 For example:
 ```js
 SomeClass.prototype.mix = mixing.mix;
+...
+var obj = new SomeClass();
+...
+obj.mix([obj1, obj2]);
 ```
 
 ## Licence
