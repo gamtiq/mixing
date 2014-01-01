@@ -3,6 +3,7 @@
 Functions to mix objects.
 
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
+[![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
 
 ## Installation
 
