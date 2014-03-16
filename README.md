@@ -11,6 +11,10 @@ Functions to mix objects.
 
     npm install mixing
 
+### [Ringo](http://ringojs.org)
+
+    ringo-admin install gamtiq/mixing
+
 ### [Component](https://github.com/component/component)
 
     component install gamtiq/mixing
@@ -29,7 +33,7 @@ Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
 ## Usage
 
-### Node, Component
+### Node, Ringo, Component
 
 ```js
 var mixin = require("mixing");
