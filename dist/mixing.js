@@ -36,6 +36,7 @@ if (! Array.isArray) {
  *      The target object into which fields and functions will be copied.
  * @param {Array | Object} source
  *      Array of source objects or just one object whose contents will be copied.
+ *      If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.
  * @param {Object} [settings]
  *      Operation settings. Fields are names of settings, their values are the corresponding values of settings.
  *      The following settings are being supported.
@@ -100,6 +101,25 @@ if (! Array.isArray) {
  *              </td>
  *          </tr>
  *          <tr>
+ *              <td><code>filter</code></td>
+ *              <td><code>Function</code></td>
+ *              <td><code>null</code></td>
+ *              <td>
+ *                  Allows selecting elements that should be copied.
+ *                  <br>
+ *                  If specified function returns <code>true</code> for a field,
+ *                  the field will be copied in the target object.
+ *                  <br>
+ *                  The following parameters are passed into filter function:
+ *                  <ul>
+ *                  <li>field name
+ *                  <li>field value
+ *                  <li>reference to the target object
+ *                  <li>reference to the source object
+ *                  </ul>
+ *              </td>
+ *          </tr>
+ *          <tr>
  *              <td><code>otherName</code></td>
  *              <td><code>Object</code></td>
  *              <td><code>null</code></td>
@@ -120,12 +140,15 @@ if (! Array.isArray) {
  *              </td>
  *          </tr>
  *      </table>
+ *      <code>except</code> and <code>filter</code> settings can be used together.
+ *      In such situation a field will be copied only when the field satisfies both settings
+ *      (i.e. not in exceptions and filter function returns <code>true</code>).
  * @return {Object}
  *      Modified target object.
  * @alias module:mixing
  */
 function mixing(destination, source, settings) {
-    /*jshint laxbreak:true*/
+    /*jshint boss:true, laxbreak:true*/
     if (typeof source === "object" && source !== null) {
         // Prepare parameters
         if (typeof settings !== "object" || settings === null) {
@@ -139,6 +162,7 @@ function mixing(destination, source, settings) {
             bFuncToProto = ("funcToProto" in settings ? settings.funcToProto : false),
             bOverwrite = ("overwrite" in settings ? settings.overwrite : false),
             bRecursive = ("recursive" in settings ? settings.recursive : false),
+            filter = settings.filter,
             otherNameMap = ("otherName" in settings ? settings.otherName : null),
             exceptList = settings.except,
             bFuncProp, exceptions, nI, nL, obj, propName, propValue, sType, value;
@@ -166,27 +190,29 @@ function mixing(destination, source, settings) {
         
         // Copy fields and functions according to settings
         for (nI = 0, nL = source.length; nI < nL; nI++) {
-            obj = source[nI];
-            for (propName in obj) {
-                if (! exceptions || ! (propName in exceptions)) {
+            if (obj = source[nI]) {
+                for (propName in obj) {
                     propValue = obj[propName];
-                    if (otherNameMap && (propName in otherNameMap)) {
-                        propName = otherNameMap[propName];
-                    }
-                    sType = typeof propValue;
-                    // If recursive mode and field's value is an object
-                    if (bRecursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object") {
-                        mixing(value, propValue, settings);
-                    }
-                    else {
-                        bFuncProp = (sType === "function");
-                        if ((bOverwrite || ! (propName in destination))
-                                && (! bFuncProp || bCopyFunc)) {
-                            if (bFuncProp && bFuncToProto) {
-                                destination.constructor.prototype[propName] = propValue;
-                            }
-                            else {
-                                destination[propName] = propValue;
+                    if ((! exceptions || ! (propName in exceptions)) 
+                            && (! filter || filter(propName, propValue, destination, obj))) {
+                        if (otherNameMap && (propName in otherNameMap)) {
+                            propName = otherNameMap[propName];
+                        }
+                        sType = typeof propValue;
+                        // If recursive mode and field's value is an object
+                        if (bRecursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object") {
+                            mixing(value, propValue, settings);
+                        }
+                        else {
+                            bFuncProp = (sType === "function");
+                            if ((bOverwrite || ! (propName in destination))
+                                    && (! bFuncProp || bCopyFunc)) {
+                                if (bFuncProp && bFuncToProto) {
+                                    destination.constructor.prototype[propName] = propValue;
+                                }
+                                else {
+                                    destination[propName] = propValue;
+                                }
                             }
                         }
                     }

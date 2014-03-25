@@ -66,6 +66,28 @@ describe("mixing", function() {
             });
         });
         
+        describe("mixing(destination, null | undefined | false | '' | 0 | [null, undefined, false, '', 0])", function() {
+            it("should return unmodified destination object", function() {
+                var dest = {a: obj, b: couple, c: source};
+                expect( mixin(dest, null) )
+                    .eql(dest);
+                expect( mixin(dest, undef) )
+                    .eql(dest);
+                expect( mixin(dest, false) )
+                    .eql(dest);
+                expect( mixin(dest, "") )
+                    .eql(dest);
+                expect( mixin(dest, 0) )
+                    .eql(dest);
+                expect( mixin(dest, [null, 0]) )
+                    .eql(dest);
+                expect( mixin(dest, [false, '', null]) )
+                    .eql(dest);
+                expect( mixin(dest, [null, undef, false, '', 0]) )
+                    .eql(dest);
+            });
+        });
+        
         describe("mixing(destination, source)", function() {
             it("should copy all fields from the source object into the destination object", function() {
                 var dest = {a: str, b: num, f1: str, f2: num};
@@ -322,6 +344,56 @@ describe("mixing", function() {
                         .have.property("bet", couple);
                     expect(dest)
                         .not.have.property("alpha");
+                });
+            });
+        });
+        
+        describe("mixing(destination, source, {filter: ...})", function() {
+            function filter(field, value, target, source) {
+                return ["a", "c", "z", "list", "obj"].indexOf(field) > -1;
+            }
+            
+            describe("mixing(destination, source, {filter: someFunction})", function() {
+                it("should copy all fields from the source object except those for which filter function returns false", function() {
+                    var settings = {filter: filter};
+                    
+                    expect( mixin({}, {a: 1, list: couple, z: "end"}, settings) )
+                        .eql({a: 1, z: "end", list: couple});
+                    expect( mixin({}, {b: 2, couple: list, x: "yz"}, settings) )
+                        .eql({});
+                    expect( mixin({}, obj, settings) )
+                        .eql({a: obj.a, c: obj.c});
+                    
+                    expect( mixin({sole: "field"}, {a: 1, z: obj, b: 2}, settings) )
+                        .eql({sole: "field", a: 1, z: obj});
+                    expect( mixin({sole: "field", c: "creative"}, {obj: obj, c: 3, delta: 5, some: "value", sole: "island"}, settings) )
+                        .eql({sole: "field", c: "creative", obj: obj});
+                });
+            });
+            
+            describe("mixing(destination, source, {except: ..., filter: someFunction})", function() {
+                it("should copy all fields from the source object except those that are specified or for which filter function returns false", function() {
+                    var settings = {except: ["a", "obj"], filter: filter};
+                    
+                    expect( mixin({}, {a: 1, list: couple, z: "end"}, settings) )
+                        .eql({z: "end", list: couple});
+                    expect( mixin({}, {b: 2, couple: list, x: "yz", obj: {}}, settings) )
+                        .eql({});
+                    expect( mixin({}, obj, settings) )
+                        .eql({c: obj.c});
+                    
+                    expect( mixin({omega: "o", delta: "d"}, {a: 1, list: null, c: 3, delta: 4, obj: obj}, settings) )
+                        .eql({omega: "o", delta: "d", list: null, c: 3});
+                    
+                    expect( mixin({}, 
+                                    [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
+                                    {
+                                        except: ["a", "g"],
+                                        filter: function(field, value, target, source) {
+                                            return typeof value === "number" && value < 10;
+                                        }
+                                    }) )
+                        .eql({c: 3, e: 4, h: 7});
                 });
             });
         });
