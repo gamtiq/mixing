@@ -1,7 +1,7 @@
 {
   "name": "mixing",
   "main": ["dist/mixing.js", "dist/mixing.min.js"],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/gamtiq/mixing",
   "authors": [
     "Denis Sikuler"
@@ -11,7 +11,8 @@
     "mixin",
     "mix",
     "merge",
-    "object"
+    "object",
+    "filter"
   ],
   "license": "MIT",
   "ignore": [

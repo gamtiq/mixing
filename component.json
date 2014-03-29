@@ -2,12 +2,13 @@
     "name": "mixing",
     "repo": "gamtiq/mixing",
     "description": "Functions to mix objects",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "keywords": [
         "mix",
         "merge",
         "mixin",
-        "object"
+        "object",
+        "filter"
     ],
     "dependencies": {
         "gamtiq/isarray-shim": "*"
