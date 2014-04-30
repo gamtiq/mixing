@@ -1,6 +1,6 @@
 # mixing
 
-Functions to mix objects.
+Functions to mix, filter and copy/clone objects.
 
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
@@ -72,7 +72,7 @@ define(["path/to/dist/mixing.js"], function(mixin) {
 ### Example
 
 ```js
-var copy = mixin({}, source);   // Make a shallow copy of source
+var copy = mixin.copy(source);   // Make a shallow copy of source
 var result = mixin({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixin({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixin({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
@@ -85,6 +85,13 @@ mixin({},
               return typeof value === "number" && value < 10;
           }
       });   // Returns {c: 3, e: 4, h: 7}
+
+var obj = {
+    a: 1,
+    b: 2,
+    clone: mixin.clone
+};
+var obj2 = obj.clone();   // obj2 is a shallow copy of obj
 ```
 
 ## API
@@ -106,6 +113,23 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `except`: `Array | Object | String` - Name(s) of fields/functions that shouldn't be copied.
 * `filter`: `Function` - Allows selecting elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
+
+### .copy(source: Array | Object, [settings: Object]);
+
+Make a copy of source object(s).
+
+### .clone([settings: Object]);
+
+Make a copy of `this` object.
+This function can be transferred to an object to use as a method.
+For example:
+```js
+SomeClass.prototype.clone = mixing.clone;
+...
+var obj = new SomeClass();
+...
+var copy = obj.clone();
+```
 
 ### .mix(source: Array | Object, [settings: Object]);
 

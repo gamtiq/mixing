@@ -1,7 +1,7 @@
 {
   "name": "mixing",
   "version": "0.0.3",
-  "description": "Functions to mix objects",
+  "description": "Functions to mix, filter and copy/clone objects",
   "main": "index.js",
   "directories": {
     "doc": "doc",
@@ -23,7 +23,9 @@
     "merge",
     "mixin",
     "object",
-    "filter"
+    "filter",
+    "copy",
+    "clone"
   ],
   "homepage": "https://github.com/gamtiq/mixing",
   "author": "Denis Sikuler",

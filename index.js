@@ -203,12 +203,48 @@ function mixing(destination, source, settings) {
 }
 
 /**
+ * Make a copy of source object(s).
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * var copy = mixing({}, source, settings);
+ * </pre></code>
+ * 
+ * @param {Array | Object} source
+ *      Array of source objects or just one object whose contents will be copied.
+ * @param {Object} [settings]
+ *      Operation settings. See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Newly created object containing contents of source objects.
+ */
+mixing.copy = function(source, settings) {
+    return mixing({}, source, settings);
+};
+
+/**
+ * Make a copy of <code>this</code> object.
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * var copy = mixing({}, this, settings);
+ * </pre></code>
+ * It can be transferred to an object to use as a method.
+ * 
+ * @param {Object} [settings]
+ *      Operation settings. See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Newly created object containing contents of <code>this</code> object.
+ */
+mixing.clone = function(settings) {
+    return mixing({}, this, settings);
+};
+
+/**
  * Copy/add all fields and functions from source objects into <code>this</code> object.
  * As a result <code>this</code> object may be modified.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
- * var mixing = require("mixing");
  * mixing(this, source, settings);
  * </pre></code>
  * It can be transferred to an object to use as a method.
@@ -216,7 +252,7 @@ function mixing(destination, source, settings) {
  * @param {Array | Object} source
  *      Array of source objects or just one object whose contents will be copied.
  * @param {Object} [settings]
- *      Operation settings. See {@link module:mixing} for details.
+ *      Operation settings. See {@link module:mixing mixing} for details.
  * @return {Object}
  *      Modified <code>this</code> object.
  */

@@ -134,12 +134,14 @@ describe("mixing", function() {
         
         describe("mixing(destination, [source1, source2, ...])", function() {
             it("should copy all fields from source objects into the destination object", function() {
-                expect( mixin({}, [source, source, source]) )
+                expect( mixin({}, [null, source, undef, source, 0, source, false, source, ""]) )
                     .eql(source);
                 expect( mixin({a: 1, b: 2}, [{c: 3}, {d: 4}, {e: couple, f: source, g: list}]) )
                     .eql({a: 1, b: 2, c: 3, d: 4, e: couple, f: source, g: list});
                 expect( mixin({"a b c": method1, "d e f": method2}, [{"g h i": list}]) )
                     .eql({"a b c": method1, "d e f": method2, "g h i": list});
+                expect( mixin({a: 1, start: "now"}, [{c: 3}, null, {delta: source}, false, 0, {finish: "endless"}]) )
+                    .eql({a: 1, start: "now", c: 3, delta: source, finish: "endless"});
             });
         });
         
@@ -449,6 +451,71 @@ describe("mixing", function() {
                 expect(dest)
                     .not.have.property("e");
             });
+        });
+    });
+    
+    
+    
+    describe(".copy(source, settings)", function() {
+        var copy = mixin.copy;
+        it("should return empty object", function() {
+            expect( copy(null) )
+                .eql({});
+            expect( copy(undef) )
+                .eql({});
+            expect( copy([0, "", false, undef, null]) )
+                .eql({});
+        });
+        it("should create copy of source object(s)", function() {
+            expect( copy({a: 1}) )
+                .eql({a: 1});
+            expect( copy(obj) )
+                .eql(obj);
+            expect( copy(source) )
+                .eql(source);
+            
+            expect( copy([obj, source]) )
+                .eql({a: str, b: num, c: emptyArray, d: nullVal, e: sEmpty, f: undef, g: list, met2: method2});
+            expect( copy([obj, null, source, {a: 1}, {f: obj, g: 0, h: "h"}], 
+                            {
+                                filter: function(field, value, target, source) {
+                                    return typeof source[field] === "object";
+                                }
+                            }) )
+                .eql({a: list, b: obj, c: emptyArray, d: nullVal, g: list, f: obj});
+        });
+    });
+    
+    
+    
+    describe(".clone(settings)", function() {
+        var clone = mixin.clone;
+        it("should create a copy of this object or object that has clone method", function() {
+            var source = {
+                a: "alfa",
+                b: "beta",
+                f: false,
+                no: null,
+                list: list,
+                clone: clone
+            };
+            
+            expect( clone.call(obj) )
+                .eql(obj);
+            expect( clone.call(source) )
+                .eql(source);
+            
+            expect( source.clone() )
+                .eql(source);
+            expect( source.clone({except: ["a", "no", "clone"]}) )
+                .eql({b: "beta", f: false, list: list});
+            expect( source.clone({
+                                    filter: function(field, value, target, source) {
+                                        var sType = typeof source[field];
+                                        return sType !== "object" && sType !== "function";
+                                    }
+                                }) )
+                .eql({a: "alfa", b: "beta", f: false});
         });
     });
     
