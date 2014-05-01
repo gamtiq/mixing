@@ -1,14 +1,17 @@
 {
     "name": "mixing",
     "repo": "gamtiq/mixing",
-    "description": "Functions to mix objects",
-    "version": "0.0.3",
+    "description": "Functions to mix, filter, change and copy/clone objects",
+    "version": "0.0.4",
     "keywords": [
         "mix",
         "merge",
         "mixin",
         "object",
-        "filter"
+        "filter",
+        "change",
+        "copy",
+        "clone"
     ],
     "dependencies": {
         "gamtiq/isarray-shim": "*"

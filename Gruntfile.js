@@ -62,6 +62,7 @@ module.exports = function(grunt) {
         
         push: {
             options: {
+                files: ["package.json", "bower.json", "component.json"],
                 commitMessage: "Release version %VERSION%",
                 commitFiles: ["-a"],
                 tagName: "%VERSION%",
