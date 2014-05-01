@@ -118,6 +118,25 @@ if (! Array.isArray) {
  *                  <code>{prop: 1, method: "no-func"}</code>
  *              </td>
  *          </tr>
+ *          <tr>
+ *              <td><code>change</code></td>
+ *              <td><code>Function</code></td>
+ *              <td><code>null</code></td>
+ *              <td>
+ *                  Gives ability to change values that should be copied.
+ *                  <br>
+ *                  Value returned by the function for a field will be copied into the target object 
+ *                  instead of original field's value.
+ *                  <br>
+ *                  The following parameters are passed into change function:
+ *                  <ul>
+ *                  <li>field name
+ *                  <li>original field value
+ *                  <li>reference to the target object
+ *                  <li>reference to the source object
+ *                  </ul>
+ *              </td>
+ *          </tr>
  *      </table>
  *      <code>except</code> and <code>filter</code> settings can be used together.
  *      In such situation a field will be copied only when the field satisfies both settings
@@ -141,6 +160,7 @@ function mixing(destination, source, settings) {
             bFuncToProto = ("funcToProto" in settings ? settings.funcToProto : false),
             bOverwrite = ("overwrite" in settings ? settings.overwrite : false),
             bRecursive = ("recursive" in settings ? settings.recursive : false),
+            change = settings.change,
             filter = settings.filter,
             otherNameMap = ("otherName" in settings ? settings.otherName : null),
             exceptList = settings.except,
@@ -186,6 +206,9 @@ function mixing(destination, source, settings) {
                             bFuncProp = (sType === "function");
                             if ((bOverwrite || ! (propName in destination))
                                     && (! bFuncProp || bCopyFunc)) {
+                                if (change) {
+                                    propValue = change(propName, propValue, destination, obj);
+                                }
                                 if (bFuncProp && bFuncToProto) {
                                     destination.constructor.prototype[propName] = propValue;
                                 }

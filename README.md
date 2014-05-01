@@ -1,6 +1,6 @@
 # mixing
 
-Functions to mix, filter and copy/clone objects.
+Functions to mix, filter, change and copy/clone objects.
 
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
@@ -83,8 +83,11 @@ mixin({},
           except: ["a", "g"],
           filter: function(field, value, target, source) {
               return typeof value === "number" && value < 10;
-          }
-      });   // Returns {c: 3, e: 4, h: 7}
+          },
+          change: function(field, value, target, source) {
+              return value > 5 ? value * value : value;
+          },
+      });   // Returns {c: 3, e: 4, h: 49}
 
 var obj = {
     a: 1,
@@ -113,6 +116,7 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `except`: `Array | Object | String` - Name(s) of fields/functions that shouldn't be copied.
 * `filter`: `Function` - Allows selecting elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
+* `change`: `Function` - Gives ability to change values that should be copied.
 
 ### .copy(source: Array | Object, [settings: Object]);
 

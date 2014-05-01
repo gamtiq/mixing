@@ -452,6 +452,47 @@ describe("mixing", function() {
                     .not.have.property("e");
             });
         });
+        
+        describe("mixing(destination, source, {change: ...})", function() {
+            function change(field, value, target, source) {
+                var sType = typeof value;
+                if (sType === "number") {
+                    value *= value;
+                }
+                else if (sType === "string") {
+                    value += value;
+                }
+                return value;
+            }
+            
+            function changeToStr(field, value, target, source) {
+                return String(value);
+            }
+            
+            it("should copy changed values", function() {
+                var settings = {change: change};
+                
+                expect( mixin({}, {}, settings) )
+                    .eql({});
+                expect( mixin({}, {a: -10, b: 1, c: 10, d: "d", e: "End", f: "finita "}, settings) )
+                    .eql({a: 100, b: 1, c: 100, d: "dd", e: "EndEnd", f: "finita finita "});
+                expect( mixin({}, {a: 2, list: couple, s: "str", bool: false, empty: sEmpty}, settings) )
+                    .eql({a: 4, s: "strstr", list: couple, bool: false, empty: sEmpty});
+                expect( mixin({}, {no: null, undef: undef, obj: obj, met: method1}, settings) )
+                    .eql({no: null, undef: undef, obj: obj, met: method1});
+                
+                settings = {change: changeToStr};
+                
+                expect( mixin({}, {a: 1, b: null, c: 123, z: "z"}, settings) )
+                    .eql({a: "1", b: "null", c: "123", z: "z"});
+                expect( mixin({}, {list: [1, 2, 3, 4], obj: source, value: true, couple: couple}, settings) )
+                    .eql({list: "1,2,3,4", obj: "[object Object]", value: "true",
+                            couple: couple[0].toString() + "," + couple[1].toString()});
+                expect( mixin({}, {a: 1, b: "b", c: false, d: {}, e: change, f: null, g: undef, h: []}, settings) )
+                    .eql({a: "1", b: "b", c: "false", d: "[object Object]", e: change.toString(), 
+                            f: "null", g: "undefined", h: ""});
+            });
+        });
     });
     
     
