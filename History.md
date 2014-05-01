@@ -1,3 +1,8 @@
+### 0.0.4 / 2014-05-01
+
+* add `change` setting that allows modifying of copied values
+* add `copy` and `clone` methods to make object's copy
+
 ### 0.0.3 / 2014-03-25
 
 * add `filter` setting that allows selecting fields that should be copied

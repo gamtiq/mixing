@@ -58,6 +58,15 @@ module.exports = function(grunt) {
                 objectToExport: "<%= name %>",
                 globalAlias: "<%= name %>"
             }
+        },
+        
+        push: {
+            options: {
+                commitMessage: "Release version %VERSION%",
+                commitFiles: ["-a"],
+                tagName: "%VERSION%",
+                tagMessage: "Version %VERSION%"
+            }
         }
         
     });
@@ -68,6 +77,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-mocha-cli");
     grunt.loadNpmTasks("grunt-umd");
+    grunt.loadNpmTasks("grunt-push-release");
     
     // Tasks
     grunt.registerTask("compile", "Creates distribution source", function() {
@@ -105,4 +115,8 @@ module.exports = function(grunt) {
     grunt.registerTask("test", ["mochacli"]);
     grunt.registerTask("default", ["jshint", "mochacli"]);
     grunt.registerTask("all", ["default", "build", "doc"]);
+    
+    grunt.registerTask("release", ["push"]);
+    grunt.registerTask("release-minor", ["push:minor"]);
+    grunt.registerTask("release-major", ["push:major"]);
 };
