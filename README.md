@@ -77,6 +77,11 @@ var result = mixin({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3
 mixin({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixin({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 
+// Mix arrays
+mixin([1, 2, 3], ["a", "b", "c", "d"], {overwrite: true, oneSource: true});   // Returns ["a", "b", "c", "d"]
+mixin([3, 2, 1, 4, 5], [1, 2, 3], {overwrite: true, oneSource: true});   // Returns [1, 2, 3, 4, 5]
+
+// Filter and change field values
 mixin({}, 
       [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
       {
@@ -89,6 +94,7 @@ mixin({},
           },
       });   // Returns {c: 3, e: 4, h: 49}
 
+// Clone
 var obj = {
     a: 1,
     b: 2,
@@ -112,6 +118,8 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `funcToProto`: `Boolean` - Should functions be copied into `prototype` of the `destination` object's `constructor`?
 * `overwrite`: `Boolean` - Should a field/function be overwritten when it exists in the `destination` object?
 * `recursive`: `Boolean` - Should this function be called recursively when field's value of the `destination` and `source` object is an object?
+* `mixFromArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?
+* `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?
 * `oneSource`: `Boolean` - Should `source` array be interpreted directly as copied object instead of list of source objects?
 * `except`: `Array | Object | String` - Name(s) of fields/functions that shouldn't be copied.
 * `filter`: `Function` - Allows selecting elements that should be copied.
