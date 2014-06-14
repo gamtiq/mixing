@@ -81,6 +81,27 @@ if (! Array.isArray) {
  *              </td>
  *          </tr>
  *          <tr>
+ *              <td><code>mixFromArray</code></td>
+ *              <td><code>Boolean</code></td>
+ *              <td><code>false</code></td>
+ *              <td>
+ *                  Should contents of a field of the source object be copied when the field's value is an array?
+ *                  <br>
+ *                  Will be used only when <code>recursive</code> setting has <code>true</code> value.
+ *              </td>
+ *          </tr>
+ *          <tr>
+ *              <td><code>mixToArray</code></td>
+ *              <td><code>Boolean</code></td>
+ *              <td><code>false</code></td>
+ *              <td>
+ *                  Should contents of a field of the source object be copied into a field of the target object
+ *                  when the latest field's value is an array?
+ *                  <br>
+ *                  Will be used only when <code>recursive</code> setting has <code>true</code> value.
+ *              </td>
+ *          </tr>
+ *          <tr>
  *              <td><code>oneSource</code></td>
  *              <td><code>Boolean</code></td>
  *              <td><code>false</code></td>
@@ -178,9 +199,11 @@ function mixing(destination, source, settings) {
         }
         // Prepare settings
         var bCopyFunc = ("copyFunc" in settings ? settings.copyFunc : true),
-            bFuncToProto = ("funcToProto" in settings ? settings.funcToProto : false),
-            bOverwrite = ("overwrite" in settings ? settings.overwrite : false),
-            bRecursive = ("recursive" in settings ? settings.recursive : false),
+            bFuncToProto = Boolean(settings.funcToProto),
+            bMixFromArray = Boolean(settings.mixFromArray),
+            bMixToArray = Boolean(settings.mixToArray),
+            bOverwrite = Boolean(settings.overwrite),
+            bRecursive = Boolean(settings.recursive),
             change = settings.change,
             filter = settings.filter,
             otherNameMap = ("otherName" in settings ? settings.otherName : null),
@@ -220,8 +243,12 @@ function mixing(destination, source, settings) {
                         }
                         sType = typeof propValue;
                         // If recursive mode and field's value is an object
-                        if (bRecursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object") {
-                            mixing(value, propValue, settings);
+                        if (bRecursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object"
+                                && (! Array.isArray(propValue) || bMixFromArray) && (! Array.isArray(value) || bMixToArray)) {
+                            mixing(value, propValue, 
+                                    bMixFromArray 
+                                        ? mixing({oneSource: true}, settings)
+                                        : settings);
                         }
                         else {
                             bFuncProp = (sType === "function");
