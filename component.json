@@ -2,7 +2,7 @@
     "name": "mixing",
     "repo": "gamtiq/mixing",
     "description": "Functions to mix, filter, change and copy/clone objects",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "keywords": [
         "mix",
         "merge",
