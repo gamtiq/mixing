@@ -1,3 +1,7 @@
+### 0.0.5 / 2014-06-14
+
+* add `mixFromArray` and `mixToArray` settings to tune mixing of arrays
+
 ### 0.0.4 / 2014-05-01
 
 * add `change` setting that allows modifying of copied values
