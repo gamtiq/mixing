@@ -290,6 +290,44 @@ mixing.clone = function(settings) {
 };
 
 /**
+ * Filter <code>this</code> object.
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * var result = mixing({}, this, {filter: filter});
+ * </pre></code>
+ * It can be transferred to an object to use as a method.
+ * 
+ * @param {Function | Object} filter
+ *      Filter function to select fields or object that represents operation settings including filter function.
+ *      See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Newly created object containing fields of <code>this</code> object for which filter function returns true.
+ */
+mixing.filter = function(filter) {
+    return mixing({}, this, typeof filter === "function" ? {filter: filter} : filter);
+};
+
+/**
+ * Copy and change values of fields of <code>this</code> object.
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * var result = mixing({}, this, {change: change});
+ * </pre></code>
+ * It can be transferred to an object to use as a method.
+ * 
+ * @param {Function | Object} change
+ *      Function to change values of copied fields or object that represents operation settings including change function.
+ *      See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Newly created object containing fields of <code>this</code> object with changed values.
+ */
+mixing.map = function(change) {
+    return mixing({}, this, typeof change === "function" ? {change: change} : change);
+};
+
+/**
  * Copy/add all fields and functions from source objects into <code>this</code> object.
  * As a result <code>this</code> object may be modified.
  * <br>

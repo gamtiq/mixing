@@ -125,7 +125,7 @@ describe("mixing", function() {
             
             it("should copy nothing", function() {
                 var dest = {a: 1, b: 2};
-                expect( mixin(obj, source) )
+                expect( mixin(obj, {a: "space", c: null, g: {}}) )
                     .eql(obj);
                 expect( mixin({a: 1, b: 2}, {b: new Date()}) )
                     .eql(dest);
@@ -620,6 +620,123 @@ describe("mixing", function() {
                                     }
                                 }) )
                 .eql({a: "alfa", b: "beta", f: false});
+        });
+    });
+    
+    
+    
+    describe(".filter(filter: Function | settings: Object)", function() {
+        function filterObj(field, value, target, source) {
+            return typeof value === "object";
+        }
+        
+        function filterFunc(field, value, target, source) {
+            return typeof value === "function";
+        }
+        
+        var filter = mixin.filter;
+        it("should filter this object or object that has filter method", function() {
+            var source = {
+                a: 0,
+                b: "value",
+                f: {
+                    z: null,
+                    omega: 2
+                },
+                list: list,
+                filter: filter,
+                m1: method1,
+                m2: method2
+            };
+            
+            expect( filter.call({a: 1, b: {}, c: "str", d: obj}, filterObj) )
+                .eql({b: {}, d: obj});
+            expect( filter.call(obj, filterObj) )
+                .eql({c: emptyArray, d: nullVal, g: list});
+            expect( filter.call(list, {filter: filterObj, oneSource: true}) )
+                .eql({2: emptyObj, 3: emptyArray, 4: nullVal});
+            expect( filter.call(obj, emptyFunc) )
+                .eql({});
+            
+            expect( source.filter(filterObj) )
+                .eql({f: source.f, list: list});
+            expect( source.filter({filter: filterFunc}) )
+                .eql({filter: filter, m1: method1, m2: method2});
+        });
+        
+        it("should create a copy of this object", function() {
+            function retTrue() {
+                return true;
+            }
+            
+            expect( filter.call(obj, {}) )
+                .eql(obj);
+            expect( filter.call(obj, retTrue) )
+                .eql(obj);
+            expect( filter.call(obj, {filter: retTrue}) )
+                .eql(obj);
+            expect( filter.call({a: obj, b: source, c: null}, {filter: filterObj}) )
+                .eql({a: obj, b: source, c: null});
+        });
+    });
+    
+    
+    
+    describe(".map(change: Function | settings: Object)", function() {
+        function sum(field, value, target, source) {
+            var sType = typeof value;
+            return sType === "number" || sType === "string" 
+                        ? value + value 
+                        : value;
+        }
+        
+        function nullify(field, value, target, source) {
+            return typeof value === "object" ? null : value;
+        }
+        
+        var map = mixin.map;
+        it("should copy contents of this object or object that has map method and modify values of some fields", function() {
+            var src = {
+                a: "astra ",
+                b: " naut",
+                c: 2112,
+                d: couple,
+                e: obj,
+                f: null,
+                list: list,
+                map: map,
+                m1: method1,
+                m2: method2
+            };
+            
+            expect( map.call({a: 1, b: "b", c: 0}, sum) )
+                .eql({a: 2, b: "bb", c: 0});
+            expect( map.call(obj, nullify) )
+                .eql({a: str, b: num, c: null, d: nullVal, e: sEmpty, f: undef, g: null});
+            expect( map.call(source, {change: nullify}) )
+                .eql({a: null, b: null, c: null, d: null, met2: method2});
+            
+            expect( src.map(sum) )
+                .eql({a: "astra astra ", b: " naut naut", c: 4224, d: couple, e: obj, f: null,
+                        list: list, map: map, m1: method1, m2: method2});
+            expect( src.map(nullify) )
+                .eql({a: "astra ", b: " naut", c: 2112, d: null, e: null, f: null,
+                        list: null, map: map, m1: method1, m2: method2});
+        });
+        
+        it("should create a copy of this object", function() {
+            function retValue(field, value, target, source) {
+                return value;
+            }
+            
+            expect( map.call(obj, {}) )
+                .eql(obj);
+            expect( map.call(obj, retValue) )
+                .eql(obj);
+            expect( map.call(obj, {change: retValue}) )
+                .eql(obj);
+            expect( map.call({a: 1, b: 2, c: undef}, {change: retValue}) )
+                .eql({a: 1, b: 2, c: undef});
         });
     });
     

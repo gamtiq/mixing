@@ -69,7 +69,7 @@ define(["path/to/dist/mixing.js"], function(mixin) {
 </script>
 ```
 
-### Example
+### Examples
 
 ```js
 var copy = mixin.copy(source);   // Make a shallow copy of source
@@ -94,13 +94,28 @@ mixin({},
           },
       });   // Returns {c: 3, e: 4, h: 49}
 
-// Clone
+// Clone, filter, map
 var obj = {
     a: 1,
     b: 2,
-    clone: mixin.clone
+    clone: mixin.clone,
+    filter: mixin.filter,
+    map: mixin.map
 };
 var obj2 = obj.clone();   // obj2 is a shallow copy of obj
+
+function isNumericValue(field, value, target, source) {
+    return typeof value === "number";
+}
+
+var obj3 = obj.filter(isNumericValue);   // {a: 1, b: 2}
+
+var obj4 = obj.map({
+    filter: isNumericValue,
+    change: function(field, value, target, source) {
+        return value + value;
+    }
+});   // {a: 2, b: 4}
 ```
 
 ## API
@@ -141,6 +156,38 @@ SomeClass.prototype.clone = mixing.clone;
 var obj = new SomeClass();
 ...
 var copy = obj.clone();
+```
+
+### .filter(filter: Function | Object);
+
+Filter `this` object.
+This function can be transferred to an object to use as a method.
+For example:
+```js
+SomeClass.prototype.filter = mixing.filter;
+...
+var obj = new SomeClass();
+...
+var result = obj.filter(function(field, value, target, source) {
+    // source is obj, target is result
+    ...
+});
+```
+
+### .map(change: Function | Object);
+
+Copy and change values of fields of `this` object.
+This function can be transferred to an object to use as a method.
+For example:
+```js
+SomeClass.prototype.map = mixing.map;
+...
+var obj = new SomeClass();
+...
+var result = obj.map(function(field, value, target, source) {
+    // source is obj, target is result
+    ...
+});
 ```
 
 ### .mix(source: Array | Object, [settings: Object]);

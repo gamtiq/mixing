@@ -9,6 +9,7 @@
         "mixin",
         "object",
         "filter",
+        "map",
         "change",
         "copy",
         "clone"
