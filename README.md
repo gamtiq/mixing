@@ -37,14 +37,14 @@ Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 ### Node, Ringo, Component
 
 ```js
-var mixin = require("mixing");
+var mixing = require("mixing");
 ...
 ```
 
 ### Jam
 
 ```js
-require(["mixing"], function(mixin) {
+require(["mixing"], function(mixing) {
     ...
 });
 ```
@@ -52,7 +52,7 @@ require(["mixing"], function(mixin) {
 ### AMD
 
 ```js
-define(["path/to/dist/mixing.js"], function(mixin) {
+define(["path/to/dist/mixing.js"], function(mixing) {
     ...
 });
 ```
@@ -64,7 +64,6 @@ define(["path/to/dist/mixing.js"], function(mixin) {
 <script type="text/javascript" src="path/to/dist/mixing.js"></script>
 <script type="text/javascript">
     // mixing is available via mixing field of window object
-    var mixin = mixing;
     ...
 </script>
 ```
@@ -72,35 +71,35 @@ define(["path/to/dist/mixing.js"], function(mixin) {
 ### Examples
 
 ```js
-var copy = mixin.copy(source);   // Make a shallow copy of source
-var result = mixin({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
-mixin({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
-mixin({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
+var copy = mixing.copy(source);   // Make a shallow copy of source
+var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
+mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
+mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 
 // Mix arrays
-mixin([1, 2, 3], ["a", "b", "c", "d"], {overwrite: true, oneSource: true});   // Returns ["a", "b", "c", "d"]
-mixin([3, 2, 1, 4, 5], [1, 2, 3], {overwrite: true, oneSource: true});   // Returns [1, 2, 3, 4, 5]
+mixing([1, 2, 3], ["a", "b", "c", "d"], {overwrite: true, oneSource: true});   // Returns ["a", "b", "c", "d"]
+mixing([3, 2, 1, 4, 5], [1, 2, 3], {overwrite: true, oneSource: true});   // Returns [1, 2, 3, 4, 5]
 
 // Filter and change field values
-mixin({}, 
-      [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
-      {
-          except: ["a", "g"],
-          filter: function(field, value, target, source) {
-              return typeof value === "number" && value < 10;
-          },
-          change: function(field, value, target, source) {
-              return value > 5 ? value * value : value;
-          },
-      });   // Returns {c: 3, e: 4, h: 49}
+mixing({}, 
+       [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
+       {
+           except: ["a", "g"],
+           filter: function(field, value, target, source) {
+               return typeof value === "number" && value < 10;
+           },
+           change: function(field, value, target, source) {
+               return value > 5 ? value * value : value;
+           },
+       });   // Returns {c: 3, e: 4, h: 49}
 
 // Clone, filter, map
 var obj = {
     a: 1,
     b: 2,
-    clone: mixin.clone,
-    filter: mixin.filter,
-    map: mixin.map
+    clone: mixing.clone,
+    filter: mixing.filter,
+    map: mixing.map
 };
 var obj2 = obj.clone();   // obj2 is a shallow copy of obj
 
@@ -136,6 +135,7 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `mixFromArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?
 * `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?
 * `oneSource`: `Boolean` - Should `source` array be interpreted directly as copied object instead of list of source objects?
+* `ownProperty`: `Boolean` - Should only own properties of the source object be copied into the target object?
 * `except`: `Array | Object | String` - Name(s) of fields/functions that shouldn't be copied.
 * `filter`: `Function` - Allows selecting elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.

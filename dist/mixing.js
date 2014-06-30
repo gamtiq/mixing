@@ -111,6 +111,12 @@
      *              </td>
      *          </tr>
      *          <tr>
+     *              <td><code>ownProperty</code></td>
+     *              <td><code>Boolean</code></td>
+     *              <td><code>false</code></td>
+     *              <td>Should only own properties of the source object be copied in the target object?</td>
+     *          </tr>
+     *          <tr>
      *              <td><code>except</code></td>
      *              <td><code>Array | Object | String</code></td>
      *              <td><code>""</code> (empty string)</td>
@@ -203,6 +209,7 @@
                 bMixFromArray = Boolean(settings.mixFromArray),
                 bMixToArray = Boolean(settings.mixToArray),
                 bOverwrite = Boolean(settings.overwrite),
+                bOwnProperty = Boolean(settings.ownProperty),
                 bRecursive = Boolean(settings.recursive),
                 change = settings.change,
                 filter = settings.filter,
@@ -236,7 +243,8 @@
                 if (obj = source[nI]) {
                     for (propName in obj) {
                         propValue = obj[propName];
-                        if ((! exceptions || ! (propName in exceptions)) 
+                        if ((! bOwnProperty || obj.hasOwnProperty(propName)) 
+                                && (! exceptions || ! (propName in exceptions)) 
                                 && (! filter || filter(propName, propValue, destination, obj))) {
                             if (otherNameMap && (propName in otherNameMap)) {
                                 propName = otherNameMap[propName];

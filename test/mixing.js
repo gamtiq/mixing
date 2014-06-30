@@ -343,6 +343,45 @@ describe("mixing", function() {
             });
         });
         
+        describe("mixing(destination, source, {ownProperty: ...}])", function() {
+            function Core() {
+            }
+            Core.prototype = obj;
+            
+            describe("mixing(destination, source, {ownProperty: true}])", function() {
+                var settings = {ownProperty: true};
+                
+                it("should copy only own properties from source object", function() {
+                    var src = new Core();
+                    src.b = "beta";
+                    src.e = "epsilon";
+                    src.x = 707;
+                    
+                    expect( mixin({}, src, settings) )
+                        .eql({b: "beta", e: "epsilon", x: 707});
+                });
+                
+                it("should copy nothing", function() {
+                    expect( mixin({}, new Core(), settings) )
+                        .eql({});
+                });
+            });
+            
+            describe("mixing(destination, source, {ownProperty: false}])", function() {
+                var settings = {ownProperty: false};
+                
+                it("should copy all properties (including inherited) from source object", function() {
+                    var src = new Core();
+                    src.a = "alfa";
+                    src.g = 8;
+                    src.z = "final";
+                    
+                    expect( mixin({}, src, settings) )
+                        .eql({a: "alfa", b: num, c: emptyArray, d: nullVal, e: sEmpty, f: undef, g: 8, z: "final"});
+                });
+            });
+        });
+        
         describe("mixing(destination, source, {except: ...})", function() {
             
             describe("mixing(destination, source, {except: 'name1'})", function() {
