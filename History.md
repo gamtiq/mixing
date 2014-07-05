@@ -1,3 +1,9 @@
+### 0.1.0 / 2014-07-05
+
+* add `ownProperty` setting to copy only own properties of object(s)
+* add `filter` and `map` methods to process `this` object
+* add data about SPM package
+
 ### 0.0.5 / 2014-06-14
 
 * add `mixFromArray` and `mixToArray` settings to tune mixing of arrays
