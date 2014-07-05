@@ -2,7 +2,7 @@
  * @module mixing 
  */
 
-// Load shim only in component+browser environment. Array.isArray is defined in node
+// Load shim only in browser environment. Array.isArray is defined in node
 if (! Array.isArray) {
     require("isarray-shim");
 }

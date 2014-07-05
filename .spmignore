@@ -1,0 +1,9 @@
+.*
+build
+components
+dist
+node_modules
+sea-modules
+bower.json
+component.json
+Makefile

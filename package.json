@@ -56,4 +56,13 @@
   "categories": [
     "Utilities"
   ]
+  "spm": {
+    "main": "index.js",
+    "dependencies": {
+      "isarray-shim": "0.0.1"
+    },
+    "engines": {
+      "seajs": "2.2.1"
+    }
+  }
 }

@@ -28,13 +28,17 @@ Functions to mix, filter, change and copy/clone objects.
 
     bower install mixing
 
+### [SPM](http://spmjs.io)
+
+    spm install mixing
+
 ### AMD, script tag
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
 ## Usage
 
-### Node, Ringo, Component
+### Node, Ringo, Component, SPM
 
 ```js
 var mixing = require("mixing");
