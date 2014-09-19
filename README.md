@@ -208,6 +208,11 @@ var obj = new SomeClass();
 obj.mix([obj1, obj2]);
 ```
 
+## Related projects
+
+* [basespace](https://github.com/gamtiq/basespace)
+* [extend](https://github.com/gamtiq/extend)
+
 ## Licence
 
 MIT
