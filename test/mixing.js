@@ -382,6 +382,37 @@ describe("mixing", function() {
             });
         });
         
+        describe("mixing(destination, source, {copy: ...})", function() {
+            
+            describe("mixing(destination, source, {copy: 'name1'})", function() {
+                it("should copy only specified field", function() {
+                    expect( mixin({a: 1, d: "enigma"}, obj, {copy: "e"}) )
+                        .eql({a: 1, d: "enigma", e: sEmpty});
+                });
+            });
+            
+            describe("mixing(destination, source, {copy: ['name1', 'name2', ...]})", function() {
+                it("should copy only those fields from the source object that are mentioned in the array", function() {
+                    expect( mixin({a: 1, b: 2}, {a: 4, c: 2, d: 1, z: -99}, {copy: ["a", "c", "z"]}) )
+                        .eql({a: 1, b: 2, c: 2, z: -99});
+                });
+            });
+            
+            describe("mixing(destination, source, {copy: {'name1': value1, 'name2': value2, ...}})", function() {
+                it("should copy only those fields from the source object that are in the specified object", function() {
+                    expect( mixin({beta: 2, delta: 4}, obj, {copy: {c: null, d: 1, f: undef}}) )
+                        .eql({beta: 2, delta: 4, c: emptyArray, d: nullVal, f: undef});
+                });
+            });
+            
+            describe("mixing(destination, source, {copy: /regular expression/})", function() {
+                it("should copy only those fields from the source object that match the regular expression", function() {
+                    expect( mixin({f: 7, g: 6}, {a: 5, 2: "limited", u: 3, 777: 1, jk: 4, "4you": 83}, {copy: /^\d/}) )
+                        .eql({f: 7, g: 6, 2: "limited", 777: 1, "4you": 83});
+                });
+            });
+        });
+        
         describe("mixing(destination, source, {except: ...})", function() {
             
             describe("mixing(destination, source, {except: 'name1'})", function() {
@@ -450,6 +481,19 @@ describe("mixing", function() {
                         .not.have.property("alpha");
                 });
             });
+            
+            describe("mixing(destination, source, {except: /regular expression/})", function() {
+                it("should copy all fields from the source object except those that match the regular expression", function() {
+                    var dest = {b: "eta"};
+                    
+                    expect( mixin(dest, obj, {except: /[c-f]/}) )
+                        .eql({a: str, b: "eta", g: list});
+                
+                    dest = {b: 1, c: 4};
+                    expect( mixin(dest, {b: 5, a4: -3, d: 9, a1: "", alfa: "rays"}, {except: /^a\d/}) )
+                        .eql({b: 1, c: 4, d: 9, alfa: "rays"});
+                });
+            });
         });
         
         describe("mixing(destination, source, {filter: ...})", function() {
@@ -475,8 +519,19 @@ describe("mixing", function() {
                 });
             });
             
-            describe("mixing(destination, source, {except: ..., filter: someFunction})", function() {
-                it("should copy all fields from the source object except those that are specified or for which filter function returns false", function() {
+            describe("mixing(destination, source, {filter: /regular expression/})", function() {
+                it("should copy those fields from the source object whose values are matching regular expression", function() {
+                    expect( mixin({}, {a: "str", b: 7, c: null, d: obj, e: -1, f: []}, {filter: /\d/}) )
+                        .eql({b: 7, e: -1});
+                    expect( mixin({}, {b: 39, f: "do!", x: "yz", z: "end."}, {filter: /^[^?!.]+$/}) )
+                        .eql({b: 39, x: "yz"});
+                    expect( mixin({}, {a: obj, b: 832, f: "done", nega: -64, no: null, s: "5th"}, {filter: /^\D/}) )
+                        .eql({a: obj, f: "done", nega: -64, no: null});
+                });
+            });
+            
+            describe("mixing(destination, source, {except: ..., filter: ...})", function() {
+                it("should copy all fields from the source object except those that are specified or do not conform to filter", function() {
                     var settings = {except: ["a", "obj"], filter: filter};
                     
                     expect( mixin({}, {a: 1, list: couple, z: "end"}, settings) )
@@ -498,6 +553,20 @@ describe("mixing", function() {
                                         }
                                     }) )
                         .eql({c: 3, e: 4, h: 7});
+                    
+                    expect( mixin({}, {a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /\d/, filter: /\d/}) )
+                        .eql({a: 1, b: 4, e: "-123"});
+                    expect( mixin({}, {a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/}) )
+                        .eql({e: "-123"});
+                });
+            });
+            
+            describe("mixing(destination, source, {copy: ..., except: ..., filter: ...})", function() {
+                it("should copy only those fields from the source object that conform to specified conditions", function() {
+                    expect( mixin({a: 1}, 
+                                    {a: "str", gamma: 7, c: null, delta: obj, e: -1, fall: "abc", omega: "3", astro: "naut"}, 
+                                    {copy: /a/, except: /l/, filter: /\d/}) )
+                        .eql({a: 1, gamma: 7, omega: "3"});
                 });
             });
         });

@@ -80,6 +80,10 @@ var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 
+mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
+mixing.copy({a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/});   // Returns {e: "-123"}
+mixing({x: 5}, {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: "a3", delta: "plus"}
+
 // Mix arrays
 mixing([1, 2, 3], ["a", "b", "c", "d"], {overwrite: true, oneSource: true});   // Returns ["a", "b", "c", "d"]
 mixing([3, 2, 1, 4, 5], [1, 2, 3], {overwrite: true, oneSource: true});   // Returns [1, 2, 3, 4, 5]
@@ -140,8 +144,9 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?
 * `oneSource`: `Boolean` - Should `source` array be interpreted directly as copied object instead of list of source objects?
 * `ownProperty`: `Boolean` - Should only own properties of the source object be copied into the target object?
-* `except`: `Array | Object | String` - Name(s) of fields/functions that shouldn't be copied.
-* `filter`: `Function` - Allows selecting elements that should be copied.
+* `copy`: `Array | Object | RegExp | String` - Array, object, regular expression or string that defines names of fields/functions that should be copied.
+* `except`: `Array | Object | RegExp | String` - Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
+* `filter`: `Function | RegExp` - Function or regular expression that can be used to select elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
 * `change`: `Function` - Gives ability to change values that should be copied.
 
@@ -210,6 +215,7 @@ obj.mix([obj1, obj2]);
 
 ## Related projects
 
+* [adam](https://github.com/gamtiq/adam)
 * [basespace](https://github.com/gamtiq/basespace)
 * [extend](https://github.com/gamtiq/extend)
 

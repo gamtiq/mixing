@@ -34,6 +34,35 @@ if (! Array.isArray) {
     require("isarray-shim");
 }
 
+function prepareFieldList(fieldList) {
+    var map, nI, regexp, sType;
+    if (Array.isArray(fieldList)) {
+        if (fieldList.length > 0) {
+            map = {};
+            nI = fieldList.length;
+            do {
+                map[ fieldList[--nI] ] = null;
+            } while(nI);
+        }
+    }
+    else {
+        sType = typeof fieldList;
+        if (sType === "string") {
+            map = {};
+            map[fieldList] = null;
+        }
+        else if (sType === "object") {
+            if (fieldList instanceof RegExp) {
+                regexp = fieldList;
+            }
+            else {
+                map = fieldList;
+            }
+        }
+    }
+    return {map: map, regexp: regexp};
+}
+
 /**
  * Copy/add all fields and functions from source objects into the target object.
  * As a result the target object may be modified.
@@ -123,22 +152,37 @@ if (! Array.isArray) {
  *              &lt;td>Should only own properties of the source object be copied in the target object?&lt;/td>
  *          &lt;/tr>
  *          &lt;tr>
- *              &lt;td>&lt;code>except&lt;/code>&lt;/td>
- *              &lt;td>&lt;code>Array | Object | String&lt;/code>&lt;/td>
+ *              &lt;td>&lt;code>copy&lt;/code>&lt;/td>
+ *              &lt;td>&lt;code>Array | Object | RegExp | String&lt;/code>&lt;/td>
  *              &lt;td>&lt;code>""&lt;/code> (empty string)&lt;/td>
  *              &lt;td>
- *                  Array, object (the preferred variant) or string that defines names of fields/functions that shouldn't be copied.
+ *                  Array, object, regular expression or string that defines names of fields/functions that should be copied.
+ *                  &lt;br>
+ *                  If an object is passed then his fields determine copied elements.
+ *                  If a regular expression is passed, then field names matching the regular expression will be copied.
+ *                  If a string is passed then it is name of the only copied field.
+ *              &lt;/td>
+ *          &lt;/tr>
+ *          &lt;tr>
+ *              &lt;td>&lt;code>except&lt;/code>&lt;/td>
+ *              &lt;td>&lt;code>Array | Object | RegExp | String&lt;/code>&lt;/td>
+ *              &lt;td>&lt;code>""&lt;/code> (empty string)&lt;/td>
+ *              &lt;td>
+ *                  Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
  *                  &lt;br>
  *                  If an object is passed then his fields determine non-copied elements.
+ *                  If a regular expression is passed, then field names matching the regular expression will not be copied.
  *                  If a string is passed then it is name of the only non-copied field.
  *              &lt;/td>
  *          &lt;/tr>
  *          &lt;tr>
  *              &lt;td>&lt;code>filter&lt;/code>&lt;/td>
- *              &lt;td>&lt;code>Function&lt;/code>&lt;/td>
+ *              &lt;td>&lt;code>Function | RegExp&lt;/code>&lt;/td>
  *              &lt;td>&lt;code>null&lt;/code>&lt;/td>
  *              &lt;td>
- *                  Allows selecting elements that should be copied.
+ *                  Function or regular expression that can be used to select elements that should be copied.
+ *                  &lt;br>
+ *                  If regular expression is passed, only those fields will be copied whose values are matching regular expression.
  *                  &lt;br>
  *                  If specified function returns &lt;code>true&lt;/code> for a field,
  *                  the field will be copied in the target object.
@@ -192,9 +236,9 @@ if (! Array.isArray) {
  *              &lt;/td>
  *          &lt;/tr>
  *      &lt;/table>
- *      &lt;code>except&lt;/code> and &lt;code>filter&lt;/code> settings can be used together.
- *      In such situation a field will be copied only when the field satisfies both settings
- *      (i.e. not in exceptions and filter function returns &lt;code>true&lt;/code>).
+ *      &lt;code>copy&lt;/code>, &lt;code>except&lt;/code> and &lt;code>filter&lt;/code> settings can be used together.
+ *      In such situation a field will be copied only when the field satisfies to all settings
+ *      (i.e. belongs to copied elements, not in exceptions and conforms to filter).
  * @return {Object}
  *      Modified target object.
  * @alias module:mixing
@@ -220,28 +264,24 @@ function mixing(destination, source, settings) {
             change = settings.change,
             filter = settings.filter,
             otherNameMap = ("otherName" in settings ? settings.otherName : null),
+            copyList = settings.copy,
             exceptList = settings.except,
-            bFuncProp, exceptions, nI, nL, obj, propName, propValue, sType, value;
+            bFuncProp, copyMap, copyRegExp, exceptions, exceptRegExp, filterRegExp,
+            nI, nL, obj, propName, propValue, sType, value;
+        
+        if (copyList) {
+            copyList = prepareFieldList(copyList);
+            copyMap = copyList.map;
+            copyRegExp = copyList.regexp;
+        }
         if (exceptList) {
-            if (Array.isArray(exceptList)) {
-                if (exceptList.length > 0) {
-                    exceptions = {};
-                    nI = exceptList.length;
-                    do {
-                        exceptions[ exceptList[--nI] ] = null;
-                    } while(nI);
-                }
-            }
-            else {
-                sType = typeof exceptList;
-                if (sType === "string") {
-                    exceptions = {};
-                    exceptions[exceptList] = null;
-                }
-                else if (sType === "object") {
-                    exceptions = exceptList;
-                }
-            }
+            exceptList = prepareFieldList(exceptList);
+            exceptions = exceptList.map;
+            exceptRegExp = exceptList.regexp;
+        }
+        if (filter && typeof filter === "object") {
+            filterRegExp = filter;
+            filter = null;
         }
         
         // Copy fields and functions according to settings
@@ -249,9 +289,13 @@ function mixing(destination, source, settings) {
             if (obj = source[nI]) {
                 for (propName in obj) {
                     propValue = obj[propName];
-                    if ((! bOwnProperty || obj.hasOwnProperty(propName)) 
-                            && (! exceptions || ! (propName in exceptions)) 
-                            && (! filter || filter(propName, propValue, destination, obj))) {
+                    if ((! bOwnProperty || obj.hasOwnProperty(propName))
+                            && (! copyMap || (propName in copyMap))
+                            && (! copyRegExp || copyRegExp.test(propName))
+                            && (! exceptions || ! (propName in exceptions))
+                            && (! exceptRegExp || ! exceptRegExp.test(propName))
+                            && (! filter || filter(propName, propValue, destination, obj))
+                            && (! filterRegExp || filterRegExp.test(propValue))) {
                         if (otherNameMap && (propName in otherNameMap)) {
                             propName = otherNameMap[propName];
                         }
@@ -400,7 +444,7 @@ module.exports = mixing;
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0</a> on Sat Jul 05 2014 20:44:05 GMT+0400 (MSK)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0</a> on Sun Nov 16 2014 23:56:09 GMT+0400 (MSK)
 </footer>
 
 <script> prettyPrint(); </script>

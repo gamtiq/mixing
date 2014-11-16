@@ -28,6 +28,35 @@
 
 
 
+    function prepareFieldList(fieldList) {
+        var map, nI, regexp, sType;
+        if (Array.isArray(fieldList)) {
+            if (fieldList.length > 0) {
+                map = {};
+                nI = fieldList.length;
+                do {
+                    map[ fieldList[--nI] ] = null;
+                } while(nI);
+            }
+        }
+        else {
+            sType = typeof fieldList;
+            if (sType === "string") {
+                map = {};
+                map[fieldList] = null;
+            }
+            else if (sType === "object") {
+                if (fieldList instanceof RegExp) {
+                    regexp = fieldList;
+                }
+                else {
+                    map = fieldList;
+                }
+            }
+        }
+        return {map: map, regexp: regexp};
+    }
+
     /**
      * Copy/add all fields and functions from source objects into the target object.
      * As a result the target object may be modified.
@@ -117,22 +146,37 @@
      *              <td>Should only own properties of the source object be copied in the target object?</td>
      *          </tr>
      *          <tr>
-     *              <td><code>except</code></td>
-     *              <td><code>Array | Object | String</code></td>
+     *              <td><code>copy</code></td>
+     *              <td><code>Array | Object | RegExp | String</code></td>
      *              <td><code>""</code> (empty string)</td>
      *              <td>
-     *                  Array, object (the preferred variant) or string that defines names of fields/functions that shouldn't be copied.
+     *                  Array, object, regular expression or string that defines names of fields/functions that should be copied.
+     *                  <br>
+     *                  If an object is passed then his fields determine copied elements.
+     *                  If a regular expression is passed, then field names matching the regular expression will be copied.
+     *                  If a string is passed then it is name of the only copied field.
+     *              </td>
+     *          </tr>
+     *          <tr>
+     *              <td><code>except</code></td>
+     *              <td><code>Array | Object | RegExp | String</code></td>
+     *              <td><code>""</code> (empty string)</td>
+     *              <td>
+     *                  Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
      *                  <br>
      *                  If an object is passed then his fields determine non-copied elements.
+     *                  If a regular expression is passed, then field names matching the regular expression will not be copied.
      *                  If a string is passed then it is name of the only non-copied field.
      *              </td>
      *          </tr>
      *          <tr>
      *              <td><code>filter</code></td>
-     *              <td><code>Function</code></td>
+     *              <td><code>Function | RegExp</code></td>
      *              <td><code>null</code></td>
      *              <td>
-     *                  Allows selecting elements that should be copied.
+     *                  Function or regular expression that can be used to select elements that should be copied.
+     *                  <br>
+     *                  If regular expression is passed, only those fields will be copied whose values are matching regular expression.
      *                  <br>
      *                  If specified function returns <code>true</code> for a field,
      *                  the field will be copied in the target object.
@@ -186,9 +230,9 @@
      *              </td>
      *          </tr>
      *      </table>
-     *      <code>except</code> and <code>filter</code> settings can be used together.
-     *      In such situation a field will be copied only when the field satisfies both settings
-     *      (i.e. not in exceptions and filter function returns <code>true</code>).
+     *      <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.
+     *      In such situation a field will be copied only when the field satisfies to all settings
+     *      (i.e. belongs to copied elements, not in exceptions and conforms to filter).
      * @return {Object}
      *      Modified target object.
      * @alias module:mixing
@@ -214,28 +258,24 @@
                 change = settings.change,
                 filter = settings.filter,
                 otherNameMap = ("otherName" in settings ? settings.otherName : null),
+                copyList = settings.copy,
                 exceptList = settings.except,
-                bFuncProp, exceptions, nI, nL, obj, propName, propValue, sType, value;
+                bFuncProp, copyMap, copyRegExp, exceptions, exceptRegExp, filterRegExp,
+                nI, nL, obj, propName, propValue, sType, value;
+            
+            if (copyList) {
+                copyList = prepareFieldList(copyList);
+                copyMap = copyList.map;
+                copyRegExp = copyList.regexp;
+            }
             if (exceptList) {
-                if (Array.isArray(exceptList)) {
-                    if (exceptList.length > 0) {
-                        exceptions = {};
-                        nI = exceptList.length;
-                        do {
-                            exceptions[ exceptList[--nI] ] = null;
-                        } while(nI);
-                    }
-                }
-                else {
-                    sType = typeof exceptList;
-                    if (sType === "string") {
-                        exceptions = {};
-                        exceptions[exceptList] = null;
-                    }
-                    else if (sType === "object") {
-                        exceptions = exceptList;
-                    }
-                }
+                exceptList = prepareFieldList(exceptList);
+                exceptions = exceptList.map;
+                exceptRegExp = exceptList.regexp;
+            }
+            if (filter && typeof filter === "object") {
+                filterRegExp = filter;
+                filter = null;
             }
             
             // Copy fields and functions according to settings
@@ -243,9 +283,13 @@
                 if (obj = source[nI]) {
                     for (propName in obj) {
                         propValue = obj[propName];
-                        if ((! bOwnProperty || obj.hasOwnProperty(propName)) 
-                                && (! exceptions || ! (propName in exceptions)) 
-                                && (! filter || filter(propName, propValue, destination, obj))) {
+                        if ((! bOwnProperty || obj.hasOwnProperty(propName))
+                                && (! copyMap || (propName in copyMap))
+                                && (! copyRegExp || copyRegExp.test(propName))
+                                && (! exceptions || ! (propName in exceptions))
+                                && (! exceptRegExp || ! exceptRegExp.test(propName))
+                                && (! filter || filter(propName, propValue, destination, obj))
+                                && (! filterRegExp || filterRegExp.test(propValue))) {
                             if (otherNameMap && (propName in otherNameMap)) {
                                 propName = otherNameMap[propName];
                             }
