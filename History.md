@@ -1,3 +1,8 @@
+### 0.1.1 / 2014-11-16
+
+* add `copy` setting to specify names of fields/functions that should be copied
+* RegExp can be used as value for `except` and `filter` settings
+
 ### 0.1.0 / 2014-07-05
 
 * add `ownProperty` setting to copy only own properties of object(s)
