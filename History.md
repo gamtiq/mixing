@@ -1,3 +1,7 @@
+### 0.1.2 / 2015-01-04
+
+* migration to [Component](https://github.com/componentjs/component) 1.0
+
 ### 0.1.1 / 2014-11-16
 
 * add `copy` setting to specify names of fields/functions that should be copied

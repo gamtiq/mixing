@@ -86,7 +86,7 @@ module.exports = function(grunt) {
         var file = grunt.file,
             options = {encoding: "utf8"},
             sLibPath = "./index.js",
-            sShimPath = "./components/gamtiq-isarray-shim/index.js",
+            sShimPath = "./components/gamtiq/isarray-shim/0.1.0/index.js",
             sLib, sShim;
         if (file.isFile(sShimPath)) {
             if (file.isFile(sLibPath)) {
