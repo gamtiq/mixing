@@ -1,6 +1,6 @@
 {
     "name": "mixing",
-    "repo": "gamtiq/mixing",
+    "repository": "gamtiq/mixing",
     "description": "Functions to mix, filter, change and copy/clone objects",
     "version": "0.1.1",
     "keywords": [
@@ -15,7 +15,7 @@
         "clone"
     ],
     "dependencies": {
-        "gamtiq/isarray-shim": "*"
+        "gamtiq/isarray-shim": "~0.1.0"
     },
     "development": {},
     "license": "MIT",
