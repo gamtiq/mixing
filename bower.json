@@ -16,7 +16,8 @@
     "map",
     "change",
     "copy",
-    "clone"
+    "clone",
+    "update"
   ],
   "license": "MIT",
   "ignore": [

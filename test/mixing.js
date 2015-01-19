@@ -39,6 +39,14 @@ describe("mixing", function() {
         expect = chai.expect;
     }
     
+    
+    function incNumValue(field, value) {
+        return typeof value === "number"
+                ? ++value
+                : value;
+    }
+    
+    
     describe("mixing()", function() {
         
         describe("mixing({}, {})", function() {
@@ -624,7 +632,7 @@ describe("mixing", function() {
             });
         });
         
-        describe("mixing(destination, source, {change: ...})", function() {
+        describe("mixing(destination, source, {change: function...})", function() {
             function change(field, value, target, source) {
                 var sType = typeof value;
                 if (sType === "number") {
@@ -663,6 +671,56 @@ describe("mixing", function() {
                     .eql({a: "1", b: "b", c: "false", d: "[object Object]", e: change.toString(), 
                             f: "null", g: "undefined", h: ""});
             });
+        });
+        
+        describe("mixing(destination, source, {change: {field1: value1, ...})", function() {
+            it("should copy changed values", function() {
+                expect( mixin({}, {a: -9, b: undef, c: 10, d: "dom", e: "End", f: "finish", g: "galileo"}, 
+                                {change: {a: "", d: 0, f: null}}) )
+                    .eql({a: "", b: undef, c: 10, d: 0, e: "End", f: null, g: "galileo"});
+                expect( mixin({omega: "o", eta: 2.7}, {list: couple, s: "str", b: true, mix: mixin, omega: 3}, 
+                                {change: {eta: "nol", list: list, b: 5, a: 7}}) )
+                    .eql({omega: "o", eta: 2.7, list: list, s: "str", b: 5, mix: mixin});
+            });
+        });
+    });
+    
+    
+    
+    describe(".change(source, change)", function() {
+        var change = mixin.change;
+        it("should return unchanged source value", function() {
+            expect( change(null) )
+                .eql(null);
+            expect( change(undef) )
+                .eql(undef);
+            expect( change("") )
+                .eql("");
+            expect( change(true) )
+                .eql(true);
+        });
+        it("should return modified source object/array", function() {
+            function check(obj, update, expected) {
+                var result = change(obj, update);
+                expect( result )
+                    .equal(result);
+                expect( result )
+                    .eql(expected);
+            }
+            
+            check( {a: 1, b: 2, c: 3},
+                    {b: "two", a: null},
+                    {a: null, b: "two", c: 3} );
+            check( {a: 1, b: "2", c: 3, d: 100, e: null},
+                    incNumValue,
+                    {a: 2, b: "2", c: 4, d: 101, e: null} );
+            
+            check( [1, 2, 3, 4, 5],
+                    {0: 0, 3: 100},
+                    [0, 2, 3, 100, 5] );
+            check( ["abc", 4, null, change, -1],
+                    incNumValue,
+                    ["abc", 5, null, change, 0] );
         });
     });
     
@@ -871,6 +929,26 @@ describe("mixing", function() {
                 .have.property("obj", obj);
             expect(dest)
                 .have.property("mix", mixin.mix);
+        });
+    });
+    
+    
+    
+    describe(".update(change)", function() {
+        it("should modify fields into object that has update method", function() {
+            var update = mixin.update,
+                dest = {
+                    a: 1,
+                    b: "beta",
+                    c: emptyFunc,
+                    d: -8,
+                    update: update
+                };
+            
+            expect( dest.update(incNumValue) )
+                .equal(dest);
+            expect( dest )
+                .eql({a: 2, b: "beta", c: emptyFunc, d: -7, update: update});
         });
     });
 });

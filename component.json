@@ -12,7 +12,8 @@
         "map",
         "change",
         "copy",
-        "clone"
+        "clone",
+        "update"
     ],
     "dependencies": {
         "gamtiq/isarray-shim": "~0.1.0"

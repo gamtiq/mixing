@@ -27,7 +27,8 @@
     "map",
     "change",
     "copy",
-    "clone"
+    "clone",
+    "update"
   ],
   "homepage": "https://github.com/gamtiq/mixing",
   "author": "Denis Sikuler",

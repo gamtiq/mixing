@@ -191,12 +191,14 @@ function prepareFieldList(fieldList) {
  *          </tr>
  *          <tr>
  *              <td><code>change</code></td>
- *              <td><code>Function</code></td>
+ *              <td><code>Function | Object</code></td>
  *              <td><code>null</code></td>
  *              <td>
- *                  Gives ability to change values that should be copied.
+ *                  Function or object that gives ability to change values that should be copied.
  *                  <br>
- *                  Value returned by the function for a field will be copied into the target object 
+ *                  If an object is passed then his fields determine new values for copied elements.
+ *                  <br>
+ *                  If a function is passed then value returned by the function for a field will be copied into the target object 
  *                  instead of original field's value.
  *                  <br>
  *                  The following parameters are passed into change function:
@@ -234,12 +236,11 @@ function mixing(destination, source, settings) {
             bOverwrite = Boolean(settings.overwrite),
             bOwnProperty = Boolean(settings.ownProperty),
             bRecursive = Boolean(settings.recursive),
-            change = settings.change,
             filter = settings.filter,
             otherNameMap = ("otherName" in settings ? settings.otherName : null),
             copyList = settings.copy,
             exceptList = settings.except,
-            bFuncProp, copyMap, copyRegExp, exceptions, exceptRegExp, filterRegExp,
+            bFuncProp, change, changeFunc, copyMap, copyRegExp, exceptions, exceptRegExp, filterRegExp,
             nI, nL, obj, propName, propValue, sType, value;
         
         if (copyList) {
@@ -255,6 +256,14 @@ function mixing(destination, source, settings) {
         if (filter && typeof filter === "object") {
             filterRegExp = filter;
             filter = null;
+        }
+        if (settings.change) {
+            if (typeof settings.change === "function") {
+                changeFunc = settings.change;
+            }
+            else {
+                change = settings.change;
+            }
         }
         
         // Copy fields and functions according to settings
@@ -285,8 +294,11 @@ function mixing(destination, source, settings) {
                             bFuncProp = (sType === "function");
                             if ((bOverwrite || ! (propName in destination))
                                     && (! bFuncProp || bCopyFunc)) {
-                                if (change) {
-                                    propValue = change(propName, propValue, destination, obj);
+                                if (changeFunc) {
+                                    propValue = changeFunc(propName, propValue, destination, obj);
+                                }
+                                else if (change && (propName in change)) {
+                                    propValue = change[propName];
                                 }
                                 if (bFuncProp && bFuncToProto) {
                                     destination.constructor.prototype[propName] = propValue;
@@ -303,6 +315,25 @@ function mixing(destination, source, settings) {
     }
     return destination;
 }
+
+/**
+ * Change values of fields of given object.
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * mixing(source, source, {change: change, overwrite: true, oneSource: true});
+ * </pre></code>
+ * 
+ * @param {Array | Object} source
+ *      An array or an object whose fields should be modified.
+ * @param {Function | Object} change
+ *      A function or an object that specifies the modification. See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Modified <code>source</code> object.
+ */
+mixing.change = function(source, change) {
+    return mixing(source, source, {change: change, overwrite: true, oneSource: true});
+};
 
 /**
  * Make a copy of source object(s).
@@ -398,6 +429,24 @@ mixing.map = function(change) {
  */
 mixing.mix = function(source, settings) {
     return mixing(this, source, settings);
+};
+
+/**
+ * Change values of fields of <code>this</code> object.
+ * <br>
+ * This function is a "wrap" for the following code:
+ * <code><pre>
+ * mixing.change(this, change);
+ * </pre></code>
+ * It can be transferred to an object to use as a method.
+ * 
+ * @param {Function | Object} change
+ *      A function or an object that specifies the modification. See {@link module:mixing mixing} for details.
+ * @return {Object}
+ *      Modified <code>this</code> object.
+ */
+mixing.update = function(change) {
+    return mixing.change(this, change);
 };
 
 module.exports = mixing;

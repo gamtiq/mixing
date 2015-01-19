@@ -101,13 +101,17 @@ mixing({},
            },
        });   // Returns {c: 3, e: 4, h: 49}
 
+mixing.change({a: 1, b: "abc", c: null, d: 4444, e: false},
+                {b: 22, c: 333, e: 55555});   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
+
 // Clone, filter, map
 var obj = {
     a: 1,
     b: 2,
     clone: mixing.clone,
     filter: mixing.filter,
-    map: mixing.map
+    map: mixing.map,
+    update: mixing.update
 };
 var obj2 = obj.clone();   // obj2 is a shallow copy of obj
 
@@ -123,6 +127,12 @@ var obj4 = obj.map({
         return value + value;
     }
 });   // {a: 2, b: 4}
+
+obj.update(function(field, value, target, source) {
+    return typeof value === "number"
+                ? ++value
+                : value;
+});   // obj is {a: 2, b: 3, clone: ...}
 ```
 
 ## API
@@ -148,7 +158,11 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `except`: `Array | Object | RegExp | String` - Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
 * `filter`: `Function | RegExp` - Function or regular expression that can be used to select elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
-* `change`: `Function` - Gives ability to change values that should be copied.
+* `change`: `Function | Object` - Function or object that gives ability to change values that should be copied.
+
+### .change(source: Array | Object, change: Function | Object);
+
+Change values of fields of given object.
 
 ### .copy(source: Array | Object, [settings: Object]);
 
@@ -211,6 +225,19 @@ SomeClass.prototype.mix = mixing.mix;
 var obj = new SomeClass();
 ...
 obj.mix([obj1, obj2]);
+```
+
+### .update(change: Function | Object);
+
+Change values of fields of `this` object.
+This function can be transferred to an object to use as a method.
+For example:
+```js
+SomeClass.prototype.update = mixing.update;
+...
+var obj = new SomeClass();
+...
+obj.update({a: 2, b: ""});
 ```
 
 ## Related projects
