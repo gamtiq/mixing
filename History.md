@@ -1,3 +1,8 @@
+### 0.1.3 / 2015-01-20
+
+* an object can be used as value for `change` setting
+* add `change` and `update` methods
+
 ### 0.1.2 / 2015-01-04
 
 * migration to [Component](https://github.com/componentjs/component) 1.0

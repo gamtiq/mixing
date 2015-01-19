@@ -104,7 +104,7 @@ mixing({},
 mixing.change({a: 1, b: "abc", c: null, d: 4444, e: false},
                 {b: 22, c: 333, e: 55555});   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
 
-// Clone, filter, map
+// Clone, filter, map, update
 var obj = {
     a: 1,
     b: 2,
