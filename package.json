@@ -57,6 +57,10 @@
   "categories": [
     "Utilities"
   ],
+  "jspm": {
+    "main": "dist/mixing.js",
+    "format": "cjs"
+  },
   "spm": {
     "main": "index.js",
     "dependencies": {
