@@ -1,3 +1,7 @@
+### 0.1.4 / 2015-03-17
+
+* add [jspm](https://jspm.io) support
+
 ### 0.1.3 / 2015-01-20
 
 * an object can be used as value for `change` setting
