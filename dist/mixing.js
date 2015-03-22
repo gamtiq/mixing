@@ -181,12 +181,12 @@
      *                  If specified function returns <code>true</code> for a field,
      *                  the field will be copied in the target object.
      *                  <br>
-     *                  The following parameters are passed into filter function:
+     *                  An object having the following fields is passed into filter function:
      *                  <ul>
-     *                  <li>field name
-     *                  <li>field value
-     *                  <li>reference to the target object
-     *                  <li>reference to the source object
+     *                  <li><code>field</code> - field name
+     *                  <li><code>value</code> - field value
+     *                  <li><code>target</code> - reference to the target object
+     *                  <li><code>source</code> - reference to the source object
      *                  </ul>
      *              </td>
      *          </tr>
@@ -222,12 +222,12 @@
      *                  If a function is passed then value returned by the function for a field will be copied into the target object 
      *                  instead of original field's value.
      *                  <br>
-     *                  The following parameters are passed into change function:
+     *                  An object having the following fields is passed into change function:
      *                  <ul>
-     *                  <li>field name
-     *                  <li>original field value
-     *                  <li>reference to the target object
-     *                  <li>reference to the source object
+     *                  <li><code>field</code> - field name
+     *                  <li><code>value</code> - field value
+     *                  <li><code>target</code> - reference to the target object
+     *                  <li><code>source</code> - reference to the source object
      *                  </ul>
      *              </td>
      *          </tr>
@@ -297,7 +297,7 @@
                                 && (! copyRegExp || copyRegExp.test(propName))
                                 && (! exceptions || ! (propName in exceptions))
                                 && (! exceptRegExp || ! exceptRegExp.test(propName))
-                                && (! filter || filter(propName, propValue, destination, obj))
+                                && (! filter || filter({field: propName, value: propValue, target: destination, source: obj}))
                                 && (! filterRegExp || filterRegExp.test(propValue))) {
                             if (otherNameMap && (propName in otherNameMap)) {
                                 propName = otherNameMap[propName];
@@ -316,7 +316,7 @@
                                 if ((bOverwrite || ! (propName in destination))
                                         && (! bFuncProp || bCopyFunc)) {
                                     if (changeFunc) {
-                                        propValue = changeFunc(propName, propValue, destination, obj);
+                                        propValue = changeFunc({field: propName, value: propValue, target: destination, source: obj});
                                     }
                                     else if (change && (propName in change)) {
                                         propValue = change[propName];

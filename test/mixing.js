@@ -40,7 +40,8 @@ describe("mixing", function() {
     }
     
     
-    function incNumValue(field, value) {
+    function incNumValue(data) {
+        var value = data.value;
         return typeof value === "number"
                 ? ++value
                 : value;
@@ -505,8 +506,8 @@ describe("mixing", function() {
         });
         
         describe("mixing(destination, source, {filter: ...})", function() {
-            function filter(field, value, target, source) {
-                return ["a", "c", "z", "list", "obj"].indexOf(field) > -1;
+            function filter(data) {
+                return ["a", "c", "z", "list", "obj"].indexOf(data.field) > -1;
             }
             
             describe("mixing(destination, source, {filter: someFunction})", function() {
@@ -556,7 +557,8 @@ describe("mixing", function() {
                                     [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
                                     {
                                         except: ["a", "g"],
-                                        filter: function(field, value, target, source) {
+                                        filter: function(data) {
+                                            var value = data.value;
                                             return typeof value === "number" && value < 10;
                                         }
                                     }) )
@@ -633,8 +635,9 @@ describe("mixing", function() {
         });
         
         describe("mixing(destination, source, {change: function...})", function() {
-            function change(field, value, target, source) {
-                var sType = typeof value;
+            function change(data) {
+                var value = data.value,
+                    sType = typeof value;
                 if (sType === "number") {
                     value *= value;
                 }
@@ -644,8 +647,8 @@ describe("mixing", function() {
                 return value;
             }
             
-            function changeToStr(field, value, target, source) {
-                return String(value);
+            function changeToStr(data) {
+                return String(data.value);
             }
             
             it("should copy changed values", function() {
@@ -703,7 +706,7 @@ describe("mixing", function() {
             function check(obj, update, expected) {
                 var result = change(obj, update);
                 expect( result )
-                    .equal(result);
+                    .equal(obj);
                 expect( result )
                     .eql(expected);
             }
@@ -748,8 +751,8 @@ describe("mixing", function() {
                 .eql({a: str, b: num, c: emptyArray, d: nullVal, e: sEmpty, f: undef, g: list, met2: method2});
             expect( copy([obj, null, source, {a: 1}, {f: obj, g: 0, h: "h"}], 
                             {
-                                filter: function(field, value, target, source) {
-                                    return typeof source[field] === "object";
+                                filter: function(data) {
+                                    return typeof data.source[data.field] === "object";
                                 }
                             }) )
                 .eql({a: list, b: obj, c: emptyArray, d: nullVal, g: list, f: obj});
@@ -780,8 +783,8 @@ describe("mixing", function() {
             expect( source.clone({except: ["a", "no", "clone"]}) )
                 .eql({b: "beta", f: false, list: list});
             expect( source.clone({
-                                    filter: function(field, value, target, source) {
-                                        var sType = typeof source[field];
+                                    filter: function(data) {
+                                        var sType = typeof data.source[data.field];
                                         return sType !== "object" && sType !== "function";
                                     }
                                 }) )
@@ -792,12 +795,12 @@ describe("mixing", function() {
     
     
     describe(".filter(filter: Function | settings: Object)", function() {
-        function filterObj(field, value, target, source) {
-            return typeof value === "object";
+        function filterObj(data) {
+            return typeof data.value === "object";
         }
         
-        function filterFunc(field, value, target, source) {
-            return typeof value === "function";
+        function filterFunc(data) {
+            return typeof data.value === "function";
         }
         
         var filter = mixin.filter;
@@ -849,14 +852,16 @@ describe("mixing", function() {
     
     
     describe(".map(change: Function | settings: Object)", function() {
-        function sum(field, value, target, source) {
-            var sType = typeof value;
+        function sum(data) {
+            var value = data.value,
+                sType = typeof value;
             return sType === "number" || sType === "string" 
                         ? value + value 
                         : value;
         }
         
-        function nullify(field, value, target, source) {
+        function nullify(data) {
+            var value = data.value;
             return typeof value === "object" ? null : value;
         }
         
@@ -891,8 +896,8 @@ describe("mixing", function() {
         });
         
         it("should create a copy of this object", function() {
-            function retValue(field, value, target, source) {
-                return value;
+            function retValue(data) {
+                return data.value;
             }
             
             expect( map.call(obj, {}) )

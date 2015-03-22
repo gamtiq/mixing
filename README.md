@@ -28,6 +28,10 @@ Functions to mix, filter, change and copy/clone objects.
 
     bower install mixing
 
+### [JSPM](http://jspm.io)
+
+    jspm install mixing
+
 ### [SPM](http://spmjs.io)
 
     spm install mixing
@@ -38,7 +42,7 @@ Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
 ## Usage
 
-### Node, Ringo, Component, SPM
+### Node, Ringo, Component, JSPM, SPM
 
 ```js
 var mixing = require("mixing");
@@ -49,6 +53,14 @@ var mixing = require("mixing");
 
 ```js
 require(["mixing"], function(mixing) {
+    ...
+});
+```
+
+### JSPM
+
+```js
+System.import("mixing").then(function(mixing) {
     ...
 });
 ```
@@ -93,12 +105,14 @@ mixing({},
        [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: "str", g: 50}, undefined, {h: 7}], 
        {
            except: ["a", "g"],
-           filter: function(field, value, target, source) {
+           filter: function(data) {
+               var value = data.value;
                return typeof value === "number" && value < 10;
            },
-           change: function(field, value, target, source) {
+           change: function(data) {
+               var value = data.value;
                return value > 5 ? value * value : value;
-           },
+           }
        });   // Returns {c: 3, e: 4, h: 49}
 
 mixing.change({a: 1, b: "abc", c: null, d: 4444, e: false},
@@ -115,20 +129,21 @@ var obj = {
 };
 var obj2 = obj.clone();   // obj2 is a shallow copy of obj
 
-function isNumericValue(field, value, target, source) {
-    return typeof value === "number";
+function isNumericValue(data) {
+    return typeof data.value === "number";
 }
 
 var obj3 = obj.filter(isNumericValue);   // {a: 1, b: 2}
 
 var obj4 = obj.map({
     filter: isNumericValue,
-    change: function(field, value, target, source) {
-        return value + value;
+    change: function(data) {
+        return data.value + data.value;
     }
 });   // {a: 2, b: 4}
 
-obj.update(function(field, value, target, source) {
+obj.update(function(data) {
+    var value = data.value;
     return typeof value === "number"
                 ? ++value
                 : value;
@@ -191,8 +206,8 @@ SomeClass.prototype.filter = mixing.filter;
 ...
 var obj = new SomeClass();
 ...
-var result = obj.filter(function(field, value, target, source) {
-    // source is obj, target is result
+var result = obj.filter(function(data) {
+    // data.source is obj, data.target is result
     ...
 });
 ```
@@ -207,8 +222,8 @@ SomeClass.prototype.map = mixing.map;
 ...
 var obj = new SomeClass();
 ...
-var result = obj.map(function(field, value, target, source) {
-    // source is obj, target is result
+var result = obj.map(function(data) {
+    // data.source is obj, data.target is result
     ...
 });
 ```
