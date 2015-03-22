@@ -1,3 +1,7 @@
+### 1.0.0 / 2015-03-22
+
+* change parameters for the functional settings `filter` and `change` (_backward incompatible change_)
+
 ### 0.1.4 / 2015-03-17
 
 * add [jspm](https://jspm.io) support
