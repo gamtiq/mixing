@@ -49,6 +49,13 @@ var mixing = require("mixing");
 ...
 ```
 
+### [Duo](http://duojs.org)
+
+```js
+var mixing = require("gamtiq/mixing");
+...
+```
+
 ### Jam
 
 ```js
