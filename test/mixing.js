@@ -11,7 +11,8 @@ describe("mixing", function() {
         return a > b;
     }
     
-    var str = "f1",
+    var bSymbol = typeof Symbol === "function",
+        str = "f1",
         num = 7,
         emptyObj = {},
         emptyArray = [],
@@ -22,11 +23,19 @@ describe("mixing", function() {
         obj = {a: str, b: num, c: emptyArray, d: nullVal, e: sEmpty, f: undef, g: list},
         couple = [list, obj],
         source = {a: list, b: obj, c: couple, d: {e: str, f: obj, g: couple, m1: method1}, met2: method2},
-        expect, mixin;
+        expect, mixin, sym1, sym2, sym3;
     
     couple.a = sEmpty;
     couple.g = emptyObj;
     couple.met = method2;
+    
+    if (bSymbol) {
+        sym1 = Symbol("symbol 1");
+        sym2 = Symbol("symbol 2");
+        sym3 = Symbol("symbol 3");
+        source[sym1] = "symbol 1";
+        source[sym3] = sym2;
+    }
     
     // node
     if (typeof mixing === "undefined") {
@@ -39,6 +48,38 @@ describe("mixing", function() {
         expect = chai.expect;
     }
     
+    
+    function addField(dest) {
+        var bAdd = bSymbol,
+            field, sType;
+        for (var nI = 1, nL = arguments.length; nI < nL; nI += 2) {
+            field = arguments[nI];
+            sType = typeof field;
+            if (bAdd || (sType !== "symbol" && sType !== "undefined")) {
+                dest[field] = arguments[nI + 1];
+            }
+        }
+        return dest;
+    }
+    
+    function checkDestination(dest, source, settings, valueMap, exceptList) {
+        var fieldList = Object.getOwnPropertyNames(valueMap).concat(bSymbol ? Object.getOwnPropertySymbols(valueMap) : []),
+            field, nI, nL;
+        mixin(dest, source, settings);
+        for (nI = 0, nL = fieldList.length; nI < nL; nI++) {
+            field = fieldList[nI];
+            expect( field in dest )
+                .equal(true);
+            expect( dest[field] )
+                .eql(valueMap[field]);
+        }
+        if (exceptList) {
+            for (nI = 0, nL = exceptList.length; nI < nL; nI++) {
+                expect( exceptList[nI] in dest )
+                    .equal(false);
+            }
+        }
+    }
     
     function incNumValue(data) {
         var value = data.value;
@@ -130,6 +171,16 @@ describe("mixing", function() {
                 
                 expect(dest)
                     .have.property("m1", method1);
+                
+                dest = {a: 1, d: null, met2: undef};
+                dest[sym1] = "s1";
+                dest[sym2] = "s2";
+                
+                checkDestination(dest, source, null,
+                                    addField({a: 1, b: obj, c: couple, d: null, met2: undef},
+                                                sym1, "s1",
+                                                sym2, "s2",
+                                                sym3, sym2));
             });
             
             it("should copy nothing", function() {
@@ -151,6 +202,17 @@ describe("mixing", function() {
                     .eql({"a b c": method1, "d e f": method2, "g h i": list});
                 expect( mixin({a: 1, start: "now"}, [{c: 3}, null, {delta: source}, false, 0, {finish: "endless"}]) )
                     .eql({a: 1, start: "now", c: 3, delta: source, finish: "endless"});
+                
+                checkDestination({c: "tree", d: "four"},
+                                    [
+                                         addField({a: null}, sym1, undef),
+                                         addField({a: "2"}, sym1, "s1"),
+                                         addField({c: 7}, sym2, sym2)
+                                     ],
+                                    null,
+                                    addField({c: "tree", d: "four", a: null},
+                                                sym1, undef,
+                                                sym2, sym2));
             });
         });
         
@@ -209,6 +271,26 @@ describe("mixing", function() {
             });
         });
         
+        if (bSymbol) {
+            describe("mixing(destination, source, {processSymbol: false}])", function() {
+                var settings = {processSymbol: false};
+                it("should copy all property names (not symbol property keys) from the source object into the destination object", function() {
+                    var dest = {a: 1},
+                        result = {a: 1, b: source.b, c: source.c, d: source.d, met2: source.met2};
+                    dest[sym1] = 0;
+                    result[sym1] = dest[sym1];
+                    
+                    checkDestination({}, source, settings,
+                                        {a: source.a, b: source.b, c: source.c, d: source.d, met2: source.met2},
+                                        [sym1, sym2, sym3]);
+        
+                    checkDestination(dest, source, settings,
+                                        result,
+                                        [sym2, sym3]);
+                });
+            });
+        }
+        
         describe("mixing(destination, source, {overwrite: true}])", function() {
             var settings = {overwrite: true};
             it("should change field values in the destination object", function() {
@@ -230,6 +312,11 @@ describe("mixing", function() {
                     .have.property("d", obj);
                 expect(dest)
                     .have.property("m1", emptyFunc);
+                
+                checkDestination( addField({a: "one", c: undef}, sym3, "s3"),
+                                    addField({a: null, b: 2}, sym3, sym1, sym2, "s2"),
+                                    settings,
+                                    addField({a: null, b: 2, c: undef}, sym3, sym1, sym2, "s2"));
             });
         });
         
@@ -253,13 +340,22 @@ describe("mixing", function() {
                     .have.property("o")
                     .have.property("f7", emptyObj);
                 expect(dest)
-                    .have.deep.property("e", obj);
+                    .have.property("e", obj);
                 expect(dest)
                     .have.property("y")
                     .have.property("y1", num);
                 expect(dest)
-                    .have.property("y")
-                    .have.deep.property("y2", couple);
+                    .have.property("y");
+                expect(dest)
+                    .have.deep.property("y.y2", couple);
+                
+                checkDestination(addField({h: ""}, sym1, addField({u: 2}, sym2, "s2")),
+                                    addField({h: "no", g: "yes"}, sym1, addField({k: 2}, sym2, "symbo", sym1, "s1")),
+                                    settings,
+                                    addField({h: "", g: "yes"},
+                                                sym1, addField({u: 2, k: 2},
+                                                                sym2, "s2",
+                                                                sym1, "s1")));
             });
         });
         
@@ -338,11 +434,11 @@ describe("mixing", function() {
                     .eql({"0": list, "1": obj, a: obj, met: undef, c: 3, g: couple.g});
             
                 expect(dest)
-                    .have.deep.property("1", obj);
+                    .have.property("1", obj);
                 expect(dest)
-                    .have.deep.property("0", list);
+                    .have.property("0", list);
                 expect(dest)
-                    .have.deep.property("a", obj);
+                    .have.property("a", obj);
                 expect(dest)
                     .have.property("c", 3);
     //            expect(dest)
@@ -368,6 +464,19 @@ describe("mixing", function() {
                     
                     expect( mixin({}, src, settings) )
                         .eql({b: "beta", e: "epsilon", x: 707});
+                    
+                    if (bSymbol) {
+                        checkDestination(addField({inside: "out"}, sym3, "symbol", 1, "one"),
+                                            addField(Object.create( addField({src: 789}, sym1, 1, sym2, 2) ),
+                                                        sym1, "s1",
+                                                        "a", 100,
+                                                        "b", "light"),
+                                            settings,
+                                            addField({inside: "out", "1": "one", a: 100, b: "light"},
+                                                        sym1, "s1",
+                                                        sym3, "symbol"),
+                                            [src, sym2]);
+                    }
                 });
                 
                 it("should copy nothing", function() {
@@ -400,17 +509,43 @@ describe("mixing", function() {
                 });
             });
             
-            describe("mixing(destination, source, {copy: ['name1', 'name2', ...]})", function() {
+            if (bSymbol) {
+                describe("mixing(destination, source, {copy: someSymbol})", function() {
+                    it("should copy only specified symbol field", function() {
+                        checkDestination({a: 1, y: "net"},
+                                            source,
+                                            {copy: sym3},
+                                            addField({a: 1, y: "net"}, sym3, sym2),
+                                            ["b", "c", "d", "met2", sym1]);
+                    });
+                });
+            }
+            
+            describe("mixing(destination, source, {copy: ['name1', someSymbol1, ...]})", function() {
                 it("should copy only those fields from the source object that are mentioned in the array", function() {
                     expect( mixin({a: 1, b: 2}, {a: 4, c: 2, d: 1, z: -99}, {copy: ["a", "c", "z"]}) )
                         .eql({a: 1, b: 2, c: 2, z: -99});
+                    
+                    checkDestination({zero: "code"},
+                                        source,
+                                        {copy: ["b", sym1, "met2"]},
+                                        addField({zero: "code", b: source.b, met2: source.met2},
+                                                    sym1, source[sym1]),
+                                        ["a", "c", "d", sym3]);
                 });
             });
             
-            describe("mixing(destination, source, {copy: {'name1': value1, 'name2': value2, ...}})", function() {
+            describe("mixing(destination, source, {copy: {'name1': value1, someSymbol1: value2, ...}})", function() {
                 it("should copy only those fields from the source object that are in the specified object", function() {
                     expect( mixin({beta: 2, delta: 4}, obj, {copy: {c: null, d: 1, f: undef}}) )
                         .eql({beta: 2, delta: 4, c: emptyArray, d: nullVal, f: undef});
+                    
+                    checkDestination({extra: "field", s: 7, d: 4},
+                                        source,
+                                        {copy: addField({a: true, d: null}, sym1, null)},
+                                        addField({extra: "field", s: 7, d: 4, a: source.a},
+                                                    sym1, source[sym1]),
+                                        ["b", "c", "met2", sym3]);
                 });
             });
             
@@ -418,6 +553,14 @@ describe("mixing", function() {
                 it("should copy only those fields from the source object that match the regular expression", function() {
                     expect( mixin({f: 7, g: 6}, {a: 5, 2: "limited", u: 3, 777: 1, jk: 4, "4you": 83}, {copy: /^\d/}) )
                         .eql({f: 7, g: 6, 2: "limited", 777: 1, "4you": 83});
+                    
+                    checkDestination({omega: 3, b: 777},
+                                        source,
+                                        {copy: /bol/},
+                                        addField({omega: 3, b: 777},
+                                                    sym1, source[sym1],
+                                                    sym3, source[sym3]),
+                                        ["a", "c", "d", "met2"]);
                 });
             });
         });
@@ -443,7 +586,20 @@ describe("mixing", function() {
                 });
             });
             
-            describe("mixing(destination, source, {except: ['name1', 'name2', ...]})", function() {
+            if (bSymbol) {
+                describe("mixing(destination, source, {except: someSymbol})", function() {
+                    it("should copy all fields from the source object except one that is specified", function() {
+                        checkDestination({c: 3},
+                                            source,
+                                            {except: sym3},
+                                            addField({c: 3, a: source.a, b: source.b, d: source.d, met2: source.met2},
+                                                        sym1, source[sym1]),
+                                            [sym3]);
+                    });
+                });
+            }
+            
+            describe("mixing(destination, source, {except: ['name1', someSymbol1, ...]})", function() {
                 var settings = {except: ["a", "c", "f"]};
                 it("should copy all fields from the source object except those that are mentioned in the array", function() {
                     var dest = {b: null, beta: 3, d: couple};
@@ -464,10 +620,16 @@ describe("mixing", function() {
                         .not.have.property("c");
                     expect(dest)
                         .not.have.property("f");
+                    
+                    checkDestination({c: 3},
+                                        source,
+                                        {except: ["a", "met2", sym1, sym3]},
+                                        {c: 3, b: source.b, d: source.d},
+                                        [sym1, sym3]);
                 });
             });
             
-            describe("mixing(destination, source, {except: {'name1': value1, 'name2': value2, ...}})", function() {
+            describe("mixing(destination, source, {except: {'name1': value1, someSymbol1: value2, ...}})", function() {
                 var settings = {except: {beta: true, alpha: false}};
                 it("should copy all fields from the source object except those that are in the exception object", function() {
                     var dest = {a: null, beta: 3, dream: "win"};
@@ -488,6 +650,13 @@ describe("mixing", function() {
                         .have.property("bet", couple);
                     expect(dest)
                         .not.have.property("alpha");
+                    
+                    checkDestination({d: undef, e: 5, met2: null},
+                                        source,
+                                        {except: addField({b: null}, sym3, true)},
+                                        addField({d: undef, e: 5, met2: null, a: source.a, c: source.c},
+                                                    sym1, source[sym1]),
+                                        ["b", sym3]);
                 });
             });
             
@@ -501,6 +670,12 @@ describe("mixing", function() {
                     dest = {b: 1, c: 4};
                     expect( mixin(dest, {b: 5, a4: -3, d: 9, a1: "", alfa: "rays"}, {except: /^a\d/}) )
                         .eql({b: 1, c: 4, d: 9, alfa: "rays"});
+                    
+                    checkDestination({a: 1, c: 3, e: 5},
+                                        source,
+                                        {except: /sym/},
+                                        {a: 1, c: 3, e: 5, b: source.b, d: source.d, met2: source.met2},
+                                        [sym1, sym3]);
                 });
             });
         });
@@ -536,6 +711,12 @@ describe("mixing", function() {
                         .eql({b: 39, x: "yz"});
                     expect( mixin({}, {a: obj, b: 832, f: "done", nega: -64, no: null, s: "5th"}, {filter: /^\D/}) )
                         .eql({a: obj, f: "done", nega: -64, no: null});
+                    
+                    checkDestination({field: "value", t: 9},
+                                        source,
+                                        {filter: /^Symbol\(/},
+                                        addField({field: "value", t: 9}, sym3, sym2),
+                                        ["a", "b", "c", "d", "met2", sym1]);
                 });
             });
             
@@ -581,7 +762,7 @@ describe("mixing", function() {
             });
         });
         
-        describe("mixing(destination, array, {otherName: {name1: 'name2', name3: 'name4', ...}])", function() {
+        describe("mixing(destination, array, {otherName: {name1: 'name2', someSymbol: otherSymbol, ...}])", function() {
             var settings = {otherName: {a: "alpha", b: "beta", met1: "smeta"}};
             it("should copy fields under other names", function() {
                 var dest = {a: obj, b: 2, c: emptyArray};
@@ -608,6 +789,14 @@ describe("mixing", function() {
                     .have.property("met2", method2);
                 expect(dest)
                     .have.property("d", num);
+                
+                checkDestination({d: 0},
+                                    source,
+                                    {otherName: addField({a: "x", met2: "f"}, sym3, sym2)},
+                                    addField({d: 0, x: source.a, b: source.b, c: source.c, f: source.met2},
+                                                sym1, source[sym1],
+                                                sym2, source[sym3]),
+                                    ["a", "met2", sym3]);
             });
             
             it("should copy fields under other names except those that are specified in the exceptions", function() {
@@ -631,6 +820,17 @@ describe("mixing", function() {
                     .have.property("delta", 4);
                 expect(dest)
                     .not.have.property("e");
+                
+                if (bSymbol) {
+                    checkDestination({a: 3},
+                                        source,
+                                        {
+                                            otherName: addField({d: "delta"}, sym1, "s", sym3, "myth"),
+                                            except: ["b", "met2", sym3]
+                                        },
+                                        {a: 3, c: source.c, delta: source.d, s: source[sym1]},
+                                        ["b", "d", "met2", sym1, sym3]);
+                }
             });
         });
         
@@ -648,7 +848,10 @@ describe("mixing", function() {
             }
             
             function changeToStr(data) {
-                return String(data.value);
+                // toString() call is necessary in Node 0.12.2 and earlier
+                return typeof data.value === "symbol"
+                        ? data.value.toString()
+                        : String(data.value);
             }
             
             it("should copy changed values", function() {
@@ -673,6 +876,16 @@ describe("mixing", function() {
                 expect( mixin({}, {a: 1, b: "b", c: false, d: {}, e: change, f: null, g: undef, h: []}, settings) )
                     .eql({a: "1", b: "b", c: "false", d: "[object Object]", e: change.toString(), 
                             f: "null", g: "undefined", h: ""});
+                
+                if (bSymbol) {
+                    checkDestination({a: 1},
+                                        source,
+                                        settings,
+                                        addField({a: 1, b: String(source.b), c: String(source.c),
+                                                            d: String(source.d), met2: String(source.met2)},
+                                                    sym1, String(source[sym1]),
+                                                    sym3, source[sym3].toString()));
+                }
             });
         });
         
@@ -684,6 +897,17 @@ describe("mixing", function() {
                 expect( mixin({omega: "o", eta: 2.7}, {list: couple, s: "str", b: true, mix: mixin, omega: 3}, 
                                 {change: {eta: "nol", list: list, b: 5, a: 7}}) )
                     .eql({omega: "o", eta: 2.7, list: list, s: "str", b: 5, mix: mixin});
+                
+                if (bSymbol) {
+                    checkDestination({c: "++"},
+                                        source,
+                                        {
+                                            copy: ["a", "b", sym3],
+                                            change: addField({a: "a", b: "b"}, sym3, sym3)
+                                        },
+                                        addField({c: "++", a: "a", b: "b"}, sym3, sym3),
+                                        ["d", "met2", sym1]);
+                }
             });
         });
     });

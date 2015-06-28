@@ -17,6 +17,8 @@
      * @module mixing 
      */
 
+    /*jshint latedef:nofunc*/
+
     // Based on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
 
     if (! Array.isArray) {
@@ -41,7 +43,7 @@
         }
         else {
             sType = typeof fieldList;
-            if (sType === "string") {
+            if (sType === "string" || sType === "symbol") {
                 map = {};
                 map[fieldList] = null;
             }
@@ -55,6 +57,52 @@
             }
         }
         return {map: map, regexp: regexp};
+    }
+
+    function copy(destination, source, propName, settings) {
+        /*jshint laxbreak:true*/
+        var propValue = source[propName],
+            sPropString = propName.toString(),
+            bFuncProp, change, otherNameMap, sType, value;
+        if ((! settings.ownProperty || source.hasOwnProperty(propName))
+                && (! settings.copyMap || (propName in settings.copyMap))
+                && (! settings.copyRegExp || settings.copyRegExp.test(sPropString))
+                && (! settings.exceptions || ! (propName in settings.exceptions))
+                && (! settings.exceptRegExp || ! settings.exceptRegExp.test(sPropString))
+                && (! settings.filter || settings.filter.call(null, {field: propName, value: propValue, target: destination, source: source}))
+                && (! settings.filterRegExp || settings.filterRegExp.test(typeof propValue === "symbol" ? propValue.toString() : propValue))) {
+            otherNameMap = settings.otherNameMap;
+            if (otherNameMap && (propName in otherNameMap)) {
+                propName = otherNameMap[propName];
+            }
+            sType = typeof propValue;
+            // If recursive mode and field's value is an object
+            if (settings.recursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object"
+                    && (! Array.isArray(propValue) || settings.mixFromArray) && (! Array.isArray(value) || settings.mixToArray)) {
+                mixing(value, propValue,
+                        settings.mixFromArray
+                            ? mixing({oneSource: true}, settings)
+                            : settings);
+            }
+            else {
+                bFuncProp = (sType === "function");
+                if ((settings.overwrite || ! (propName in destination))
+                        && (! bFuncProp || settings.copyFunc)) {
+                    if (settings.changeFunc) {
+                        propValue = settings.changeFunc.call(null, {field: propName, value: propValue, target: destination, source: source});
+                    }
+                    else if ((change = settings.change) && (propName in change)) {
+                        propValue = change[propName];
+                    }
+                    if (bFuncProp && settings.funcToProto) {
+                        destination.constructor.prototype[propName] = propValue;
+                    }
+                    else {
+                        destination[propName] = propValue;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -89,6 +137,12 @@
      *                  <br>
      *                  If <code>false</code> then functions will be copied directly into the target object.
      *              </td>
+     *          </tr>
+     *          <tr>
+     *              <td><code>processSymbol</code></td>
+     *              <td><code>Boolean</code></td>
+     *              <td><code>true</code></td>
+     *              <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>
      *          </tr>
      *          <tr>
      *              <td><code>overwrite</code></td>
@@ -147,26 +201,26 @@
      *          </tr>
      *          <tr>
      *              <td><code>copy</code></td>
-     *              <td><code>Array | Object | RegExp | String</code></td>
+     *              <td><code>Array | Object | RegExp | String | Symbol</code></td>
      *              <td><code>""</code> (empty string)</td>
      *              <td>
-     *                  Array, object, regular expression or string that defines names of fields/functions that should be copied.
+     *                  Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
      *                  <br>
      *                  If an object is passed then his fields determine copied elements.
      *                  If a regular expression is passed, then field names matching the regular expression will be copied.
-     *                  If a string is passed then it is name of the only copied field.
+     *                  If a string/symbol is passed then it is name of the only copied field.
      *              </td>
      *          </tr>
      *          <tr>
      *              <td><code>except</code></td>
-     *              <td><code>Array | Object | RegExp | String</code></td>
+     *              <td><code>Array | Object | RegExp | String | Symbol</code></td>
      *              <td><code>""</code> (empty string)</td>
      *              <td>
-     *                  Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
+     *                  Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
      *                  <br>
      *                  If an object is passed then his fields determine non-copied elements.
      *                  If a regular expression is passed, then field names matching the regular expression will not be copied.
-     *                  If a string is passed then it is name of the only non-copied field.
+     *                  If a string/symbol is passed then it is name of the only non-copied field.
      *              </td>
      *          </tr>
      *          <tr>
@@ -250,86 +304,67 @@
                 source = [source];
             }
             // Prepare settings
-            var bCopyFunc = ("copyFunc" in settings ? settings.copyFunc : true),
-                bFuncToProto = Boolean(settings.funcToProto),
-                bMixFromArray = Boolean(settings.mixFromArray),
-                bMixToArray = Boolean(settings.mixToArray),
-                bOverwrite = Boolean(settings.overwrite),
-                bOwnProperty = Boolean(settings.ownProperty),
-                bRecursive = Boolean(settings.recursive),
-                filter = settings.filter,
-                otherNameMap = ("otherName" in settings ? settings.otherName : null),
+            var getOwnPropertySymbols = Object.getOwnPropertySymbols,
+                getPrototypeOf = Object.getPrototypeOf,
+                options = {
+                    copyFunc: ("copyFunc" in settings ? settings.copyFunc : true),
+                    funcToProto: Boolean(settings.funcToProto),
+                    processSymbol: ("processSymbol" in settings ? settings.processSymbol : true)
+                                        && typeof getOwnPropertySymbols === "function",
+                    mixFromArray: Boolean(settings.mixFromArray),
+                    mixToArray: Boolean(settings.mixToArray),
+                    overwrite: Boolean(settings.overwrite),
+                    ownProperty: Boolean(settings.ownProperty),
+                    recursive: Boolean(settings.recursive),
+                    otherNameMap: ("otherName" in settings ? settings.otherName : null)
+                },
+                bOwnProperty = options.ownProperty,
+                bProcessSymbol = options.processSymbol,
+                change = settings.change,
                 copyList = settings.copy,
                 exceptList = settings.except,
-                bFuncProp, change, changeFunc, copyMap, copyRegExp, exceptions, exceptRegExp, filterRegExp,
-                nI, nL, obj, propName, propValue, sType, value;
+                filter = settings.filter,
+                nI, nK, nL, nQ, obj, propName;
             
             if (copyList) {
                 copyList = prepareFieldList(copyList);
-                copyMap = copyList.map;
-                copyRegExp = copyList.regexp;
+                options.copyMap = copyList.map;
+                options.copyRegExp = copyList.regexp;
             }
             if (exceptList) {
                 exceptList = prepareFieldList(exceptList);
-                exceptions = exceptList.map;
-                exceptRegExp = exceptList.regexp;
+                options.exceptions = exceptList.map;
+                options.exceptRegExp = exceptList.regexp;
             }
-            if (filter && typeof filter === "object") {
-                filterRegExp = filter;
-                filter = null;
+            if (filter) {
+                options[typeof filter === "object" ? "filterRegExp" : "filter"] = filter;
             }
-            if (settings.change) {
-                if (typeof settings.change === "function") {
-                    changeFunc = settings.change;
-                }
-                else {
-                    change = settings.change;
-                }
+            if (change) {
+                options[typeof change === "function" ? "changeFunc" : "change"] = change;
             }
             
             // Copy fields and functions according to settings
             for (nI = 0, nL = source.length; nI < nL; nI++) {
                 if (obj = source[nI]) {
                     for (propName in obj) {
-                        propValue = obj[propName];
-                        if ((! bOwnProperty || obj.hasOwnProperty(propName))
-                                && (! copyMap || (propName in copyMap))
-                                && (! copyRegExp || copyRegExp.test(propName))
-                                && (! exceptions || ! (propName in exceptions))
-                                && (! exceptRegExp || ! exceptRegExp.test(propName))
-                                && (! filter || filter({field: propName, value: propValue, target: destination, source: obj}))
-                                && (! filterRegExp || filterRegExp.test(propValue))) {
-                            if (otherNameMap && (propName in otherNameMap)) {
-                                propName = otherNameMap[propName];
-                            }
-                            sType = typeof propValue;
-                            // If recursive mode and field's value is an object
-                            if (bRecursive && propValue && sType === "object" && (value = destination[propName]) && typeof value === "object"
-                                    && (! Array.isArray(propValue) || bMixFromArray) && (! Array.isArray(value) || bMixToArray)) {
-                                mixing(value, propValue, 
-                                        bMixFromArray 
-                                            ? mixing({oneSource: true}, settings)
-                                            : settings);
-                            }
-                            else {
-                                bFuncProp = (sType === "function");
-                                if ((bOverwrite || ! (propName in destination))
-                                        && (! bFuncProp || bCopyFunc)) {
-                                    if (changeFunc) {
-                                        propValue = changeFunc({field: propName, value: propValue, target: destination, source: obj});
-                                    }
-                                    else if (change && (propName in change)) {
-                                        propValue = change[propName];
-                                    }
-                                    if (bFuncProp && bFuncToProto) {
-                                        destination.constructor.prototype[propName] = propValue;
-                                    }
-                                    else {
-                                        destination[propName] = propValue;
-                                    }
+                        copy(destination, obj, propName, options);
+                    }
+                    // Process symbol property keys
+                    if (bProcessSymbol) {
+                        exceptList = {};
+                        do {
+                            copyList = getOwnPropertySymbols(obj);
+                            for (nK = 0, nQ = copyList.length; nK < nQ; nK++) {
+                                propName = copyList[nK];
+                                if (! (propName in exceptList)) {
+                                    copy(destination, obj, propName, options);
+                                    exceptList[propName] = true;
                                 }
                             }
-                        }
+                            obj = bOwnProperty
+                                    ? null
+                                    : getPrototypeOf(obj);
+                        } while (obj);
                     }
                 }
             }

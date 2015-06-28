@@ -1,6 +1,7 @@
 # mixing
 
 Functions to mix, filter, change and copy/clone objects.
+Supports processing of symbol property keys that are introduced in ECMAScript 2015.
 
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
@@ -134,7 +135,8 @@ var obj = {
     map: mixing.map,
     update: mixing.update
 };
-var obj2 = obj.clone();   // obj2 is a shallow copy of obj
+obj[Symbol("field")] = Symbol("value");
+var obj2 = obj.clone();   // obj2 is a shallow copy of obj (contains symbol property key)
 
 function isNumericValue(data) {
     return typeof data.value === "number";
@@ -170,14 +172,15 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 
 * `copyFunc`: `Boolean` - Should functions be copied?
 * `funcToProto`: `Boolean` - Should functions be copied into `prototype` of the `destination` object's `constructor`?
+* `processSymbol`: `Boolean` - Should symbol property keys be processed?
 * `overwrite`: `Boolean` - Should a field/function be overwritten when it exists in the `destination` object?
 * `recursive`: `Boolean` - Should this function be called recursively when field's value of the `destination` and `source` object is an object?
 * `mixFromArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?
 * `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?
 * `oneSource`: `Boolean` - Should `source` array be interpreted directly as copied object instead of list of source objects?
 * `ownProperty`: `Boolean` - Should only own properties of the source object be copied into the target object?
-* `copy`: `Array | Object | RegExp | String` - Array, object, regular expression or string that defines names of fields/functions that should be copied.
-* `except`: `Array | Object | RegExp | String` - Array, object, regular expression or string that defines names of fields/functions that shouldn't be copied.
+* `copy`: `Array | Object | RegExp | String | Symbol` - Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
+* `except`: `Array | Object | RegExp | String | Symbol` - Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
 * `filter`: `Function | RegExp` - Function or regular expression that can be used to select elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
 * `change`: `Function | Object` - Function or object that gives ability to change values that should be copied.
