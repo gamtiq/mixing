@@ -1,3 +1,7 @@
+### 1.1.0 / 2015-06-28
+
+* add ability to process symbol property keys (`processSymbol` setting)
+
 ### 1.0.0 / 2015-03-22
 
 * change parameters for the functional settings `filter` and `change` (_backward incompatible change_)
