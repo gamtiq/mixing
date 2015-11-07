@@ -275,6 +275,7 @@ obj.update({a: 2, b: ""});
 * [adam](https://github.com/gamtiq/adam)
 * [basespace](https://github.com/gamtiq/basespace)
 * [extend](https://github.com/gamtiq/extend)
+* [teo](https://github.com/gamtiq/teo)
 
 ## Licence
 
