@@ -7,6 +7,7 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
+<a name="top"></a>
 * [Usage](#usage)
 * [Examples](#examples)
 * [API](#api)
@@ -46,7 +47,7 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
-## Usage <a name="usage"></a>
+## Usage <a name="usage"></a> [&#x2191;](#top)
 
 ### Node, Ringo, Component, JSPM, SPM
 
@@ -97,7 +98,7 @@ define(["path/to/dist/mixing.js"], function(mixing) {
 </script>
 ```
 
-### Examples <a name="examples"></a>
+### Examples <a name="examples"></a> [&#x2191;](#top)
 
 ```js
 var copy = mixing.copy(source);   // Make a shallow copy of source
@@ -164,7 +165,7 @@ obj.update(function(data) {
 });   // obj is {a: 2, b: 3, clone: ...}
 ```
 
-## API <a name="api"></a>
+## API <a name="api"></a> [&#x2191;](#top)
 
 See `doc` directory for details.
 
@@ -270,7 +271,7 @@ var obj = new SomeClass();
 obj.update({a: 2, b: ""});
 ```
 
-## Related projects <a name="related"></a>
+## Related projects <a name="related"></a> [&#x2191;](#top)
 
 * [adam](https://github.com/gamtiq/adam)
 * [basespace](https://github.com/gamtiq/basespace)
