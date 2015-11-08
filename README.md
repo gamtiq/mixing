@@ -1,5 +1,4 @@
-<a name="start"></a>
-# mixing
+# mixing <a name="start"></a>
 
 Functions to mix, filter, change and copy/clone objects.
 Supports processing of symbol property keys that are introduced in ECMAScript 2015.
