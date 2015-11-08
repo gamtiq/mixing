@@ -1,3 +1,4 @@
+<a name="start"></a>
 # mixing
 
 Functions to mix, filter, change and copy/clone objects.
@@ -7,7 +8,6 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-<a name="top"></a>
 * [Usage](#usage)
 * [Examples](#examples)
 * [API](#api)
@@ -47,7 +47,7 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
-## Usage <a name="usage"></a> [&#x2191;](#top)
+## Usage <a name="usage"></a> [&#x2191;](#start)
 
 ### Node, Ringo, Component, JSPM, SPM
 
@@ -98,7 +98,7 @@ define(["path/to/dist/mixing.js"], function(mixing) {
 </script>
 ```
 
-### Examples <a name="examples"></a> [&#x2191;](#top)
+### Examples <a name="examples"></a> [&#x2191;](#start)
 
 ```js
 var copy = mixing.copy(source);   // Make a shallow copy of source
@@ -165,7 +165,7 @@ obj.update(function(data) {
 });   // obj is {a: 2, b: 3, clone: ...}
 ```
 
-## API <a name="api"></a> [&#x2191;](#top)
+## API <a name="api"></a> [&#x2191;](#start)
 
 See `doc` directory for details.
 
@@ -271,7 +271,7 @@ var obj = new SomeClass();
 obj.update({a: 2, b: ""});
 ```
 
-## Related projects <a name="related"></a> [&#x2191;](#top)
+## Related projects <a name="related"></a> [&#x2191;](#start)
 
 * [adam](https://github.com/gamtiq/adam)
 * [basespace](https://github.com/gamtiq/basespace)
