@@ -1,3 +1,7 @@
+### 1.2.0 / 2015-12-31
+
+* add ability to select non-copied fields via object value of `except` setting (_backward incompatible change_)
+
 ### 1.1.0 / 2015-06-28
 
 * add ability to process symbol property keys (`processSymbol` setting)
