@@ -1,48 +1,94 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Module: mixing</title>
-    
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<meta charset="utf-8">
+	<title>mixing Module: mixing</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.spacelab.css">
+
 </head>
 
 <body>
 
-<div id="main">
-    
-    <h1 class="page-title">Module: mixing</h1>
-    
-    
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">mixing</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-mixing.html">mixing</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+	</div>
+
+</div>
+</div>
 
 
+<div class="container" id="toc-content">
+<div class="row">
 
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Module: mixing</h1>
 <section>
-    
+
 <header>
-    <h2>
-    mixing
-    </h2>
     
-</header>  
+        
+            
+        
+    
+</header>
+
 
 <article>
     <div class="container-overview">
     
         
+
+        
+            
+<hr>
 <dt>
-    <h4 class="name" id="module:mixing"><span class="type-signature"></span>require("mixing")<span class="signature">(destination, source, <span class="optional">settings</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="module:mixing"><span class="type-signature"></span>(require("mixing"))(destination, source, <span class="optional">settings</span>)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Copy/add all fields and functions from source objects into the target object.As a result the target object may be modified.
@@ -50,71 +96,73 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>destination</code></td>
             
-            
+
             <td class="type">
             
                 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The target object into which fields and functions will be copied.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>source</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -124,105 +172,125 @@
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Array of source objects or just one object whose contents will be copied.     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>settings</code></td>
             
-            
+
             <td class="type">
             
                 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
                     &lt;optional><br>
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
-            <td class="description last">Operation settings. Fields are names of settings, their values are the corresponding values of settings.     The following settings are being supported.     <table>         <tr>             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>         </tr>         <tr>             <td><code>copyFunc</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should functions be copied?</td>         </tr>         <tr>             <td><code>funcToProto</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>                 (i.e. into <code>destination.constructor.prototype</code>)?                 <br>                 If <code>false</code> then functions will be copied directly into the target object.             </td>         </tr>         <tr>             <td><code>processSymbol</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>         </tr>         <tr>             <td><code>overwrite</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should a field/function be overwritten when it exists in the target object?</td>         </tr>         <tr>             <td><code>recursive</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should this function be called recursively when field's value of the target and source object is an object?                 <br>                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function                 with the same settings.                 <br>                 This option has no dependency with <code>overwrite</code> setting and has priority over it.             </td>         </tr>         <tr>             <td><code>mixFromArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied when the field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>mixToArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied into a field of the target object                 when the latest field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>oneSource</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Indicates that array that is passed as <code>source</code> parameter should be interpreted                 directly as copied object instead of list of source objects.             </td>         </tr>         <tr>             <td><code>ownProperty</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should only own properties of the source object be copied in the target object?</td>         </tr>         <tr>             <td><code>copy</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.                 <br>                 If an object is passed then his fields determine copied elements.                 If a regular expression is passed, then field names matching the regular expression will be copied.                 If a string/symbol is passed then it is name of the only copied field.             </td>         </tr>         <tr>             <td><code>except</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.                 <br>                 If an object is passed then his fields determine non-copied elements.                 If a regular expression is passed, then field names matching the regular expression will not be copied.                 If a string/symbol is passed then it is name of the only non-copied field.             </td>         </tr>         <tr>             <td><code>filter</code></td>             <td><code>Function | RegExp</code></td>             <td><code>null</code></td>             <td>                 Function or regular expression that can be used to select elements that should be copied.                 <br>                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.                 <br>                 If specified function returns <code>true</code> for a field,                 the field will be copied in the target object.                 <br>                 An object having the following fields is passed into filter function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>         <tr>             <td><code>otherName</code></td>             <td><code>Object</code></td>             <td><code>null</code></td>             <td>                 Defines "renaming table" for copied elements.                 <br>                 Fields of the table are names from a source object, values are the corresponding names in the target object.                 <br>                 For example, the call                 <br>                 <code>                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})                 </code>                 <br>                 will return the following object                 <br>                 <code>{prop: 1, method: "no-func"}</code>             </td>         </tr>         <tr>             <td><code>change</code></td>             <td><code>Function | Object</code></td>             <td><code>null</code></td>             <td>                 Function or object that gives ability to change values that should be copied.                 <br>                 If an object is passed then his fields determine new values for copied elements.                 <br>                 If a function is passed then value returned by the function for a field will be copied into the target object                  instead of original field's value.                 <br>                 An object having the following fields is passed into change function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>     </table>     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.     In such situation a field will be copied only when the field satisfies to all settings     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</td>
+
+            <td class="description last">Operation settings. Fields are names of settings, their values are the corresponding values of settings.     The following settings are being supported.     <table>         <tr>             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>         </tr>         <tr>             <td><code>copyFunc</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should functions be copied?</td>         </tr>         <tr>             <td><code>funcToProto</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>                 (i.e. into <code>destination.constructor.prototype</code>)?                 <br>                 If <code>false</code> then functions will be copied directly into the target object.             </td>         </tr>         <tr>             <td><code>processSymbol</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>         </tr>         <tr>             <td><code>overwrite</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should a field/function be overwritten when it exists in the target object?</td>         </tr>         <tr>             <td><code>recursive</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should this function be called recursively when field's value of the target and source object is an object?                 <br>                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function                 with the same settings.                 <br>                 This option has no dependency with <code>overwrite</code> setting and has priority over it.             </td>         </tr>         <tr>             <td><code>mixFromArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied when the field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>mixToArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied into a field of the target object                 when the latest field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>oneSource</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Indicates that array that is passed as <code>source</code> parameter should be interpreted                 directly as copied object instead of list of source objects.             </td>         </tr>         <tr>             <td><code>ownProperty</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should only own properties of the source object be copied in the target object?</td>         </tr>         <tr>             <td><code>copy</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.                 <br>                 If an object is passed then his fields determine copied elements.                 If a regular expression is passed, then field names matching the regular expression will be copied.                 If a string/symbol is passed then it is name of the only copied field.             </td>         </tr>         <tr>             <td><code>except</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.                 <br>                 If an object is passed then his fields with true values determine non-copied elements.                 If a regular expression is passed, then field names matching the regular expression will not be copied.                 If a string/symbol is passed then it is name of the only non-copied field.             </td>         </tr>         <tr>             <td><code>filter</code></td>             <td><code>Function | RegExp</code></td>             <td><code>null</code></td>             <td>                 Function or regular expression that can be used to select elements that should be copied.                 <br>                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.                 <br>                 If specified function returns <code>true</code> for a field,                 the field will be copied in the target object.                 <br>                 An object having the following fields is passed into filter function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>         <tr>             <td><code>otherName</code></td>             <td><code>Object</code></td>             <td><code>null</code></td>             <td>                 Defines "renaming table" for copied elements.                 <br>                 Fields of the table are names from a source object, values are the corresponding names in the target object.                 <br>                 For example, the call                 <br>                 <code>                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})                 </code>                 <br>                 will return the following object                 <br>                 <code>{prop: 1, method: "no-func"}</code>             </td>         </tr>         <tr>             <td><code>change</code></td>             <td><code>Function | Object</code></td>             <td><code>null</code></td>             <td>                 Function or object that gives ability to change values that should be copied.                 <br>                 If an object is passed then his fields determine new values for copied elements.                 <br>                 If a function is passed then value returned by the function for a field will be copied into the target object                  instead of original field's value.                 <br>                 An object having the following fields is passed into change function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>     </table>     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.     In such situation a field will be copied only when the field satisfies to all settings     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line275">line 275</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-275">line 275</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -234,90 +302,53 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
-    
-    
-    
-        
-        
-        
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-        
         
     
     </div>
+
     
+
     
+
     
+
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
+
     
         <h3 class="subsection-title">Methods</h3>
-        
+
         <dl>
             
+<hr>
 <dt>
-    <h4 class="name" id="change"><span class="type-signature">&lt;static> </span>change<span class="signature">(source, change)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".change"><span class="type-signature">&lt;static> </span>change(source, change)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Change values of fields of given object.<br>This function is a "wrap" for the following code:<code><pre>mixing(source, source, {change: change, overwrite: true, oneSource: true});</pre></code>
@@ -325,38 +356,39 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>source</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -366,90 +398,110 @@
 <span class="param-type">Object</span>
 
 
+
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">An array or an object whose fields should be modified.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>change</code></td>
             
-            
+
             <td class="type">
             
                 
-<span class="param-type">Function</span>
+<span class="param-type">function</span>
 |
 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line369">line 369</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-369">line 369</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -461,31 +513,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="clone"><span class="type-signature">&lt;static> </span>clone<span class="signature">(<span class="optional">settings</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".clone"><span class="type-signature">&lt;static> </span>clone(<span class="optional">settings</span>)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Make a copy of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var copy = mixing({}, this, settings);</pre></code>It can be transferred to an object to use as a method.
@@ -493,114 +548,134 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>settings</code></td>
             
-            
+
             <td class="type">
             
                 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
                     &lt;optional><br>
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line406">line 406</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-406">line 406</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -612,31 +687,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="copy"><span class="type-signature">&lt;static> </span>copy<span class="signature">(source, <span class="optional">settings</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".copy"><span class="type-signature">&lt;static> </span>copy(source, <span class="optional">settings</span>)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Make a copy of source object(s).<br>This function is a "wrap" for the following code:<code><pre>var copy = mixing({}, source, settings);</pre></code>
@@ -644,40 +722,41 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>source</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -687,105 +766,125 @@
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Array of source objects or just one object whose contents will be copied.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>settings</code></td>
             
-            
+
             <td class="type">
             
                 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
                     &lt;optional><br>
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line388">line 388</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-388">line 388</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -797,31 +896,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="filter"><span class="type-signature">&lt;static> </span>filter<span class="signature">(filter)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".filter"><span class="type-signature">&lt;static> </span>filter(filter)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Filter <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var result = mixing({}, this, {filter: filter});</pre></code>It can be transferred to an object to use as a method.
@@ -829,105 +931,125 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>filter</code></td>
             
-            
+
             <td class="type">
             
                 
-<span class="param-type">Function</span>
+<span class="param-type">function</span>
 |
 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">Filter function to select fields or object that represents operation settings including filter function.     See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line425">line 425</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-425">line 425</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -939,31 +1061,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="map"><span class="type-signature">&lt;static> </span>map<span class="signature">(change)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".map"><span class="type-signature">&lt;static> </span>map(change)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Copy and change values of fields of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var result = mixing({}, this, {change: change});</pre></code>It can be transferred to an object to use as a method.
@@ -971,105 +1096,125 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>change</code></td>
             
-            
+
             <td class="type">
             
                 
-<span class="param-type">Function</span>
+<span class="param-type">function</span>
 |
 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">Function to change values of copied fields or object that represents operation settings including change function.     See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line444">line 444</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-444">line 444</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -1081,31 +1226,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="mix"><span class="type-signature">&lt;static> </span>mix<span class="signature">(source, <span class="optional">settings</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".mix"><span class="type-signature">&lt;static> </span>mix(source, <span class="optional">settings</span>)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Copy/add all fields and functions from source objects into <code>this</code> object.As a result <code>this</code> object may be modified.<br>This function is a "wrap" for the following code:<code><pre>mixing(this, source, settings);</pre></code>It can be transferred to an object to use as a method.
@@ -1113,40 +1261,41 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>source</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -1156,105 +1305,125 @@
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Array of source objects or just one object whose contents will be copied.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>settings</code></td>
             
-            
+
             <td class="type">
             
                 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
-            
+
             
                 <td class="attributes">
                 
                     &lt;optional><br>
                 
-                    
+
                 
-                    
+
                 
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line465">line 465</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-465">line 465</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -1266,31 +1435,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="update"><span class="type-signature">&lt;static> </span>update<span class="signature">(change)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update(change)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         Change values of fields of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>mixing.change(this, change);</pre></code>It can be transferred to an object to use as a method.
@@ -1298,105 +1470,125 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
         
 
-<table class="params">
+<table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>change</code></td>
             
-            
+
             <td class="type">
             
                 
-<span class="param-type">Function</span>
+<span class="param-type">function</span>
 |
 
 <span class="param-type">Object</span>
 
 
+
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
+
     
-    
+
     
 <dl class="details">
     
-        
-    
-    
+
+	
+
+	
+
+	
+
     
 
     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line483">line 483</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="E__projects_github_mixing_index.js.html">E:/projects/github/mixing/index.js</a>,
+				 <a href="E__projects_github_mixing_index.js.html#sunlight-1-line-483">line 483</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -1408,48 +1600,162 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
+
         
-    
+
     
 </dd>
 
         </dl>
     
+
     
-    
-    
+
     
 </article>
 
-</section>  
+</section>
 
 
 
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
 
 </div>
+</div>
 
-<nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-mixing.html">mixing</a></li></ul>
-</nav>
-
-<br clear="both">
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0</a> on Sun Jun 28 2015 15:44:00 GMT+0400 (MSK)
+
+
+	<span class="copyright">
+	Copyright (c) 2013-2016 Denis Sikuler
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on 2015-12-31T01:13:05+03:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
+
 </body>
 </html>

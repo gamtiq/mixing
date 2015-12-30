@@ -1,0 +1,9 @@
+{
+    "templates": {
+        "outputSourceFiles": true,
+        "systemName": "mixing",
+        "copyright": "Copyright (c) 2013-2016 Denis Sikuler",
+        "theme": "spacelab",
+        "linenums": true
+    }
+}

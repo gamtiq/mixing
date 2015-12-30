@@ -9,14 +9,14 @@ if (! Array.isArray) {
     require("isarray-shim");
 }
 
-function prepareFieldList(fieldList) {
+function prepareFieldList(fieldList, value) {
     var map, nI, regexp, sType;
     if (Array.isArray(fieldList)) {
         if (fieldList.length > 0) {
             map = {};
             nI = fieldList.length;
             do {
-                map[ fieldList[--nI] ] = null;
+                map[ fieldList[--nI] ] = value || null;
             } while(nI);
         }
     }
@@ -24,7 +24,7 @@ function prepareFieldList(fieldList) {
         sType = typeof fieldList;
         if (sType === "string" || sType === "symbol") {
             map = {};
-            map[fieldList] = null;
+            map[fieldList] = value || null;
         }
         else if (sType === "object") {
             if (fieldList instanceof RegExp) {
@@ -46,7 +46,7 @@ function copy(destination, source, propName, settings) {
     if ((! settings.ownProperty || source.hasOwnProperty(propName))
             && (! settings.copyMap || (propName in settings.copyMap))
             && (! settings.copyRegExp || settings.copyRegExp.test(sPropString))
-            && (! settings.exceptions || ! (propName in settings.exceptions))
+            && (! settings.exceptions || ! settings.exceptions[propName])
             && (! settings.exceptRegExp || ! settings.exceptRegExp.test(sPropString))
             && (! settings.filter || settings.filter.call(null, {field: propName, value: propValue, target: destination, source: source}))
             && (! settings.filterRegExp || settings.filterRegExp.test(typeof propValue === "symbol" ? propValue.toString() : propValue))) {
@@ -197,7 +197,7 @@ function copy(destination, source, propName, settings) {
  *              <td>
  *                  Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
  *                  <br>
- *                  If an object is passed then his fields determine non-copied elements.
+ *                  If an object is passed then his fields with true values determine non-copied elements.
  *                  If a regular expression is passed, then field names matching the regular expression will not be copied.
  *                  If a string/symbol is passed then it is name of the only non-copied field.
  *              </td>
@@ -311,7 +311,7 @@ function mixing(destination, source, settings) {
             options.copyRegExp = copyList.regexp;
         }
         if (exceptList) {
-            exceptList = prepareFieldList(exceptList);
+            exceptList = prepareFieldList(exceptList, true);
             options.exceptions = exceptList.map;
             options.exceptRegExp = exceptList.regexp;
         }

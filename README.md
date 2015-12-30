@@ -105,6 +105,7 @@ var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 
+mixing({a: 1, b: 2, c: "", d: false}, {a: -1, b: null, c: true, d: "empty"}, {overwrite: true, except: {a: false, b: true, c: null, d: "yes"}});   // Returns {a: -1, b: 2, c: true, d: false}
 mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
 mixing.copy({a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/});   // Returns {e: "-123"}
 mixing({x: 5}, {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: "a3", delta: "plus"}

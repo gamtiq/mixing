@@ -604,6 +604,9 @@ describe("mixing", function() {
                 it("should copy all fields from the source object except those that are mentioned in the array", function() {
                     var dest = {b: null, beta: 3, d: couple};
                     
+                    expect( mixin({}, {a: "alpha", c: null, d: 7}, {except: []}) )
+                        .eql({a: "alpha", c: null, d: 7});
+                
                     expect( mixin({}, {a: 4, b: 3, c: 2, d: 1}, settings) )
                         .eql({b: 3, d: 1});
                     
@@ -630,15 +633,15 @@ describe("mixing", function() {
             });
             
             describe("mixing(destination, source, {except: {'name1': value1, someSymbol1: value2, ...}})", function() {
-                var settings = {except: {beta: true, alpha: false}};
+                var settings = {except: {beta: true, alpha: false, omega: "exclude"}};
                 it("should copy all fields from the source object except those that are in the exception object", function() {
                     var dest = {a: null, beta: 3, dream: "win"};
                     
-                    expect( mixin({}, {alpha: 1, beta: 2, gamma: 3, delta: 4}, settings) )
-                        .eql({gamma: 3, delta: 4});
+                    expect( mixin({}, {alpha: 1, beta: 2, gamma: 3, delta: 4, omega: 7}, settings) )
+                        .eql({alpha: 1, gamma: 3, delta: 4});
                     
-                    expect( mixin(dest, {star: "super", a: list, beta: 100, bet: couple, alpha: true}, settings) )
-                        .eql({a: null, beta: 3, dream: "win", star: "super", bet: couple});
+                    expect( mixin(dest, {star: "super", a: list, beta: 100, bet: couple, alpha: true, omega: null}, settings) )
+                        .eql({a: null, beta: 3, dream: "win", star: "super", bet: couple, alpha: true});
                 
                     expect(dest)
                         .have.property("a", null);
@@ -649,14 +652,16 @@ describe("mixing", function() {
                     expect(dest)
                         .have.property("bet", couple);
                     expect(dest)
-                        .not.have.property("alpha");
+                        .have.property("alpha", true);
+                    expect(dest)
+                        .not.have.property("omega");
                     
                     checkDestination({d: undef, e: 5, met2: null},
                                         source,
-                                        {except: addField({b: null}, sym3, true)},
-                                        addField({d: undef, e: 5, met2: null, a: source.a, c: source.c},
+                                        {except: addField({a: 1, b: null}, sym3, true)},
+                                        addField({d: undef, e: 5, met2: null, b: source.b, c: source.c},
                                                     sym1, source[sym1]),
-                                        ["b", sym3]);
+                                        ["a", sym3]);
                 });
             });
             
