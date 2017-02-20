@@ -15,9 +15,7 @@
         "clone",
         "update"
     ],
-    "dependencies": {
-        "gamtiq/isarray-shim": "~0.1.0"
-    },
+    "dependencies": {},
     "development": {},
     "license": "MIT",
     "main": "index.js",

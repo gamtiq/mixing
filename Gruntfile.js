@@ -56,7 +56,8 @@ module.exports = function(grunt) {
         umd: {
             dist: {
                 template: "unit",
-                src: "dist/<%= dest %>",
+                src: "<%= src %>",
+                dest: "dist/<%= dest %>",
                 objectToExport: "<%= name %>",
                 globalAlias: "<%= name %>",
                 indent: "    "
@@ -84,37 +85,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-push-release");
     
     // Tasks
-    grunt.registerTask("compile", "Creates distribution source", function() {
-        var file = grunt.file,
-            options = {encoding: "utf8"},
-            sLibPath = "./index.js",
-            sShimPath = "./components/gamtiq/isarray-shim/0.1.0/index.js",
-            sLib, sShim;
-        if (file.isFile(sShimPath)) {
-            if (file.isFile(sLibPath)) {
-                sShim = file.read(sShimPath, options);
-                if (sShim) {
-                    sShim = sShim.substring(0, sShim.indexOf("module.exports")) + "\n";
-                    
-                    sLib = file.read(sLibPath, options);
-                    file.write("./dist/mixing.js", 
-                                sLib.substring(0, sLib.indexOf("// Load shim")) + sShim + sLib.substring(sLib.indexOf("}") + 1), 
-                                options);
-                }
-                else {
-                    grunt.warn("Cannot read the source file of required component isarray-shim.");
-                }
-            }
-            else {
-                grunt.warn("Cannot find library source file index.js.");
-            }
-        }
-        else {
-            grunt.warn("Cannot find the required component isarray-shim.");
-        }
-    });
-    
-    grunt.registerTask("build", ["compile", "umd", "uglify"]);
+    grunt.registerTask("build", ["umd", "uglify"]);
     grunt.registerTask("doc", ["jsdoc"]);
     grunt.registerTask("test", ["mochacli"]);
     grunt.registerTask("default", ["jshint", "mochacli"]);

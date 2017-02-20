@@ -4,9 +4,10 @@
 
 /*jshint latedef:nofunc*/
 
-// Load shim only in browser environment. Array.isArray is defined in node
 if (! Array.isArray) {
-    require("isarray-shim");
+    Array.isArray = function(obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+    };
 }
 
 function prepareFieldList(fieldList, value) {
