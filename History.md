@@ -1,3 +1,8 @@
+### 1.2.1 / 2017-02-21
+
+* remove `isarray-shim` component dependency
+* remove Jam and SPM support
+
 ### 1.2.0 / 2015-12-31
 
 * add ability to select non-copied fields via object value of `except` setting (_backward incompatible change_)
