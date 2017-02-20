@@ -47,28 +47,8 @@
     "grunt-push-release": "~0.1.9",
     "ink-docstrap": "~1.1.0"
   },
-  "jam": {
-    "main": "dist/mixing.js",
-    "include": [
-      "doc",
-      "dist",
-      "README.md"
-    ]
-  },
-  "categories": [
-    "Utilities"
-  ],
   "jspm": {
     "main": "dist/mixing.js",
     "format": "cjs"
-  },
-  "spm": {
-    "main": "index.js",
-    "dependencies": {
-      "isarray-shim": "0.0.1"
-    },
-    "engines": {
-      "seajs": "2.2.1"
-    }
   }
 }

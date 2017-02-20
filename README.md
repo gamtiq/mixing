@@ -22,14 +22,6 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
     ringo-admin install gamtiq/mixing
 
-### [Component](https://github.com/componentjs/component)
-
-    component install gamtiq/mixing
-
-### [Jam](http://jamjs.org)
-
-    jam install mixing
-
 ### [Bower](http://bower.io)
 
     bower install mixing
@@ -38,17 +30,13 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
     jspm install mixing
 
-### [SPM](http://spmjs.io)
-
-    spm install mixing
-
 ### AMD, script tag
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
 ## Usage <a name="usage"></a> [&#x2191;](#start)
 
-### Node, Ringo, Component, JSPM, SPM
+### Node, Ringo, JSPM
 
 ```js
 var mixing = require("mixing");
@@ -60,14 +48,6 @@ var mixing = require("mixing");
 ```js
 var mixing = require("gamtiq/mixing");
 ...
-```
-
-### Jam
-
-```js
-require(["mixing"], function(mixing) {
-    ...
-});
 ```
 
 ### JSPM
