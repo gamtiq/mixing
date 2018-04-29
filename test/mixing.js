@@ -138,6 +138,19 @@ describe("mixing", function() {
             });
         });
         
+        describe("mixing(<non-object value>, source)", function() {
+            it("should return passed value", function() {
+                function check(value, source, settings) {
+                    expect( mixin(value, source, settings) )
+                        .equal( value );
+                }
+
+                check(null, {a: 1, b: 2});
+                check(false, true);
+                check("test string", [couple, source]);
+            });
+        });
+        
         describe("mixing(destination, source)", function() {
             it("should copy all fields from the source object into the destination object", function() {
                 var dest = {a: str, b: num, f1: str, f2: num};
@@ -158,6 +171,38 @@ describe("mixing", function() {
                     .have.property("f3", method1);
                 expect(dest)
                     .have.property("f4", source);
+            });
+            
+            it("should copy fields from the source object into the destination function", function() {
+                function dest() {
+                    console.log('test function');
+                }
+
+                dest.a = 1;
+                
+                expect( mixin(dest, {a: 2, b: "value", z: false}) )
+                    .equal(dest);
+                
+                expect(dest)
+                    .have.property("a", 1);
+                expect(dest)
+                    .have.property("b", "value");
+                expect(dest)
+                    .have.property("z", false);
+            });
+            
+            it("should copy fields from the source function into the destination object", function() {
+                function source() {
+                    console.log('test function');
+                }
+
+                source.a = num;
+                source.met = method1;
+                
+                var dest = {a: null, b: "test"};
+
+                expect( mixin(dest, source) )
+                    .eql( {a: null, b: "test", met: method1} );
             });
             
             it("should copy all fields from the source object that are absent in the destination object", function() {
@@ -985,6 +1030,46 @@ describe("mixing", function() {
                                 }
                             }) )
                 .eql({a: list, b: obj, c: emptyArray, d: nullVal, g: list, f: obj});
+        });
+    });
+    
+    
+    
+    describe(".mixToItems(list, source, settings)", function() {
+        var mixToItems = mixin.mixToItems;
+        it("should return non-modified array", function() {
+            var list = [1, "moon", false, undef, null, -3, "end"];
+            var original = list.slice(0);
+            var result = mixToItems(list, {a: 1, '1': 100, g: list}, {overwrite: true});
+            
+            expect( result )
+                .equal( list );
+            expect( result )
+                .eql( original );
+        });
+
+        it("should modify object items", function() {
+            var obj1 = {a: 1, b: "second"};
+            var obj2 = {b: num, c: method1}
+            var list = ["start", obj1, 3, obj2, null];
+
+            expect( mixToItems(list, [{a: 3}, {c: "cinema"}]) )
+                .equal(list);
+            expect( list[0] )
+                .equal( "start" );
+            expect( list[1] )
+                .equal( obj1 );
+            expect( list[2] )
+                .equal( 3 );
+            expect( list[3] )
+                .equal( obj2 );
+            expect( list[4] )
+                .equal( null );
+
+            expect( obj1 )
+                .eql( {a: 1, b: "second", c: "cinema"} );
+            expect( obj2 )
+                .eql( {a: 3, b: num, c: method1} );
         });
     });
     

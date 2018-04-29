@@ -3,6 +3,8 @@
 Functions to mix, filter, change and copy/clone objects.
 Supports processing of symbol property keys that are introduced in ECMAScript 2015.
 
+`mixing` is like an improved version of `Object.assign`.
+
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
@@ -112,6 +114,10 @@ mixing({},
 mixing.change({a: 1, b: "abc", c: null, d: 4444, e: false},
                 {b: 22, c: 333, e: 55555});   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
 
+// Change items in array
+mixing.mixToItems([{a: 1, b: 2}, {b: 3}, 83, {}], {a: null, c: 9});   // Returns [{a: 1, b: 2, c: 9}, {a: null, b: 3, c: 9}, 83, {a: null, c: 9}]
+mixing.mixToItems([null, {a: 1, b: 2}, {b: 3, z: 0}, {}], {a: null, b: false}, {overwrite: true});   // Returns [null, {a: null, b: false}, {a: null, b: false, z: 0}, {a: null, b: false}]
+
 // Clone, filter, map, update
 var obj = {
     a: 1,
@@ -178,6 +184,10 @@ Change values of fields of given object.
 ### .copy(source: Array | Object, [settings: Object]);
 
 Make a copy of source object(s).
+
+### .mixToItems(destinationList: Array, source: Array | Object, [settings: Object]);
+
+Copy fields from source object(s) into every object item of given array.
 
 ### .clone([settings: Object]);
 

@@ -89,7 +89,7 @@ function copy(destination, source, propName, settings) {
  * Copy/add all fields and functions from source objects into the target object.
  * As a result the target object may be modified.
  *
- * @param {Object} destination
+ * @param {Object | Function} destination
  *      The target object into which fields and functions will be copied.
  * @param {Array | Object} source
  *      Array of source objects or just one object whose contents will be copied.
@@ -275,7 +275,10 @@ function copy(destination, source, propName, settings) {
  */
 function mixing(destination, source, settings) {
     /*jshint boss:true, laxbreak:true*/
-    if (typeof source === "object" && source !== null) {
+    var destinationType = typeof destination;
+    var sourceType = typeof source;
+    if (destination && (destinationType === "object" || destinationType === "function")
+            && source && (sourceType === "object" || sourceType === "function")) {
         // Prepare parameters
         if (typeof settings !== "object" || settings === null) {
             settings = {};
@@ -388,6 +391,25 @@ mixing.change = function(source, change) {
  */
 mixing.copy = function(source, settings) {
     return mixing({}, source, settings);
+};
+
+/**
+ * Copy fields from source object(s) into every object item of given array.
+ * 
+ * @param {Array} destinationList
+ *      An array whose items should be modified.
+ * @param {Array | Object} source
+ *      Array of source objects or just one object whose contents will be copied.
+ * @param {Object} [settings]
+ *      Operation settings that will be applied to every copying. See {@link module:mixing mixing} for details.
+ * @return {Array}
+ *      Original <code>destinationList</code> with possibly modified object items.
+ */
+mixing.mixToItems = function(destinationList, source, settings) {
+    for (var nI = 0, nL = destinationList.length; nI < nL; nI++) {
+        destinationList[nI] = mixing(destinationList[nI], source, settings);
+    }
+    return destinationList;
 };
 
 /**
