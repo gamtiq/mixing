@@ -228,7 +228,7 @@
 
             
 
-            <td class="description last">Operation settings. Fields are names of settings, their values are the corresponding values of settings.     The following settings are being supported.     <table>         <tr>             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>         </tr>         <tr>             <td><code>copyFunc</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should functions be copied?</td>         </tr>         <tr>             <td><code>funcToProto</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>                 (i.e. into <code>destination.constructor.prototype</code>)?                 <br>                 If <code>false</code> then functions will be copied directly into the target object.             </td>         </tr>         <tr>             <td><code>processSymbol</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>         </tr>         <tr>             <td><code>overwrite</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should a field/function be overwritten when it exists in the target object?</td>         </tr>         <tr>             <td><code>recursive</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should this function be called recursively when field's value of the target and source object is an object?                 <br>                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function                 with the same settings.                 <br>                 This option has no dependency with <code>overwrite</code> setting and has priority over it.             </td>         </tr>         <tr>             <td><code>mixFromArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied when the field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>mixToArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied into a field of the target object                 when the latest field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>oneSource</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Indicates that array that is passed as <code>source</code> parameter should be interpreted                 directly as copied object instead of list of source objects.             </td>         </tr>         <tr>             <td><code>ownProperty</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should only own properties of the source object be copied in the target object?</td>         </tr>         <tr>             <td><code>copy</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.                 <br>                 If an object is passed then his fields determine copied elements.                 If a regular expression is passed, then field names matching the regular expression will be copied.                 If a string/symbol is passed then it is name of the only copied field.             </td>         </tr>         <tr>             <td><code>except</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.                 <br>                 If an object is passed then his fields with true values determine non-copied elements.                 If a regular expression is passed, then field names matching the regular expression will not be copied.                 If a string/symbol is passed then it is name of the only non-copied field.             </td>         </tr>         <tr>             <td><code>filter</code></td>             <td><code>Function | RegExp</code></td>             <td><code>null</code></td>             <td>                 Function or regular expression that can be used to select elements that should be copied.                 <br>                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.                 <br>                 If specified function returns <code>true</code> for a field,                 the field will be copied in the target object.                 <br>                 An object having the following fields is passed into filter function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>         <tr>             <td><code>otherName</code></td>             <td><code>Object</code></td>             <td><code>null</code></td>             <td>                 Defines "renaming table" for copied elements.                 <br>                 Fields of the table are names from a source object, values are the corresponding names in the target object.                 <br>                 For example, the call                 <br>                 <code>                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})                 </code>                 <br>                 will return the following object                 <br>                 <code>{prop: 1, method: "no-func"}</code>             </td>         </tr>         <tr>             <td><code>change</code></td>             <td><code>Function | Object</code></td>             <td><code>null</code></td>             <td>                 Function or object that gives ability to change values that should be copied.                 <br>                 If an object is passed then his fields determine new values for copied elements.                 <br>                 If a function is passed then value returned by the function for a field will be copied into the target object                  instead of original field's value.                 <br>                 An object having the following fields is passed into change function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>     </table>     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.     In such situation a field will be copied only when the field satisfies to all settings     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</td>
+            <td class="description last">Operation settings. Fields are names of settings, their values are the corresponding values of settings.     The following settings are being supported.     <table>         <tr>             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>         </tr>         <tr>             <td><code>copyFunc</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should functions be copied?</td>         </tr>         <tr>             <td><code>funcToProto</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>                 (i.e. into <code>destination.constructor.prototype</code>)?                 <br>                 If <code>false</code> then functions will be copied directly into the target object.             </td>         </tr>         <tr>             <td><code>processSymbol</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>         </tr>         <tr>             <td><code>overwrite</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should a field/function be overwritten when it exists in the target object?</td>         </tr>         <tr>             <td><code>recursive</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should this function be called recursively when field's value of the target and source object is an object?                 <br>                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function                 with the same settings.                 <br>                 This option has no dependency with <code>overwrite</code> setting and has priority over it.             </td>         </tr>         <tr>             <td><code>mixFromArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied when the field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>mixToArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied into a field of the target object                 when the latest field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>oneSource</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Indicates that array that is passed as <code>source</code> parameter should be interpreted                 directly as copied object instead of list of source objects.             </td>         </tr>         <tr>             <td><code>ownProperty</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should only own properties of the source object be copied in the target object?</td>         </tr>         <tr>             <td><code>copy</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.                 <br>                 If an object is passed then his fields determine copied elements.                 If a regular expression is passed, then field names matching the regular expression will be copied.                 If a string/symbol is passed then it is name of the only copied field.             </td>         </tr>         <tr>             <td><code>except</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.                 <br>                 If an object is passed then his fields with true values determine non-copied elements.                 If a regular expression is passed, then field names matching the regular expression will not be copied.                 If a string/symbol is passed then it is name of the only non-copied field.             </td>         </tr>         <tr>             <td><code>filter</code></td>             <td><code>Function | RegExp</code></td>             <td><code>null</code></td>             <td>                 Function or regular expression that can be used to select elements that should be copied.                 <br>                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.                 <br>                 If specified function returns <code>true</code> for a field,                 the field will be copied in the target object.                 <br>                 An object having the following fields is passed into filter function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>         <tr>             <td><code>otherName</code></td>             <td><code>Object</code></td>             <td><code>null</code></td>             <td>                 Defines "renaming table" for copied elements.                 <br>                 Fields of the table are names from a source object, values are the corresponding names in the target object.                 <br>                 For example, the call                 <br>                 <code>                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})                 </code>                 <br>                 will return the following object                 <br>                 <code>{prop: 1, method: "no-func"}</code>             </td>         </tr>         <tr>             <td><code>change</code></td>             <td><code>Function | Object</code></td>             <td><code>null</code></td>             <td>                 Function or object that gives ability to change values that should be copied.                 <br>                 If an object is passed then his fields determine new values for copied elements.                 <br>                 If a function is passed then value returned by the function for a field will be copied into the target object                  instead of original field's value.                 <br>                 An object having the following fields is passed into change function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>     </table>     Default values of settings can be redefined by <a href="module-mixing.html#.setSettings">setSettings</a> method.     <br>     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.     In such situation a field will be copied only when the field satisfies to all settings     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</td>
         </tr>
 
     
@@ -273,7 +273,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-276">line 276</a>
+				 <a href="index.js.html#sunlight-1-line-280">line 280</a>
 			</li>
 		</ul>
 	</dd>
@@ -484,7 +484,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-373">line 373</a>
+				 <a href="index.js.html#sunlight-1-line-384">line 384</a>
 			</li>
 		</ul>
 	</dd>
@@ -658,7 +658,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-429">line 429</a>
+				 <a href="index.js.html#sunlight-1-line-440">line 440</a>
 			</li>
 		</ul>
 	</dd>
@@ -867,7 +867,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-392">line 392</a>
+				 <a href="index.js.html#sunlight-1-line-403">line 403</a>
 			</li>
 		</ul>
 	</dd>
@@ -1032,7 +1032,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-448">line 448</a>
+				 <a href="index.js.html#sunlight-1-line-459">line 459</a>
 			</li>
 		</ul>
 	</dd>
@@ -1073,6 +1073,121 @@
     <dd>
         
 <span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getSettings"><span class="type-signature">&lt;static> </span>getSettings()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Return default settings that were set earlier.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-527">line 527</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Default settings that were set earlier or <code>undefined / null</code> if default settings were not set.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">undefined</span>
 
 
 
@@ -1197,7 +1312,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-467">line 467</a>
+				 <a href="index.js.html#sunlight-1-line-478">line 478</a>
 			</li>
 		</ul>
 	</dd>
@@ -1406,7 +1521,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-488">line 488</a>
+				 <a href="index.js.html#sunlight-1-line-499">line 499</a>
 			</li>
 		</ul>
 	</dd>
@@ -1647,7 +1762,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-408">line 408</a>
+				 <a href="index.js.html#sunlight-1-line-419">line 419</a>
 			</li>
 		</ul>
 	</dd>
@@ -1696,6 +1811,159 @@
 
 
         
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setSettings"><span class="type-signature">&lt;static> </span>setSettings( [settings])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Set (redefine, reset) default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>settings</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.     Initial default values will be used for settings that are not specified in the passed object.     Pass <code>undefined</code>, <code>null</code>, non-object or to call without parameter     to reset default settings to initial values.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-541">line 541</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 </dd>
@@ -1812,7 +2080,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-506">line 506</a>
+				 <a href="index.js.html#sunlight-1-line-517">line 517</a>
 			</li>
 		</ul>
 	</dd>
@@ -1913,13 +2181,13 @@
 
 
 	<span class="copyright">
-	Copyright (c) 2013-2017 Denis Sikuler
+	Copyright (c) 2013-2018 Denis Sikuler
 	</span>
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on 2018-04-29T17:38:48+03:00
+		on 2018-05-09T15:08:59+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

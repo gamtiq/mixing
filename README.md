@@ -3,7 +3,7 @@
 Functions to mix, filter, change and copy/clone objects.
 Supports processing of symbol property keys that are introduced in ECMAScript 2015.
 
-`mixing` is like an improved version of `Object.assign`.
+`mixing` is like an improved version of `Object.assign` and is compatible with ECMAScript 3+.
 
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
@@ -92,9 +92,15 @@ mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "
 mixing.copy({a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/});   // Returns {e: "-123"}
 mixing({x: 5}, {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: "a3", delta: "plus"}
 
+// Change default settings
+mixing.setSettings({overwrite: true, oneSource: true});
 // Mix arrays
-mixing([1, 2, 3], ["a", "b", "c", "d"], {overwrite: true, oneSource: true});   // Returns ["a", "b", "c", "d"]
-mixing([3, 2, 1, 4, 5], [1, 2, 3], {overwrite: true, oneSource: true});   // Returns [1, 2, 3, 4, 5]
+mixing([1, 2, 3], ["a", "b", "c", "d"]);   // Returns ["a", "b", "c", "d"]
+mixing([3, 2, 1, 4, 5], [1, 2, 3]);   // Returns [1, 2, 3, 4, 5]
+// Get redefined default settings
+mixing.getSettings();   // Returns {overwrite: true, oneSource: true}
+// Reset default settings to initial values
+mixing.setSettings();
 
 // Filter and change field values
 mixing({}, 
@@ -260,6 +266,14 @@ var obj = new SomeClass();
 ...
 obj.update({a: 2, b: ""});
 ```
+
+### .getSettings();
+
+Return default settings that were set earlier.
+
+### .setSettings([settings: Object]);
+
+Set (redefine, reset) default settings that should be used for subsequent `mixing` calls.
 
 ## Related projects <a name="related"></a> [&#x2191;](#start)
 

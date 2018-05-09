@@ -19,6 +19,8 @@
 
     /*jshint latedef:nofunc*/
 
+    var defaultSettings;
+
     if (! Array.isArray) {
         Array.isArray = function(obj) {
             return Object.prototype.toString.call(obj) === "[object Array]";
@@ -281,6 +283,8 @@
      *              </td>
      *          </tr>
      *      </table>
+     *      Default values of settings can be redefined by {@link module:mixing.setSettings setSettings} method.
+     *      <br>
      *      <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.
      *      In such situation a field will be copied only when the field satisfies to all settings
      *      (i.e. belongs to copied elements, not in exceptions and conforms to filter).
@@ -294,9 +298,16 @@
         var sourceType = typeof source;
         if (destination && (destinationType === "object" || destinationType === "function")
                 && source && (sourceType === "object" || sourceType === "function")) {
+            var obj;
             // Prepare parameters
             if (typeof settings !== "object" || settings === null) {
-                settings = {};
+                settings = defaultSettings || {};
+            }
+            else if (defaultSettings) {
+                obj = defaultSettings;
+                defaultSettings = null;
+                settings = mixing({}, [settings, obj]);
+                defaultSettings = obj;
             }
             if (! Array.isArray(source) || settings.oneSource) {
                 source = [source];
@@ -322,7 +333,7 @@
                 copyList = settings.copy,
                 exceptList = settings.except,
                 filter = settings.filter,
-                nI, nK, nL, nQ, obj, propName;
+                nI, nK, nL, nQ, propName;
             
             if (copyList) {
                 copyList = prepareFieldList(copyList);
@@ -520,6 +531,30 @@
      */
     mixing.update = function(change) {
         return mixing.change(this, change);
+    };
+
+    /**
+     * Return default settings that were set earlier.
+     * 
+     * @return {Object | undefined}
+     *      Default settings that were set earlier or <code>undefined / null</code> if default settings were not set.
+     */
+    mixing.getSettings = function() {
+        return defaultSettings;
+    };
+
+    /**
+     * Set (redefine, reset) default settings that should be used for subsequent {@link module:mixing mixing} calls.
+     * 
+     * @param {Object | undefined} [settings]
+     *      Default settings that should be used for subsequent {@link module:mixing mixing} calls.
+     *      Initial default values will be used for settings that are not specified in the passed object.
+     *      Pass <code>undefined</code>, <code>null</code>, non-object or to call without parameter
+     *      to reset default settings to initial values.
+     * @alias module:mixing.setSettings
+     */
+    mixing.setSettings = function(settings) {
+        defaultSettings = typeof settings === "object" ? settings : null;
     };
 
     module.exports = mixing;

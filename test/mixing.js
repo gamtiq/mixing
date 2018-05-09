@@ -1270,4 +1270,76 @@ describe("mixing", function() {
                 .eql({a: 2, b: "beta", c: emptyFunc, d: -7, update: update});
         });
     });
+    
+    
+    
+    describe(".getSettings()", function() {
+        var getSettings = mixin.getSettings;
+        var setSettings = mixin.setSettings;
+
+        afterEach(function() {
+            setSettings();
+        });
+
+        it("should return undefined", function() {
+            expect( getSettings() )
+                .equal( undef );
+        });
+        it("should return null", function() {
+            setSettings({overwrite: false});
+            setSettings({copyFunc: false});
+            setSettings();
+
+            expect( getSettings() )
+                .equal( null );
+        });
+        it("should return object with last specified settings", function() {
+            setSettings({overwrite: false});
+            setSettings({copyFunc: false});
+
+            expect( getSettings() )
+                .eql( {copyFunc: false} );
+
+            setSettings({processSymbol: false, ownProperty: true});
+
+            expect( getSettings() )
+                .eql( {processSymbol: false, ownProperty: true} );
+        });
+    });
+    
+    
+    
+    describe(".setSettings(settings)", function() {
+        var setSettings = mixin.setSettings;
+
+        afterEach(function() {
+            setSettings();
+        });
+
+        it("should change default settings to specified values", function() {
+            setSettings({overwrite: true});
+
+            expect( mixin({a: 1}, [{a: 2, b: 2}, {a: 3, c: 3}]) )
+                .eql( {a: 3, b: 2, c: 3} );
+
+            setSettings({copyFunc: false, except: 'b'});
+
+            expect( mixin({a: 1}, [{a: 2, b: 2, m: method1}, {a: 3, c: 3, m: method2}]) )
+                .eql( {a: 1, c: 3} );
+            expect( mixin({a: 1}, [{a: 2, b: 2, m: method1}, {a: 3, c: 3, m: method2}], {copyFunc: true, except: null}) )
+                .eql( {a: 1, b: 2, c: 3, m: method1} );
+        });
+
+        it("should reset default settings to initial values", function() {
+            setSettings({overwrite: true, copyFunc: false, except: 'b'});
+
+            expect( mixin({a: 1}, [{a: 2, b: 2, m: method1}, {a: 3, c: 3, m: method2}]) )
+                .eql( {a: 3, c: 3} );
+
+            setSettings();
+
+            expect( mixin({a: 1}, [{a: 2, b: 2, m: method1}, {a: 3, c: 3, m: method2}]) )
+                .eql( {a: 1, b: 2, c: 3, m: method1} );
+        });
+    });
 });
