@@ -1,3 +1,8 @@
+### 1.2.2 / 2018-05-09
+
+* add `mixToItems` method
+* add ability to redefine default values of settings (`setSettings` method).
+
 ### 1.2.1 / 2017-02-21
 
 * remove `isarray-shim` component dependency
