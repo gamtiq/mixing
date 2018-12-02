@@ -25,6 +25,10 @@ describe("mixing", function() {
         source = {a: list, b: obj, c: couple, d: {e: str, f: obj, g: couple, m1: method1}, met2: method2},
         expect, mixin, sym1, sym2, sym3;
     
+    function Core() {
+    }
+    Core.prototype = obj;
+    
     couple.a = sEmpty;
     couple.g = emptyObj;
     couple.met = method2;
@@ -494,10 +498,6 @@ describe("mixing", function() {
         });
         
         describe("mixing(destination, source, {ownProperty: ...}])", function() {
-            function Core() {
-            }
-            Core.prototype = obj;
-            
             describe("mixing(destination, source, {ownProperty: true}])", function() {
                 var settings = {ownProperty: true};
                 
@@ -959,6 +959,30 @@ describe("mixing", function() {
                                         ["d", "met2", sym1]);
                 }
             });
+        });
+    });
+    
+    
+    
+    describe(".assign(destination, source1, source2, ...)", function() {
+        var assign = mixin.assign;
+        it("should copy own properties of source objects into destination", function() {
+            var src1 = new Core(),
+                src2 = {a: 2, b: 4, src2: true},
+                src3 = {a: 3, d: 10, src3: false, x: 5};
+            src1.e = 'e';
+            src1.src1 = 0;
+
+            expect( assign({}, src1) )
+                .eql( {e: 'e', src1: 0} );
+            expect( assign({a: 0, z: false}, src1, null, src2, undef, src3) )
+                .eql( {a: 3, z: false, e: 'e', src1: 0, b: 4, src2: true, d: 10, src3: false, x: 5} );
+        });
+        it("should return unmodified destination", function() {
+            expect( assign({test: true, data: 3}, 0, false, '', null, undef) )
+                .eql( {test: true, data: 3} );
+            expect( assign({a: 'start', b: 'end'}, new Core(), {}) )
+                .eql( {a: 'start', b: 'end'} );
         });
     });
     

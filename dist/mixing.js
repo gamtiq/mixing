@@ -382,6 +382,27 @@
     }
 
     /**
+     * Copy values of all of the own properties from one or more source objects to the target object
+     * (similar to <code>Object.assign</code>).
+     * <br>
+     * This function is a "wrap" for the following code:
+     * <code><pre>
+     * mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});
+     * </pre></code>
+     * 
+     * @param {Object | Function} destination
+     *      The target object into which fields and functions will be copied.
+     * @param {...Object} source
+     *      An object whose contents will be copied.
+     *      If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.
+     * @return {Object}
+     *      Modified <code>target</code> object.
+     */
+    mixing.assign = function(destination) {
+        return mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});
+    };
+
+    /**
      * Change values of fields of given object.
      * <br>
      * This function is a "wrap" for the following code:

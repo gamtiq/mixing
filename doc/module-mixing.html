@@ -349,6 +349,215 @@
             
 <hr>
 <dt>
+    <h4 class="name" id=".assign"><span class="type-signature">&lt;static> </span>assign(destination, source)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Copy values of all of the own properties from one or more source objects to the target object(similar to <code>Object.assign</code>).<br>This function is a "wrap" for the following code:<code><pre>mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});</pre></code>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>destination</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The target object into which fields and functions will be copied.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>source</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An object whose contents will be copied.     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-386">line 386</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Modified <code>target</code> object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id=".change"><span class="type-signature">&lt;static> </span>change(source, change)</h4>
     
     
@@ -484,7 +693,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-384">line 384</a>
+				 <a href="index.js.html#sunlight-1-line-405">line 405</a>
 			</li>
 		</ul>
 	</dd>
@@ -658,7 +867,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-440">line 440</a>
+				 <a href="index.js.html#sunlight-1-line-461">line 461</a>
 			</li>
 		</ul>
 	</dd>
@@ -867,7 +1076,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-403">line 403</a>
+				 <a href="index.js.html#sunlight-1-line-424">line 424</a>
 			</li>
 		</ul>
 	</dd>
@@ -1032,7 +1241,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-459">line 459</a>
+				 <a href="index.js.html#sunlight-1-line-480">line 480</a>
 			</li>
 		</ul>
 	</dd>
@@ -1144,7 +1353,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-527">line 527</a>
+				 <a href="index.js.html#sunlight-1-line-548">line 548</a>
 			</li>
 		</ul>
 	</dd>
@@ -1312,7 +1521,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-478">line 478</a>
+				 <a href="index.js.html#sunlight-1-line-499">line 499</a>
 			</li>
 		</ul>
 	</dd>
@@ -1521,7 +1730,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-499">line 499</a>
+				 <a href="index.js.html#sunlight-1-line-520">line 520</a>
 			</li>
 		</ul>
 	</dd>
@@ -1762,7 +1971,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-419">line 419</a>
+				 <a href="index.js.html#sunlight-1-line-440">line 440</a>
 			</li>
 		</ul>
 	</dd>
@@ -1939,7 +2148,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-541">line 541</a>
+				 <a href="index.js.html#sunlight-1-line-562">line 562</a>
 			</li>
 		</ul>
 	</dd>
@@ -2080,7 +2289,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-517">line 517</a>
+				 <a href="index.js.html#sunlight-1-line-538">line 538</a>
 			</li>
 		</ul>
 	</dd>
@@ -2185,9 +2394,9 @@
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2018-05-09T15:08:59+03:00
+		on 2018-12-02T13:33:46+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
