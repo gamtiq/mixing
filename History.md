@@ -1,3 +1,8 @@
+### 1.2.3 / 2018-12-02
+
+* add `assign` method
+* add types declaration file
+
 ### 1.2.2 / 2018-05-09
 
 * add `mixToItems` method
