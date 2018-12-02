@@ -91,6 +91,7 @@ mixing({a: 1, b: 2, c: "", d: false}, {a: -1, b: null, c: true, d: "empty"}, {ov
 mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
 mixing.copy({a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/});   // Returns {e: "-123"}
 mixing({x: 5}, {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: "a3", delta: "plus"}
+mixing.assign({a: "start"}, {a: 1, b: 0}, {b: 2, c: 3, d: 4}, null, {e: "end"});   // Returns {a: 1, b: 2, c: 3, d: 4, e: "end"}
 
 // Change default settings
 mixing.setSettings({overwrite: true, oneSource: true});
@@ -182,6 +183,11 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `filter`: `Function | RegExp` - Function or regular expression that can be used to select elements that should be copied.
 * `otherName`: `Object` - Defines "renaming table" for copied elements.
 * `change`: `Function | Object` - Function or object that gives ability to change values that should be copied.
+
+### .assign(destination: Object, ...source: Object);
+
+Copy values of all of the own properties from one or more source objects to the target object
+(similar to `Object.assign`).
 
 ### .change(source: Array | Object, change: Function | Object);
 
