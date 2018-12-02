@@ -3,6 +3,7 @@
   "version": "1.2.2",
   "description": "Functions to mix, filter, change and copy/clone objects",
   "main": "index.js",
+  "types": "./index.d.ts",
   "directories": {
     "doc": "doc",
     "test": "test"
