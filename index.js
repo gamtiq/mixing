@@ -52,8 +52,10 @@ function copy(destination, source, propName, settings) {
             && (! settings.exceptions || ! settings.exceptions[propName])
             && (! settings.exceptRegExp || ! settings.exceptRegExp.test(sPropString))
             && (! settings.filter || settings.filter.call(null, {field: propName, value: propValue, target: destination, source: source}))
+            /* jshint -W122 */
             && (! settings.filterRegExp || settings.filterRegExp.test(typeof propValue === "symbol" ? propValue.toString() : propValue))) {
-        otherNameMap = settings.otherNameMap;
+            /* jshint +W122 */
+            otherNameMap = settings.otherNameMap;
         if (otherNameMap && (propName in otherNameMap)) {
             propName = otherNameMap[propName];
         }
