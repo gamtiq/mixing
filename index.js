@@ -312,7 +312,14 @@ function mixing(destination, source, settings) {
                 overwrite: Boolean(settings.overwrite),
                 ownProperty: Boolean(settings.ownProperty),
                 recursive: Boolean(settings.recursive),
-                otherNameMap: ("otherName" in settings ? settings.otherName : null)
+                otherNameMap: ("otherName" in settings ? settings.otherName : null),
+
+                changeFunc: settings.changeFunc,
+                copyMap: settings.copyMap,
+                copyRegExp: settings.copyRegExp,
+                exceptions: settings.exceptions,
+                exceptRegExp: settings.exceptRegExp,
+                filterRegExp: settings.filterRegExp
             },
             bOwnProperty = options.ownProperty,
             bProcessSymbol = options.processSymbol,

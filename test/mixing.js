@@ -728,6 +728,25 @@ describe("mixing", function() {
                                         [sym1, sym3]);
                 });
             });
+
+            describe("mixing(destination, source, {except: ..., recursive: true})", function() {
+                it("should copy recursively all fields from the source object except those that are specified", function() {
+                    checkDestination({a: 1, b: {b: 2}, d: null},
+                                        {a: false, b: {c: 2, copy: 'me', d: 3}, c: true, e: 'end', z: 100},
+                                        {except: 'c', recursive: true},
+                                        {a: 1, b: {b: 2, copy: 'me', d: 3}, d: null, e: 'end', z: 100});
+                    
+                    checkDestination({a: 1, b: {b: 2}, d: null},
+                                        {a: false, b: {c: 2, c3: 3, copy: 'me', access: false, end: true, d: 3}, c: true, delta: 5, e: 'end', z: 100},
+                                        {except: /^(c|d)/, recursive: true},
+                                        {a: 1, b: {b: 2, access: false, end: true}, d: null, e: 'end', z: 100});
+                    
+                    checkDestination({a: 1, b: {b: 2, end: null}, d: null},
+                                        {a: false, b: {c: 2, c3: 3, copy: 'me', access: false, end: true, d: 3}, c: true, d: 10, delta: 5, e: 'end', z: 100},
+                                        {except: /^(c|d)/, recursive: true, overwrite: true},
+                                        {a: false, b: {b: 2, access: false, end: true}, d: null, e: 'end', z: 100});
+                });
+            });
         });
         
         describe("mixing(destination, source, {filter: ...})", function() {
