@@ -1,6 +1,6 @@
 {
   "name": "mixing",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Functions to mix, filter, change and copy/clone objects",
   "main": "index.js",
   "types": "./index.d.ts",

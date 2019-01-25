@@ -2,7 +2,7 @@
     "templates": {
         "outputSourceFiles": true,
         "systemName": "mixing",
-        "copyright": "Copyright (c) 2013-2018 Denis Sikuler",
+        "copyright": "Copyright (c) 2013-2019 Denis Sikuler",
         "theme": "spacelab",
         "linenums": true
     }

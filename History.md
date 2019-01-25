@@ -1,3 +1,7 @@
+### 1.2.4 / 2019-01-26
+
+* fix error when `except` option is not applied on recursive copying
+
 ### 1.2.3 / 2018-12-02
 
 * add `assign` method
