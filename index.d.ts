@@ -48,6 +48,7 @@ declare namespace Mixing {
         recursive?: boolean;
         mixFromArray?: boolean;
         mixToArray?: boolean;
+        mixArray?: boolean;
         oneSource?: boolean;
         ownProperty?: boolean;
         copy?: string | string[] | RegExp | Symbol | FieldMap;

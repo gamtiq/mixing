@@ -94,7 +94,8 @@
 
     
     <div class="description">
-        Copy/add all fields and functions from source objects into the target object.As a result the target object may be modified.
+        <p>Copy/add all fields and functions from source objects into the target object.
+As a result the target object may be modified.</p>
     </div>
     
 
@@ -159,7 +160,7 @@
 
             
 
-            <td class="description last">The target object into which fields and functions will be copied.</td>
+            <td class="description last"><p>The target object into which fields and functions will be copied.</p></td>
         </tr>
 
     
@@ -194,7 +195,8 @@
 
             
 
-            <td class="description last">Array of source objects or just one object whose contents will be copied.     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</td>
+            <td class="description last"><p>Array of source objects or just one object whose contents will be copied.
+     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</p></td>
         </tr>
 
     
@@ -228,7 +230,190 @@
 
             
 
-            <td class="description last">Operation settings. Fields are names of settings, their values are the corresponding values of settings.     The following settings are being supported.     <table>         <tr>             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>         </tr>         <tr>             <td><code>copyFunc</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should functions be copied?</td>         </tr>         <tr>             <td><code>funcToProto</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>                 (i.e. into <code>destination.constructor.prototype</code>)?                 <br>                 If <code>false</code> then functions will be copied directly into the target object.             </td>         </tr>         <tr>             <td><code>processSymbol</code></td>             <td><code>Boolean</code></td>             <td><code>true</code></td>             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>         </tr>         <tr>             <td><code>overwrite</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should a field/function be overwritten when it exists in the target object?</td>         </tr>         <tr>             <td><code>recursive</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should this function be called recursively when field's value of the target and source object is an object?                 <br>                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function                 with the same settings.                 <br>                 This option has no dependency with <code>overwrite</code> setting and has priority over it.             </td>         </tr>         <tr>             <td><code>mixFromArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied when the field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>mixToArray</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Should contents of a field of the source object be copied into a field of the target object                 when the latest field's value is an array?                 <br>                 Will be used only when <code>recursive</code> setting has <code>true</code> value.             </td>         </tr>         <tr>             <td><code>oneSource</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>                 Indicates that array that is passed as <code>source</code> parameter should be interpreted                 directly as copied object instead of list of source objects.             </td>         </tr>         <tr>             <td><code>ownProperty</code></td>             <td><code>Boolean</code></td>             <td><code>false</code></td>             <td>Should only own properties of the source object be copied in the target object?</td>         </tr>         <tr>             <td><code>copy</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.                 <br>                 If an object is passed then his fields determine copied elements.                 If a regular expression is passed, then field names matching the regular expression will be copied.                 If a string/symbol is passed then it is name of the only copied field.             </td>         </tr>         <tr>             <td><code>except</code></td>             <td><code>Array | Object | RegExp | String | Symbol</code></td>             <td><code>""</code> (empty string)</td>             <td>                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.                 <br>                 If an object is passed then his fields with true values determine non-copied elements.                 If a regular expression is passed, then field names matching the regular expression will not be copied.                 If a string/symbol is passed then it is name of the only non-copied field.             </td>         </tr>         <tr>             <td><code>filter</code></td>             <td><code>Function | RegExp</code></td>             <td><code>null</code></td>             <td>                 Function or regular expression that can be used to select elements that should be copied.                 <br>                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.                 <br>                 If specified function returns <code>true</code> for a field,                 the field will be copied in the target object.                 <br>                 An object having the following fields is passed into filter function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>         <tr>             <td><code>otherName</code></td>             <td><code>Object</code></td>             <td><code>null</code></td>             <td>                 Defines "renaming table" for copied elements.                 <br>                 Fields of the table are names from a source object, values are the corresponding names in the target object.                 <br>                 For example, the call                 <br>                 <code>                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})                 </code>                 <br>                 will return the following object                 <br>                 <code>{prop: 1, method: "no-func"}</code>             </td>         </tr>         <tr>             <td><code>change</code></td>             <td><code>Function | Object</code></td>             <td><code>null</code></td>             <td>                 Function or object that gives ability to change values that should be copied.                 <br>                 If an object is passed then his fields determine new values for copied elements.                 <br>                 If a function is passed then value returned by the function for a field will be copied into the target object                  instead of original field's value.                 <br>                 An object having the following fields is passed into change function:                 <ul>                 <li><code>field</code> - field name                 <li><code>value</code> - field value                 <li><code>target</code> - reference to the target object                 <li><code>source</code> - reference to the source object                 </ul>             </td>         </tr>     </table>     Default values of settings can be redefined by <a href="module-mixing.html#.setSettings">setSettings</a> method.     <br>     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.     In such situation a field will be copied only when the field satisfies to all settings     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</td>
+            <td class="description last"><p>Operation settings. Fields are names of settings, their values are the corresponding values of settings.
+     The following settings are being supported.
+     <table>
+         <tr>
+             <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>
+         </tr>
+         <tr>
+             <td><code>copyFunc</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>true</code></td>
+             <td>Should functions be copied?</td>
+         </tr>
+         <tr>
+             <td><code>funcToProto</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>
+                 (i.e. into <code>destination.constructor.prototype</code>)?
+                 <br>
+                 If <code>false</code> then functions will be copied directly into the target object.
+             </td>
+         </tr>
+         <tr>
+             <td><code>processSymbol</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>true</code></td>
+             <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>
+         </tr>
+         <tr>
+             <td><code>overwrite</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>Should a field/function be overwritten when it exists in the target object?</td>
+         </tr>
+         <tr>
+             <td><code>recursive</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Should this function be called recursively when field's value of the target and source object is an object?
+                 <br>
+                 If <code>true</code> then object fields from the target and source objects will be mixed by using this function
+                 with the same settings.
+                 <br>
+                 This option has no dependency with <code>overwrite</code> setting and has priority over it.
+             </td>
+         </tr>
+         <tr>
+             <td><code>mixFromArray</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Should contents of a field of the source object be copied when the field's value is an array?
+                 <br>
+                 Will be used only when <code>recursive</code> setting has <code>true</code> value.
+             </td>
+         </tr>
+         <tr>
+             <td><code>mixToArray</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Should contents of a field of the source object be copied into a field of the target object
+                 when the latest field's value is an array?
+                 <br>
+                 Will be used only when <code>recursive</code> setting has <code>true</code> value.
+             </td>
+         </tr>
+         <tr>
+             <td><code>mixArray</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Sets default value for <code>mixFromArray</code> and <code>mixToArray</code> settings.
+             </td>
+         </tr>
+         <tr>
+             <td><code>oneSource</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>
+                 Indicates that array that is passed as <code>source</code> parameter should be interpreted
+                 directly as copied object instead of list of source objects.
+             </td>
+         </tr>
+         <tr>
+             <td><code>ownProperty</code></td>
+             <td><code>Boolean</code></td>
+             <td><code>false</code></td>
+             <td>Should only own properties of the source object be copied in the target object?</td>
+         </tr>
+         <tr>
+             <td><code>copy</code></td>
+             <td><code>Array | Object | RegExp | String | Symbol</code></td>
+             <td><code>""</code> (empty string)</td>
+             <td>
+                 Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
+                 <br>
+                 If an object is passed then his fields determine copied elements.
+                 If a regular expression is passed, then field names matching the regular expression will be copied.
+                 If a string/symbol is passed then it is name of the only copied field.
+             </td>
+         </tr>
+         <tr>
+             <td><code>except</code></td>
+             <td><code>Array | Object | RegExp | String | Symbol</code></td>
+             <td><code>""</code> (empty string)</td>
+             <td>
+                 Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
+                 <br>
+                 If an object is passed then his fields with true values determine non-copied elements.
+                 If a regular expression is passed, then field names matching the regular expression will not be copied.
+                 If a string/symbol is passed then it is name of the only non-copied field.
+             </td>
+         </tr>
+         <tr>
+             <td><code>filter</code></td>
+             <td><code>Function | RegExp</code></td>
+             <td><code>null</code></td>
+             <td>
+                 Function or regular expression that can be used to select elements that should be copied.
+                 <br>
+                 If regular expression is passed, only those fields will be copied whose values are matching regular expression.
+                 <br>
+                 If specified function returns <code>true</code> for a field,
+                 the field will be copied in the target object.
+                 <br>
+                 An object having the following fields is passed into filter function:
+                 <ul>
+                 <li><code>field</code> - field name
+                 <li><code>value</code> - field value
+                 <li><code>target</code> - reference to the target object
+                 <li><code>source</code> - reference to the source object
+                 </ul>
+             </td>
+         </tr>
+         <tr>
+             <td><code>otherName</code></td>
+             <td><code>Object</code></td>
+             <td><code>null</code></td>
+             <td>
+                 Defines &quot;renaming table&quot; for copied elements.
+                 <br>
+                 Fields of the table are names from a source object, values are the corresponding names in the target object.
+                 <br>
+                 For example, the call
+                 <br>
+                 <code>
+                 mixing({}, {field: 1, func: "no-func"}, {otherName: {"field": "prop", "func": "method"}})
+                 </code>
+                 <br>
+                 will return the following object
+                 <br>
+                 <code>{prop: 1, method: "no-func"}</code>
+             </td>
+         </tr>
+         <tr>
+             <td><code>change</code></td>
+             <td><code>Function | Object</code></td>
+             <td><code>null</code></td>
+             <td>
+                 Function or object that gives ability to change values that should be copied.
+                 <br>
+                 If an object is passed then his fields determine new values for copied elements.
+                 <br>
+                 If a function is passed then value returned by the function for a field will be copied into the target object 
+                 instead of original field's value.
+                 <br>
+                 An object having the following fields is passed into change function:
+                 <ul>
+                 <li><code>field</code> - field name
+                 <li><code>value</code> - field value
+                 <li><code>target</code> - reference to the target object
+                 <li><code>source</code> - reference to the source object
+                 </ul>
+             </td>
+         </tr>
+     </table>
+     Default values of settings can be redefined by <a href="module-mixing.html#.setSettings">setSettings</a> method.
+     <br>
+     <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.
+     In such situation a field will be copied only when the field satisfies to all settings
+     (i.e. belongs to copied elements, not in exceptions and conforms to filter).</p></td>
         </tr>
 
     
@@ -273,7 +458,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-282">line 282</a>
+				 <a href="index.js.html#sunlight-1-line-290">line 290</a>
 			</li>
 		</ul>
 	</dd>
@@ -302,7 +487,7 @@
     
             
 <div class="param-desc">
-    Modified target object.
+    <p>Modified target object.</p>
 </div>
 
 
@@ -357,7 +542,13 @@
 
     
     <div class="description">
-        Copy values of all of the own properties from one or more source objects to the target object(similar to <code>Object.assign</code>).<br>This function is a "wrap" for the following code:<code><pre>mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});</pre></code>
+        <p>Copy values of all of the own properties from one or more source objects to the target object
+(similar to <code>Object.assign</code>).
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});
+</pre></code></p>
     </div>
     
 
@@ -422,7 +613,7 @@
 
             
 
-            <td class="description last">The target object into which fields and functions will be copied.</td>
+            <td class="description last"><p>The target object into which fields and functions will be copied.</p></td>
         </tr>
 
     
@@ -456,7 +647,8 @@
 
             
 
-            <td class="description last">An object whose contents will be copied.     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</td>
+            <td class="description last"><p>An object whose contents will be copied.
+     If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.</p></td>
         </tr>
 
     
@@ -501,7 +693,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-395">line 395</a>
+				 <a href="index.js.html#sunlight-1-line-403">line 403</a>
 			</li>
 		</ul>
 	</dd>
@@ -530,7 +722,7 @@
     
             
 <div class="param-desc">
-    Modified <code>target</code> object.
+    <p>Modified <code>target</code> object.</p>
 </div>
 
 
@@ -566,7 +758,12 @@
 
     
     <div class="description">
-        Change values of fields of given object.<br>This function is a "wrap" for the following code:<code><pre>mixing(source, source, {change: change, overwrite: true, oneSource: true});</pre></code>
+        <p>Change values of fields of given object.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+mixing(source, source, {change: change, overwrite: true, oneSource: true});
+</pre></code></p>
     </div>
     
 
@@ -621,7 +818,7 @@
 
             
 
-            <td class="description last">An array or an object whose fields should be modified.</td>
+            <td class="description last"><p>An array or an object whose fields should be modified.</p></td>
         </tr>
 
     
@@ -648,7 +845,7 @@
 
             
 
-            <td class="description last">A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -693,7 +890,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-414">line 414</a>
+				 <a href="index.js.html#sunlight-1-line-422">line 422</a>
 			</li>
 		</ul>
 	</dd>
@@ -722,7 +919,7 @@
     
             
 <div class="param-desc">
-    Modified <code>source</code> object.
+    <p>Modified <code>source</code> object.</p>
 </div>
 
 
@@ -758,7 +955,13 @@
 
     
     <div class="description">
-        Make a copy of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var copy = mixing({}, this, settings);</pre></code>It can be transferred to an object to use as a method.
+        <p>Make a copy of <code>this</code> object.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+var copy = mixing({}, this, settings);
+</pre></code>
+It can be transferred to an object to use as a method.</p>
     </div>
     
 
@@ -822,7 +1025,7 @@
 
             
 
-            <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Operation settings. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -867,7 +1070,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-470">line 470</a>
+				 <a href="index.js.html#sunlight-1-line-478">line 478</a>
 			</li>
 		</ul>
 	</dd>
@@ -896,7 +1099,7 @@
     
             
 <div class="param-desc">
-    Newly created object containing contents of <code>this</code> object.
+    <p>Newly created object containing contents of <code>this</code> object.</p>
 </div>
 
 
@@ -932,7 +1135,12 @@
 
     
     <div class="description">
-        Make a copy of source object(s).<br>This function is a "wrap" for the following code:<code><pre>var copy = mixing({}, source, settings);</pre></code>
+        <p>Make a copy of source object(s).
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+var copy = mixing({}, source, settings);
+</pre></code></p>
     </div>
     
 
@@ -997,7 +1205,7 @@
 
             
 
-            <td class="description last">Array of source objects or just one object whose contents will be copied.</td>
+            <td class="description last"><p>Array of source objects or just one object whose contents will be copied.</p></td>
         </tr>
 
     
@@ -1031,7 +1239,7 @@
 
             
 
-            <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Operation settings. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -1076,7 +1284,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-433">line 433</a>
+				 <a href="index.js.html#sunlight-1-line-441">line 441</a>
 			</li>
 		</ul>
 	</dd>
@@ -1105,7 +1313,7 @@
     
             
 <div class="param-desc">
-    Newly created object containing contents of source objects.
+    <p>Newly created object containing contents of source objects.</p>
 </div>
 
 
@@ -1141,7 +1349,13 @@
 
     
     <div class="description">
-        Filter <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var result = mixing({}, this, {filter: filter});</pre></code>It can be transferred to an object to use as a method.
+        <p>Filter <code>this</code> object.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+var result = mixing({}, this, {filter: filter});
+</pre></code>
+It can be transferred to an object to use as a method.</p>
     </div>
     
 
@@ -1196,7 +1410,8 @@
 
             
 
-            <td class="description last">Filter function to select fields or object that represents operation settings including filter function.     See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Filter function to select fields or object that represents operation settings including filter function.
+     See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -1241,7 +1456,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-489">line 489</a>
+				 <a href="index.js.html#sunlight-1-line-497">line 497</a>
 			</li>
 		</ul>
 	</dd>
@@ -1270,7 +1485,7 @@
     
             
 <div class="param-desc">
-    Newly created object containing fields of <code>this</code> object for which filter function returns true.
+    <p>Newly created object containing fields of <code>this</code> object for which filter function returns true.</p>
 </div>
 
 
@@ -1306,7 +1521,7 @@
 
     
     <div class="description">
-        Return default settings that were set earlier.
+        <p>Return default settings that were set earlier.</p>
     </div>
     
 
@@ -1353,7 +1568,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-557">line 557</a>
+				 <a href="index.js.html#sunlight-1-line-565">line 565</a>
 			</li>
 		</ul>
 	</dd>
@@ -1382,7 +1597,7 @@
     
             
 <div class="param-desc">
-    Default settings that were set earlier or <code>undefined / null</code> if default settings were not set.
+    <p>Default settings that were set earlier or <code>undefined / null</code> if default settings were not set.</p>
 </div>
 
 
@@ -1421,7 +1636,13 @@
 
     
     <div class="description">
-        Copy and change values of fields of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>var result = mixing({}, this, {change: change});</pre></code>It can be transferred to an object to use as a method.
+        <p>Copy and change values of fields of <code>this</code> object.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+var result = mixing({}, this, {change: change});
+</pre></code>
+It can be transferred to an object to use as a method.</p>
     </div>
     
 
@@ -1476,7 +1697,8 @@
 
             
 
-            <td class="description last">Function to change values of copied fields or object that represents operation settings including change function.     See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Function to change values of copied fields or object that represents operation settings including change function.
+     See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -1521,7 +1743,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-508">line 508</a>
+				 <a href="index.js.html#sunlight-1-line-516">line 516</a>
 			</li>
 		</ul>
 	</dd>
@@ -1550,7 +1772,7 @@
     
             
 <div class="param-desc">
-    Newly created object containing fields of <code>this</code> object with changed values.
+    <p>Newly created object containing fields of <code>this</code> object with changed values.</p>
 </div>
 
 
@@ -1586,7 +1808,14 @@
 
     
     <div class="description">
-        Copy/add all fields and functions from source objects into <code>this</code> object.As a result <code>this</code> object may be modified.<br>This function is a "wrap" for the following code:<code><pre>mixing(this, source, settings);</pre></code>It can be transferred to an object to use as a method.
+        <p>Copy/add all fields and functions from source objects into <code>this</code> object.
+As a result <code>this</code> object may be modified.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+mixing(this, source, settings);
+</pre></code>
+It can be transferred to an object to use as a method.</p>
     </div>
     
 
@@ -1651,7 +1880,7 @@
 
             
 
-            <td class="description last">Array of source objects or just one object whose contents will be copied.</td>
+            <td class="description last"><p>Array of source objects or just one object whose contents will be copied.</p></td>
         </tr>
 
     
@@ -1685,7 +1914,7 @@
 
             
 
-            <td class="description last">Operation settings. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Operation settings. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -1730,7 +1959,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-529">line 529</a>
+				 <a href="index.js.html#sunlight-1-line-537">line 537</a>
 			</li>
 		</ul>
 	</dd>
@@ -1759,7 +1988,7 @@
     
             
 <div class="param-desc">
-    Modified <code>this</code> object.
+    <p>Modified <code>this</code> object.</p>
 </div>
 
 
@@ -1795,7 +2024,7 @@
 
     
     <div class="description">
-        Copy fields from source object(s) into every object item of given array.
+        <p>Copy fields from source object(s) into every object item of given array.</p>
     </div>
     
 
@@ -1857,7 +2086,7 @@
 
             
 
-            <td class="description last">An array whose items should be modified.</td>
+            <td class="description last"><p>An array whose items should be modified.</p></td>
         </tr>
 
     
@@ -1892,7 +2121,7 @@
 
             
 
-            <td class="description last">Array of source objects or just one object whose contents will be copied.</td>
+            <td class="description last"><p>Array of source objects or just one object whose contents will be copied.</p></td>
         </tr>
 
     
@@ -1926,7 +2155,7 @@
 
             
 
-            <td class="description last">Operation settings that will be applied to every copying. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>Operation settings that will be applied to every copying. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -1971,7 +2200,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-449">line 449</a>
+				 <a href="index.js.html#sunlight-1-line-457">line 457</a>
 			</li>
 		</ul>
 	</dd>
@@ -2000,7 +2229,7 @@
     
             
 <div class="param-desc">
-    Original <code>destinationList</code> with possibly modified object items.
+    <p>Original <code>destinationList</code> with possibly modified object items.</p>
 </div>
 
 
@@ -2036,7 +2265,7 @@
 
     
     <div class="description">
-        Set (redefine, reset) default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.
+        <p>Set (redefine, reset) default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.</p>
     </div>
     
 
@@ -2103,7 +2332,10 @@
 
             
 
-            <td class="description last">Default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.     Initial default values will be used for settings that are not specified in the passed object.     Pass <code>undefined</code>, <code>null</code>, non-object or to call without parameter     to reset default settings to initial values.</td>
+            <td class="description last"><p>Default settings that should be used for subsequent <a href="module-mixing.html">mixing</a> calls.
+     Initial default values will be used for settings that are not specified in the passed object.
+     Pass <code>undefined</code>, <code>null</code>, non-object or to call without parameter
+     to reset default settings to initial values.</p></td>
         </tr>
 
     
@@ -2148,7 +2380,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-571">line 571</a>
+				 <a href="index.js.html#sunlight-1-line-579">line 579</a>
 			</li>
 		</ul>
 	</dd>
@@ -2189,7 +2421,13 @@
 
     
     <div class="description">
-        Change values of fields of <code>this</code> object.<br>This function is a "wrap" for the following code:<code><pre>mixing.change(this, change);</pre></code>It can be transferred to an object to use as a method.
+        <p>Change values of fields of <code>this</code> object.
+<br>
+This function is a &quot;wrap&quot; for the following code:
+<code><pre>
+mixing.change(this, change);
+</pre></code>
+It can be transferred to an object to use as a method.</p>
     </div>
     
 
@@ -2244,7 +2482,7 @@
 
             
 
-            <td class="description last">A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</td>
+            <td class="description last"><p>A function or an object that specifies the modification. See <a href="module-mixing.html">mixing</a> for details.</p></td>
         </tr>
 
     
@@ -2289,7 +2527,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-547">line 547</a>
+				 <a href="index.js.html#sunlight-1-line-555">line 555</a>
 			</li>
 		</ul>
 	</dd>
@@ -2318,7 +2556,7 @@
     
             
 <div class="param-desc">
-    Modified <code>this</code> object.
+    <p>Modified <code>this</code> object.</p>
 </div>
 
 
@@ -2390,13 +2628,13 @@
 
 
 	<span class="copyright">
-	Copyright (c) 2013-2019 Denis Sikuler
+	Copyright (c) 2013-2020 Denis Sikuler
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-01-26T00:30:51+03:00
+		on 2020-02-19T23:56:16+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

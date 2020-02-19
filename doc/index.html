@@ -85,6 +85,186 @@
 
 
 
+    <section class="readme-section">
+        <article><h1>mixing <a name="start"></a></h1><p>Functions to mix, filter, change and copy/clone objects.
+Supports processing of symbol property keys that are introduced in ECMAScript 2015.</p>
+<p><code>mixing</code> is like an improved version of <code>Object.assign</code> and is compatible with ECMAScript 3+.</p>
+<p><a href="http://badge.fury.io/js/mixing"><img src="https://badge.fury.io/js/mixing.png" alt="NPM version"></a>
+<a href="https://travis-ci.org/gamtiq/mixing"><img src="https://travis-ci.org/gamtiq/mixing.png" alt="Build Status"></a>
+<a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt"></a></p>
+<ul>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#api">API</a></li>
+<li><a href="#related">Related projects</a></li>
+</ul>
+<h2>Installation</h2><h3>Node</h3><pre class="prettyprint source"><code>npm install mixing</code></pre><h3><a href="http://ringojs.org">Ringo</a></h3><pre class="prettyprint source"><code>ringo-admin install gamtiq/mixing</code></pre><h3><a href="http://bower.io">Bower</a></h3><pre class="prettyprint source"><code>bower install mixing</code></pre><h3>AMD, script tag</h3><p>Use <code>dist/mixing.js</code> or <code>dist/mixing.min.js</code> (minified version).</p>
+<h2>Usage <a name="usage"></a> <a href="#start">&#x2191;</a></h2><h3>Node, Ringo</h3><pre class="prettyprint source lang-js"><code>var mixing = require(&quot;mixing&quot;);
+...</code></pre><h3>AMD</h3><pre class="prettyprint source lang-js"><code>define([&quot;path/to/dist/mixing.js&quot;], function(mixing) {
+    ...
+});</code></pre><h3>Bower, script tag</h3><pre class="prettyprint source lang-html"><code>&lt;!-- Use bower_components/mixing/dist/mixing.js if the library was installed via Bower -->
+&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/dist/mixing.js&quot;>&lt;/script>
+&lt;script type=&quot;text/javascript&quot;>
+    // mixing is available via mixing field of window object
+    ...
+&lt;/script></code></pre><h3>Examples <a name="examples"></a> <a href="#start">&#x2191;</a></h3><pre class="prettyprint source lang-js"><code>var copy = mixing.copy(source);   // Make a shallow copy of source
+var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
+mixing({a: 1, b: 2}, {a: &quot;a&quot;, b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
+mixing({a: 1, b: 2, z: 100}, {a: &quot;a&quot;, b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: &quot;a&quot;, b: {}, c: 3, d: 4, z: 100}
+// Recursive mix
+mixing(
+    {a: 1, b: {c: &quot;&quot;, d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true},
+    {a: 3, b: {c: 1, c2: &quot;abc&quot;}, e: [{f2: -3}, {f1: 7, f2: null}, {f1: 10}], x: &quot;way&quot;},
+    {overwrite: true, recursive: true, mixArray: true}
+);   // Returns {a: 3, b: {c: 1, d: false, c2: &quot;abc&quot;}, e: [{f1: 1, f2: -3}, {f1: 7, f3: 9, f2: null}, {f1: 10}], x: &quot;way&quot;, z: true}
+
+mixing({a: 1, b: 2, c: &quot;&quot;, d: false}, {a: -1, b: null, c: true, d: &quot;empty&quot;}, {overwrite: true, except: {a: false, b: true, c: null, d: &quot;yes&quot;}});   // Returns {a: -1, b: 2, c: true, d: false}
+mixing({a: 1, b: 2}, {a3: 3, b: null, c4: &quot;e5&quot;, d_97: new Date(), c: 3, &quot;e-2&quot;: &quot;empty&quot;}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
+mixing.copy({a: 1, a2: 2, a3: &quot;a3&quot;, b: 4, copy5: 5, d: &quot;delta&quot;, e: &quot;-123&quot;}, {except: /a/, filter: /\W/});   // Returns {e: &quot;-123&quot;}
+mixing({x: 5}, {a: 1, a2: &quot;2man&quot;, a3: &quot;a3&quot;, b: 4, copy5: 5, delta: &quot;plus&quot;, e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: &quot;a3&quot;, delta: &quot;plus&quot;}
+mixing.assign({a: &quot;start&quot;}, {a: 1, b: 0}, {b: 2, c: 3, d: 4}, null, {e: &quot;end&quot;});   // Returns {a: 1, b: 2, c: 3, d: 4, e: &quot;end&quot;}
+
+// Change default settings
+mixing.setSettings({overwrite: true, oneSource: true});
+// Mix arrays
+mixing([1, 2, 3], [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]);   // Returns [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]
+mixing([3, 2, 1, 4, 5], [1, 2, 3]);   // Returns [1, 2, 3, 4, 5]
+// Get redefined default settings
+mixing.getSettings();   // Returns {overwrite: true, oneSource: true}
+// Reset default settings to initial values
+mixing.setSettings();
+
+// Filter and change field values
+mixing({}, 
+       [{a: 1, b: 100}, null, {c: 3, d: new Date(), e: 4}, {f: &quot;str&quot;, g: 50}, undefined, {h: 7}], 
+       {
+           except: [&quot;a&quot;, &quot;g&quot;],
+           filter: function(data) {
+               var value = data.value;
+               return typeof value === &quot;number&quot; && value &lt; 10;
+           },
+           change: function(data) {
+               var value = data.value;
+               return value > 5 ? value * value : value;
+           }
+       });   // Returns {c: 3, e: 4, h: 49}
+
+mixing.change({a: 1, b: &quot;abc&quot;, c: null, d: 4444, e: false},
+                {b: 22, c: 333, e: 55555});   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
+
+// Change items in array
+mixing.mixToItems([{a: 1, b: 2}, {b: 3}, 83, {}], {a: null, c: 9});   // Returns [{a: 1, b: 2, c: 9}, {a: null, b: 3, c: 9}, 83, {a: null, c: 9}]
+mixing.mixToItems([null, {a: 1, b: 2}, {b: 3, z: 0}, {}], {a: null, b: false}, {overwrite: true});   // Returns [null, {a: null, b: false}, {a: null, b: false, z: 0}, {a: null, b: false}]
+
+// Clone, filter, map, update
+var obj = {
+    a: 1,
+    b: 2,
+    clone: mixing.clone,
+    filter: mixing.filter,
+    map: mixing.map,
+    update: mixing.update
+};
+obj[Symbol(&quot;field&quot;)] = Symbol(&quot;value&quot;);
+var obj2 = obj.clone();   // obj2 is a shallow copy of obj (contains symbol property key)
+
+function isNumericValue(data) {
+    return typeof data.value === &quot;number&quot;;
+}
+
+var obj3 = obj.filter(isNumericValue);   // {a: 1, b: 2}
+
+var obj4 = obj.map({
+    filter: isNumericValue,
+    change: function(data) {
+        return data.value + data.value;
+    }
+});   // {a: 2, b: 4}
+
+obj.update(function(data) {
+    var value = data.value;
+    return typeof value === &quot;number&quot;
+                ? ++value
+                : value;
+});   // obj is {a: 2, b: 3, clone: ...}</code></pre><h2>API <a name="api"></a> <a href="#start">&#x2191;</a></h2><p>See <code>doc</code> directory for details.</p>
+<h3>mixing(destination: Object, source: Array | Object, [settings: Object]);</h3><p>Copy/add all fields and functions from <code>source</code> object(s) into the <code>destination</code> object.
+As a result the <code>destination</code> object may be modified.</p>
+<p>Several settings are supported (see <code>doc/module-mixing.html</code> for details):</p>
+<ul>
+<li><code>copyFunc</code>: <code>Boolean</code> - Should functions be copied?</li>
+<li><code>funcToProto</code>: <code>Boolean</code> - Should functions be copied into <code>prototype</code> of the <code>destination</code> object's <code>constructor</code>?</li>
+<li><code>processSymbol</code>: <code>Boolean</code> - Should symbol property keys be processed?</li>
+<li><code>overwrite</code>: <code>Boolean</code> - Should a field/function be overwritten when it exists in the <code>destination</code> object?</li>
+<li><code>recursive</code>: <code>Boolean</code> - Should this function be called recursively when field's value of the <code>destination</code> and <code>source</code> object is an object?</li>
+<li><code>mixFromArray</code>: <code>Boolean</code> - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?</li>
+<li><code>mixToArray</code>: <code>Boolean</code> - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?</li>
+<li><code>mixArray</code>: <code>Boolean</code> - Default value for <code>mixFromArray</code> and <code>mixToArray</code> settings.</li>
+<li><code>oneSource</code>: <code>Boolean</code> - Should <code>source</code> array be interpreted directly as copied object instead of list of source objects?</li>
+<li><code>ownProperty</code>: <code>Boolean</code> - Should only own properties of the source object be copied into the target object?</li>
+<li><code>copy</code>: <code>Array | Object | RegExp | String | Symbol</code> - Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.</li>
+<li><code>except</code>: <code>Array | Object | RegExp | String | Symbol</code> - Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.</li>
+<li><code>filter</code>: <code>Function | RegExp</code> - Function or regular expression that can be used to select elements that should be copied.</li>
+<li><code>otherName</code>: <code>Object</code> - Defines &quot;renaming table&quot; for copied elements.</li>
+<li><code>change</code>: <code>Function | Object</code> - Function or object that gives ability to change values that should be copied.</li>
+</ul>
+<h3>.assign(destination: Object, ...source: Object);</h3><p>Copy values of all of the own properties from one or more source objects to the target object
+(similar to <code>Object.assign</code>).</p>
+<h3>.change(source: Array | Object, change: Function | Object);</h3><p>Change values of fields of given object.</p>
+<h3>.copy(source: Array | Object, [settings: Object]);</h3><p>Make a copy of source object(s).</p>
+<h3>.mixToItems(destinationList: Array, source: Array | Object, [settings: Object]);</h3><p>Copy fields from source object(s) into every object item of given array.</p>
+<h3>.clone([settings: Object]);</h3><p>Make a copy of <code>this</code> object.
+This function can be transferred to an object to use as a method.
+For example:</p>
+<pre class="prettyprint source lang-js"><code>SomeClass.prototype.clone = mixing.clone;
+...
+var obj = new SomeClass();
+...
+var copy = obj.clone();</code></pre><h3>.filter(filter: Function | Object);</h3><p>Filter <code>this</code> object.
+This function can be transferred to an object to use as a method.
+For example:</p>
+<pre class="prettyprint source lang-js"><code>SomeClass.prototype.filter = mixing.filter;
+...
+var obj = new SomeClass();
+...
+var result = obj.filter(function(data) {
+    // data.source is obj, data.target is result
+    ...
+});</code></pre><h3>.map(change: Function | Object);</h3><p>Copy and change values of fields of <code>this</code> object.
+This function can be transferred to an object to use as a method.
+For example:</p>
+<pre class="prettyprint source lang-js"><code>SomeClass.prototype.map = mixing.map;
+...
+var obj = new SomeClass();
+...
+var result = obj.map(function(data) {
+    // data.source is obj, data.target is result
+    ...
+});</code></pre><h3>.mix(source: Array | Object, [settings: Object]);</h3><p>Copy/add all fields and functions from source objects into <code>this</code> object.
+As a result <code>this</code> object may be modified.
+This function can be transferred to an object to use as a method.
+For example:</p>
+<pre class="prettyprint source lang-js"><code>SomeClass.prototype.mix = mixing.mix;
+...
+var obj = new SomeClass();
+...
+obj.mix([obj1, obj2]);</code></pre><h3>.update(change: Function | Object);</h3><p>Change values of fields of <code>this</code> object.
+This function can be transferred to an object to use as a method.
+For example:</p>
+<pre class="prettyprint source lang-js"><code>SomeClass.prototype.update = mixing.update;
+...
+var obj = new SomeClass();
+...
+obj.update({a: 2, b: &quot;&quot;});</code></pre><h3>.getSettings();</h3><p>Return default settings that were set earlier.</p>
+<h3>.setSettings([settings: Object]);</h3><p>Set (redefine, reset) default settings that should be used for subsequent <code>mixing</code> calls.</p>
+<h2>Related projects <a name="related"></a> <a href="#start">&#x2191;</a></h2><ul>
+<li><a href="https://github.com/gamtiq/adam">adam</a></li>
+<li><a href="https://github.com/gamtiq/basespace">basespace</a></li>
+<li><a href="https://github.com/gamtiq/extend">extend</a></li>
+<li><a href="https://github.com/gamtiq/teo">teo</a></li>
+</ul>
+<h2>Licence</h2><p>MIT</p></article>
+    </section>
+
 
 
 
@@ -126,13 +306,13 @@
 
 
 	<span class="copyright">
-	Copyright (c) 2013-2019 Denis Sikuler
+	Copyright (c) 2013-2020 Denis Sikuler
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-01-26T00:30:51+03:00
+		on 2020-02-19T23:56:16+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

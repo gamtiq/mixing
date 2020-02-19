@@ -468,6 +468,98 @@ describe("mixing", function() {
                         {a: [11, 22, 33, 44, 55]}, 
                         {recursive: true, mixFromArray: true, mixToArray: true, overwrite: true}) )
                     .eql({a: [11, 22, 33, 44, 55]});
+                
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {recursive: true, mixFromArray: true, mixToArray: true, overwrite: false}) )
+                    .eql({
+                        a: [{b: 1, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 4, g: 5, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 5} 
+                    });
+                
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {recursive: true, mixFromArray: true, mixToArray: true, overwrite: true}) )
+                    .eql({
+                        a: [{b: 11, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 2, g: 4, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 2} 
+                    });
+            });
+        });
+        
+        describe("mixing(destination, source, {recursive: true, mixFromArray: true, mixArray: true}])", function() {
+            it("should copy fields recursively and mix from and to array", function() {
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {recursive: true, mixFromArray: true, mixArray: true}) )
+                    .eql({
+                        a: [{b: 1, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 4, g: 5, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 5} 
+                    });
+            });
+        });
+        
+        describe("mixing(destination, source, {recursive: true, mixFromArray: false, mixArray: true}])", function() {
+            it("should copy fields recursively and mix to array", function() {
+                var destArray = [1, 2, 3],
+                    dest = {a: destArray, b: [0, 5]};
+                
+                expect( mixin(dest,
+                        {a: {one: 1, two: 2, 3: 9}, b: ["test"]}, 
+                        {recursive: true, overwrite: true, mixFromArray: false, mixArray: true}) )
+                    .eql({a: destArray, b: ["test"]});
+                
+                expect(destArray)
+                    .have.property("one", 1);
+                expect(destArray)
+                    .have.property("two", 2);
+                expect(destArray.length)
+                    .equal(4);
+                expect(destArray[3])
+                    .equal(9);
+            });
+        });
+        
+        describe("mixing(destination, source, {recursive: true, mixToArray: true, mixArray: true}])", function() {
+            it("should copy fields recursively and mix from and to array", function() {
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {recursive: true, mixToArray: true, mixArray: true}) )
+                    .eql({
+                        a: [{b: 1, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 4, g: 5, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 5} 
+                    });
+            });
+        });
+        
+        describe("mixing(destination, source, {recursive: true, mixToArray: false, mixArray: true}])", function() {
+            it("should copy fields recursively and mix from array", function() {
+                var destObj = {one: 1, two: 2},
+                    dest = {a: destObj, b: [-1, -2]};
+                
+                expect( mixin(dest, 
+                                {a: [1, 2, 3], b: [4, 5, 6]}, 
+                                {recursive: true, mixToArray: false, mixArray: true}) )
+                    .eql({a: {one: 1, two: 2, 0: 1, 1: 2, 2: 3}, b: [-1, -2]});
+                
+                expect(destObj)
+                    .have.property("0", 1);
+                expect(destObj)
+                    .have.property("1", 2);
+                expect(destObj)
+                    .have.property("2", 3);
+            });
+        });
+        
+        describe("mixing(destination, source, {recursive: true, mixArray: true}])", function() {
+            it("should copy fields recursively and mix from and to array", function() {
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {recursive: true, mixArray: true}) )
+                    .eql({
+                        a: [{b: 1, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 4, g: 5, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 5} 
+                    });
             });
         });
         

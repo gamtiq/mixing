@@ -184,6 +184,14 @@ function copy(destination, source, propName, settings) {
  *              </td>
  *          </tr>
  *          <tr>
+ *              <td><code>mixArray</code></td>
+ *              <td><code>Boolean</code></td>
+ *              <td><code>false</code></td>
+ *              <td>
+ *                  Sets default value for <code>mixFromArray</code> and <code>mixToArray</code> settings.
+ *              </td>
+ *          </tr>
+ *          <tr>
  *              <td><code>oneSource</code></td>
  *              <td><code>Boolean</code></td>
  *              <td><code>false</code></td>
@@ -322,8 +330,8 @@ function mixing(destination, source, settings) {
                 funcToProto: Boolean(settings.funcToProto),
                 processSymbol: ("processSymbol" in settings ? settings.processSymbol : true)
                                     && typeof getOwnPropertySymbols === "function",
-                mixFromArray: Boolean(settings.mixFromArray),
-                mixToArray: Boolean(settings.mixToArray),
+                mixFromArray: Boolean( ("mixFromArray" in settings) ? settings.mixFromArray : settings.mixArray ),
+                mixToArray: Boolean( ("mixToArray" in settings) ? settings.mixToArray : settings.mixArray ),
                 overwrite: Boolean(settings.overwrite),
                 ownProperty: Boolean(settings.ownProperty),
                 recursive: Boolean(settings.recursive),

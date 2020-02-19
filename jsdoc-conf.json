@@ -1,8 +1,14 @@
 {
+    "plugins": ["plugins/markdown"],
+
+    "markdown": {
+        "parser": "marked"
+    },
+    
     "templates": {
         "outputSourceFiles": true,
         "systemName": "mixing",
-        "copyright": "Copyright (c) 2013-2019 Denis Sikuler",
+        "copyright": "Copyright (c) 2013-2020 Denis Sikuler",
         "theme": "spacelab",
         "linenums": true
     }

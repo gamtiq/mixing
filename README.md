@@ -28,36 +28,17 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
     bower install mixing
 
-### [JSPM](http://jspm.io)
-
-    jspm install mixing
-
 ### AMD, script tag
 
 Use `dist/mixing.js` or `dist/mixing.min.js` (minified version).
 
 ## Usage <a name="usage"></a> [&#x2191;](#start)
 
-### Node, Ringo, JSPM
+### Node, Ringo
 
 ```js
 var mixing = require("mixing");
 ...
-```
-
-### [Duo](http://duojs.org)
-
-```js
-var mixing = require("gamtiq/mixing");
-...
-```
-
-### JSPM
-
-```js
-System.import("mixing").then(function(mixing) {
-    ...
-});
 ```
 
 ### AMD
@@ -86,6 +67,12 @@ var copy = mixing.copy(source);   // Make a shallow copy of source
 var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
+// Recursive mix
+mixing(
+    {a: 1, b: {c: "", d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true},
+    {a: 3, b: {c: 1, c2: "abc"}, e: [{f2: -3}, {f1: 7, f2: null}, {f1: 10}], x: "way"},
+    {overwrite: true, recursive: true, mixArray: true}
+);   // Returns {a: 3, b: {c: 1, d: false, c2: "abc"}, e: [{f1: 1, f2: -3}, {f1: 7, f3: 9, f2: null}, {f1: 10}], x: "way", z: true}
 
 mixing({a: 1, b: 2, c: "", d: false}, {a: -1, b: null, c: true, d: "empty"}, {overwrite: true, except: {a: false, b: true, c: null, d: "yes"}});   // Returns {a: -1, b: 2, c: true, d: false}
 mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
@@ -176,6 +163,7 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `recursive`: `Boolean` - Should this function be called recursively when field's value of the `destination` and `source` object is an object?
 * `mixFromArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?
 * `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?
+* `mixArray`: `Boolean` - Default value for `mixFromArray` and `mixToArray` settings.
 * `oneSource`: `Boolean` - Should `source` array be interpreted directly as copied object instead of list of source objects?
 * `ownProperty`: `Boolean` - Should only own properties of the source object be copied into the target object?
 * `copy`: `Array | Object | RegExp | String | Symbol` - Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
