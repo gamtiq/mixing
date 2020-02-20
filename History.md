@@ -1,3 +1,8 @@
+### 1.2.5 / 2020-02-20
+
+* a function or RegExp can be used as value for `overwrite` setting
+* add `mixArray` setting
+
 ### 1.2.4 / 2019-01-26
 
 * fix error when `except` option is not applied on recursive copying
