@@ -61,16 +61,27 @@ function copy(destination, source, propName, settings) {
     var propValue = source[propName],
         sPropString = propName.toString(),
         bFuncProp, change, otherNameMap, sType, value;
+
+    function getParam() {
+        return {
+            field: propName,
+            value: propValue,
+            targetValue: destination[propName],
+            target: destination,
+            source: source
+        };
+    }
+
     if ((! settings.ownProperty || source.hasOwnProperty(propName))
             && (! settings.copyMap || (propName in settings.copyMap))
             && (! settings.copyRegExp || settings.copyRegExp.test(sPropString))
             && (! settings.exceptions || ! settings.exceptions[propName])
             && (! settings.exceptRegExp || ! settings.exceptRegExp.test(sPropString))
-            && (! settings.filter || settings.filter.call(null, {field: propName, value: propValue, target: destination, source: source}))
+            && (! settings.filter || settings.filter.call(null, getParam()))
             /* jshint -W122 */
             && (! settings.filterRegExp || settings.filterRegExp.test(typeof propValue === "symbol" ? propValue.toString() : propValue))) {
             /* jshint +W122 */
-            otherNameMap = settings.otherNameMap;
+        otherNameMap = settings.otherNameMap;
         if (otherNameMap && (propName in otherNameMap)) {
             propName = otherNameMap[propName];
         }
@@ -85,10 +96,13 @@ function copy(destination, source, propName, settings) {
         }
         else {
             bFuncProp = (sType === "function");
-            if ((settings.overwrite || ! (propName in destination))
-                    && (! bFuncProp || settings.copyFunc)) {
+            if ((! bFuncProp || settings.copyFunc)
+                    && (! (propName in destination)
+                        || ((value = settings.overwrite)
+                            && ( typeof value !== "function" || value(getParam()) )
+                            && ( ! (value instanceof RegExp) || value.test(propName) ) ))) {
                 if (settings.changeFunc) {
-                    propValue = settings.changeFunc.call(null, {field: propName, value: propValue, target: destination, source: source});
+                    propValue = settings.changeFunc.call(null, getParam());
                 }
                 else if ((change = settings.change) && (propName in change)) {
                     propValue = change[propName];
@@ -112,7 +126,7 @@ function copy(destination, source, propName, settings) {
  *      The target object into which fields and functions will be copied.
  * @param {Array | Object} source
  *      Array of source objects or just one object whose contents will be copied.
- *      If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.
+ *      If a source is a falsy value (e.g. `null` or `undefined`), the source will be skipped.
  * @param {Object} [settings]
  *      Operation settings. Fields are names of settings, their values are the corresponding values of settings.
  *      The following settings are being supported.
@@ -121,95 +135,108 @@ function copy(destination, source, propName, settings) {
  *              <th>Name</th><th>Type</th><th>Default value</th><th>Description</th>
  *          </tr>
  *          <tr>
- *              <td><code>copyFunc</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>true</code></td>
+ *              <td>`copyFunc`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`true`</td>
  *              <td>Should functions be copied?</td>
  *          </tr>
  *          <tr>
- *              <td><code>funcToProto</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`funcToProto`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
- *                  Should functions be copied into <code>prototype</code> of the target object's <code>constructor</code>
- *                  (i.e. into <code>destination.constructor.prototype</code>)?
+ *                  Should functions be copied into `prototype` of the target object's `constructor`
+ *                  (i.e. into `destination.constructor.prototype`)?
  *                  <br>
- *                  If <code>false</code> then functions will be copied directly into the target object.
+ *                  If `false` then functions will be copied directly into the target object.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>processSymbol</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>true</code></td>
+ *              <td>`processSymbol`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`true`</td>
  *              <td>Should symbol property keys (i.e. fields whose name is a symbol) be processed?</td>
  *          </tr>
  *          <tr>
- *              <td><code>overwrite</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
- *              <td>Should a field/function be overwritten when it exists in the target object?</td>
+ *              <td>`overwrite`</td>
+ *              <td>`Boolean | Function | RegExp`</td>
+ *              <td>`false`</td>
+ *              <td>
+ *                  Specifies whether a field/function should be overwritten when it exists in the target object.
+ *                  <br>
+ *                  If `true` then any existent field will be overwritten in the target object.
+ *                  <br>
+ *                  Function or regular expression can be used to select fields that should be overwritten.
+ *                  <br>
+ *                  If a regular expression is passed, only those fields will be overwritten
+ *                  whose names are matching the regular expression.
+ *                  <br>
+ *                  If specified function returns `true` for a field,
+ *                  the field will be overwritten in the target object.
+ *                  An object with contextual data is passed into the function (see details below).
+ *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>recursive</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`recursive`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
  *                  Should this function be called recursively when field's value of the target and source object is an object?
  *                  <br>
- *                  If <code>true</code> then object fields from the target and source objects will be mixed by using this function
+ *                  If `true` then object fields from the target and source objects will be mixed by using this function
  *                  with the same settings.
  *                  <br>
- *                  This option has no dependency with <code>overwrite</code> setting and has priority over it.
+ *                  This option has no dependency with `overwrite` setting and has priority over it.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>mixFromArray</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`mixFromArray`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
  *                  Should contents of a field of the source object be copied when the field's value is an array?
  *                  <br>
- *                  Will be used only when <code>recursive</code> setting has <code>true</code> value.
+ *                  Will be used only when `recursive` setting has `true` value.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>mixToArray</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`mixToArray`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
  *                  Should contents of a field of the source object be copied into a field of the target object
  *                  when the latest field's value is an array?
  *                  <br>
- *                  Will be used only when <code>recursive</code> setting has <code>true</code> value.
+ *                  Will be used only when `recursive` setting has `true` value.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>mixArray</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`mixArray`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
- *                  Sets default value for <code>mixFromArray</code> and <code>mixToArray</code> settings.
+ *                  Sets default value for `mixFromArray` and `mixToArray` settings.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>oneSource</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`oneSource`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>
- *                  Indicates that array that is passed as <code>source</code> parameter should be interpreted
+ *                  Indicates that array that is passed as `source` parameter should be interpreted
  *                  directly as copied object instead of list of source objects.
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>ownProperty</code></td>
- *              <td><code>Boolean</code></td>
- *              <td><code>false</code></td>
+ *              <td>`ownProperty`</td>
+ *              <td>`Boolean`</td>
+ *              <td>`false`</td>
  *              <td>Should only own properties of the source object be copied in the target object?</td>
  *          </tr>
  *          <tr>
- *              <td><code>copy</code></td>
- *              <td><code>Array | Object | RegExp | String | Symbol</code></td>
- *              <td><code>""</code> (empty string)</td>
+ *              <td>`copy`</td>
+ *              <td>`Array | Object | RegExp | String | Symbol`</td>
+ *              <td>`""` (empty string)</td>
  *              <td>
  *                  Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
  *                  <br>
@@ -219,9 +246,9 @@ function copy(destination, source, propName, settings) {
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>except</code></td>
- *              <td><code>Array | Object | RegExp | String | Symbol</code></td>
- *              <td><code>""</code> (empty string)</td>
+ *              <td>`except`</td>
+ *              <td>`Array | Object | RegExp | String | Symbol`</td>
+ *              <td>`""` (empty string)</td>
  *              <td>
  *                  Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
  *                  <br>
@@ -231,30 +258,24 @@ function copy(destination, source, propName, settings) {
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>filter</code></td>
- *              <td><code>Function | RegExp</code></td>
- *              <td><code>null</code></td>
+ *              <td>`filter`</td>
+ *              <td>`Function | RegExp`</td>
+ *              <td>`null`</td>
  *              <td>
  *                  Function or regular expression that can be used to select elements that should be copied.
  *                  <br>
  *                  If regular expression is passed, only those fields will be copied whose values are matching regular expression.
  *                  <br>
- *                  If specified function returns <code>true</code> for a field,
+ *                  If specified function returns `true` for a field,
  *                  the field will be copied in the target object.
  *                  <br>
- *                  An object having the following fields is passed into filter function:
- *                  <ul>
- *                  <li><code>field</code> - field name
- *                  <li><code>value</code> - field value
- *                  <li><code>target</code> - reference to the target object
- *                  <li><code>source</code> - reference to the source object
- *                  </ul>
+ *                  An object with contextual data is passed into function (see details below).
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>otherName</code></td>
- *              <td><code>Object</code></td>
- *              <td><code>null</code></td>
+ *              <td>`otherName`</td>
+ *              <td>`Object`</td>
+ *              <td>`null`</td>
  *              <td>
  *                  Defines "renaming table" for copied elements.
  *                  <br>
@@ -268,13 +289,13 @@ function copy(destination, source, propName, settings) {
  *                  <br>
  *                  will return the following object
  *                  <br>
- *                  <code>{prop: 1, method: "no-func"}</code>
+ *                  `{prop: 1, method: "no-func"}`
  *              </td>
  *          </tr>
  *          <tr>
- *              <td><code>change</code></td>
- *              <td><code>Function | Object</code></td>
- *              <td><code>null</code></td>
+ *              <td>`change`</td>
+ *              <td>`Function | Object`</td>
+ *              <td>`null`</td>
  *              <td>
  *                  Function or object that gives ability to change values that should be copied.
  *                  <br>
@@ -283,19 +304,21 @@ function copy(destination, source, propName, settings) {
  *                  If a function is passed then value returned by the function for a field will be copied into the target object 
  *                  instead of original field's value.
  *                  <br>
- *                  An object having the following fields is passed into change function:
- *                  <ul>
- *                  <li><code>field</code> - field name
- *                  <li><code>value</code> - field value
- *                  <li><code>target</code> - reference to the target object
- *                  <li><code>source</code> - reference to the source object
- *                  </ul>
+ *                  An object with contextual data is passed into function (see details below).
  *              </td>
  *          </tr>
  *      </table>
+ *      An object having the following fields is passed into `overwrite`, `filter` or `change` function:
+ *      <ul>
+ *          <li>`field` - field name
+ *          <li>`value` - field value from the source object
+ *          <li>`targetValue` - field value from the target object
+ *          <li>`target` - reference to the target object
+ *          <li>`source` - reference to the source object
+ *      </ul>
  *      Default values of settings can be redefined by {@link module:mixing.setSettings setSettings} method.
  *      <br>
- *      <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.
+ *      `copy`, `except` and `filter` settings can be used together.
  *      In such situation a field will be copied only when the field satisfies to all settings
  *      (i.e. belongs to copied elements, not in exceptions and conforms to filter).
  * @return {Object}
@@ -332,7 +355,7 @@ function mixing(destination, source, settings) {
                                     && typeof getOwnPropertySymbols === "function",
                 mixFromArray: Boolean( ("mixFromArray" in settings) ? settings.mixFromArray : settings.mixArray ),
                 mixToArray: Boolean( ("mixToArray" in settings) ? settings.mixToArray : settings.mixArray ),
-                overwrite: Boolean(settings.overwrite),
+                overwrite: settings.overwrite,
                 ownProperty: Boolean(settings.ownProperty),
                 recursive: Boolean(settings.recursive),
                 otherNameMap: ("otherName" in settings ? settings.otherName : null),
@@ -400,7 +423,7 @@ function mixing(destination, source, settings) {
 
 /**
  * Copy values of all of the own properties from one or more source objects to the target object
- * (similar to <code>Object.assign</code>).
+ * (similar to `Object.assign`).
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -411,9 +434,9 @@ function mixing(destination, source, settings) {
  *      The target object into which fields and functions will be copied.
  * @param {...Object} source
  *      An object whose contents will be copied.
- *      If a source is a falsy value (e.g. <code>null</code> or <code>undefined</code>), the source will be skipped.
+ *      If a source is a falsy value (e.g. `null` or `undefined`), the source will be skipped.
  * @return {Object}
- *      Modified <code>target</code> object.
+ *      Modified `target` object.
  */
 mixing.assign = function(destination) {
     return mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, ownProperty: true});
@@ -432,7 +455,7 @@ mixing.assign = function(destination) {
  * @param {Function | Object} change
  *      A function or an object that specifies the modification. See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Modified <code>source</code> object.
+ *      Modified `source` object.
  */
 mixing.change = function(source, change) {
     return mixing(source, source, {change: change, overwrite: true, oneSource: true});
@@ -467,7 +490,7 @@ mixing.copy = function(source, settings) {
  * @param {Object} [settings]
  *      Operation settings that will be applied to every copying. See {@link module:mixing mixing} for details.
  * @return {Array}
- *      Original <code>destinationList</code> with possibly modified object items.
+ *      Original `destinationList` with possibly modified object items.
  */
 mixing.mixToItems = function(destinationList, source, settings) {
     for (var nI = 0, nL = destinationList.length; nI < nL; nI++) {
@@ -477,7 +500,7 @@ mixing.mixToItems = function(destinationList, source, settings) {
 };
 
 /**
- * Make a copy of <code>this</code> object.
+ * Make a copy of `this` object.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -488,14 +511,14 @@ mixing.mixToItems = function(destinationList, source, settings) {
  * @param {Object} [settings]
  *      Operation settings. See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Newly created object containing contents of <code>this</code> object.
+ *      Newly created object containing contents of `this` object.
  */
 mixing.clone = function(settings) {
     return mixing({}, this, settings);
 };
 
 /**
- * Filter <code>this</code> object.
+ * Filter `this` object.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -507,14 +530,14 @@ mixing.clone = function(settings) {
  *      Filter function to select fields or object that represents operation settings including filter function.
  *      See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Newly created object containing fields of <code>this</code> object for which filter function returns true.
+ *      Newly created object containing fields of `this` object for which filter function returns true.
  */
 mixing.filter = function(filter) {
     return mixing({}, this, typeof filter === "function" ? {filter: filter} : filter);
 };
 
 /**
- * Copy and change values of fields of <code>this</code> object.
+ * Copy and change values of fields of `this` object.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -526,15 +549,15 @@ mixing.filter = function(filter) {
  *      Function to change values of copied fields or object that represents operation settings including change function.
  *      See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Newly created object containing fields of <code>this</code> object with changed values.
+ *      Newly created object containing fields of `this` object with changed values.
  */
 mixing.map = function(change) {
     return mixing({}, this, typeof change === "function" ? {change: change} : change);
 };
 
 /**
- * Copy/add all fields and functions from source objects into <code>this</code> object.
- * As a result <code>this</code> object may be modified.
+ * Copy/add all fields and functions from source objects into `this` object.
+ * As a result `this` object may be modified.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -547,14 +570,14 @@ mixing.map = function(change) {
  * @param {Object} [settings]
  *      Operation settings. See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Modified <code>this</code> object.
+ *      Modified `this` object.
  */
 mixing.mix = function(source, settings) {
     return mixing(this, source, settings);
 };
 
 /**
- * Change values of fields of <code>this</code> object.
+ * Change values of fields of `this` object.
  * <br>
  * This function is a "wrap" for the following code:
  * <code><pre>
@@ -565,7 +588,7 @@ mixing.mix = function(source, settings) {
  * @param {Function | Object} change
  *      A function or an object that specifies the modification. See {@link module:mixing mixing} for details.
  * @return {Object}
- *      Modified <code>this</code> object.
+ *      Modified `this` object.
  */
 mixing.update = function(change) {
     return mixing.change(this, change);
@@ -575,7 +598,7 @@ mixing.update = function(change) {
  * Return default settings that were set earlier.
  * 
  * @return {Object | undefined}
- *      Default settings that were set earlier or <code>undefined / null</code> if default settings were not set.
+ *      Default settings that were set earlier or `undefined / null` if default settings were not set.
  */
 mixing.getSettings = function() {
     return defaultSettings;
@@ -587,7 +610,7 @@ mixing.getSettings = function() {
  * @param {Object | undefined} [settings]
  *      Default settings that should be used for subsequent {@link module:mixing mixing} calls.
  *      Initial default values will be used for settings that are not specified in the passed object.
- *      Pass <code>undefined</code>, <code>null</code>, non-object or to call without parameter
+ *      Pass `undefined`, `null`, non-object or to call without parameter
  *      to reset default settings to initial values.
  * @alias module:mixing.setSettings
  */

@@ -89,7 +89,23 @@
         <article><h1>mixing <a name="start"></a></h1><p>Functions to mix, filter, change and copy/clone objects.
 Supports processing of symbol property keys that are introduced in ECMAScript 2015.</p>
 <p><code>mixing</code> is like an improved version of <code>Object.assign</code> and is compatible with ECMAScript 3+.</p>
-<p><a href="http://badge.fury.io/js/mixing"><img src="https://badge.fury.io/js/mixing.png" alt="NPM version"></a>
+<h3>Features</h3><ul>
+<li>Overwrite all or only some fields, or do not change existent fields (specified by <code>overwrite</code> setting).</li>
+<li>Mix recursively objects and arrays (use <code>recursive</code> and <code>mixArray</code> settings).</li>
+<li>Copy only own or all fields of a source object (<code>ownProperty</code> setting).</li>
+<li>Selectively copy fields from a source object (<code>copy</code>, <code>except</code> and <code>filter</code> settings).</li>
+<li>Rename fields of a source object that are added into the target object (<code>otherName</code> setting).</li>
+<li>Change values that are copied into the target object (<code>change</code> setting).</li>
+<li>Several helpful &quot;shortcut&quot; functions that can be used standalone or as methods.</li>
+</ul>
+<pre class="prettyprint source lang-js"><code>const obj = {a: 1, b: {c: &quot;&quot;, d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true};
+...
+mixing(
+    obj,
+    {a: 3, b: {c: 1, c2: &quot;abc&quot;}, e: [{f2: -3}, {f1: 7, f2: null}, {f1: 10}], x: &quot;way&quot;},
+    {overwrite: true, recursive: true, mixArray: true}
+);
+// obj is {a: 3, b: {c: 1, d: false, c2: &quot;abc&quot;}, e: [{f1: 1, f2: -3}, {f1: 7, f3: 9, f2: null}, {f1: 10}], x: &quot;way&quot;, z: true}</code></pre><p><a href="http://badge.fury.io/js/mixing"><img src="https://badge.fury.io/js/mixing.png" alt="NPM version"></a>
 <a href="https://travis-ci.org/gamtiq/mixing"><img src="https://travis-ci.org/gamtiq/mixing.png" alt="Build Status"></a>
 <a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt"></a></p>
 <ul>
@@ -111,6 +127,12 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2}, {a: &quot;a&quot;, b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2, z: 100}, {a: &quot;a&quot;, b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: &quot;a&quot;, b: {}, c: 3, d: 4, z: 100}
+// Overwrite only fields whose names are matching regular expression
+mixing(
+    {a: 1, b: 2, alfa: &quot;omega&quot;, delta: &quot;gamma&quot;, z: 100},
+    {a: &quot;a&quot;, b: {c: true}, d: 4, delta: 3, z: false},
+    {overwrite: /^[a-c]$/}
+);   // Returns {a: &quot;a&quot;, alfa: &quot;omega&quot;, b: {c: true}, d: 4, delta: &quot;gamma&quot;, z: 100}
 // Recursive mix
 mixing(
     {a: 1, b: {c: &quot;&quot;, d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true},
@@ -186,7 +208,8 @@ obj.update(function(data) {
     return typeof value === &quot;number&quot;
                 ? ++value
                 : value;
-});   // obj is {a: 2, b: 3, clone: ...}</code></pre><h2>API <a name="api"></a> <a href="#start">&#x2191;</a></h2><p>See <code>doc</code> directory for details.</p>
+});   // obj is {a: 2, b: 3, clone: ...}</code></pre><p>See additional examples in tests.</p>
+<h2>API <a name="api"></a> <a href="#start">&#x2191;</a></h2><p>See <code>doc</code> directory for details.</p>
 <h3>mixing(destination: Object, source: Array | Object, [settings: Object]);</h3><p>Copy/add all fields and functions from <code>source</code> object(s) into the <code>destination</code> object.
 As a result the <code>destination</code> object may be modified.</p>
 <p>Several settings are supported (see <code>doc/module-mixing.html</code> for details):</p>
@@ -194,7 +217,7 @@ As a result the <code>destination</code> object may be modified.</p>
 <li><code>copyFunc</code>: <code>Boolean</code> - Should functions be copied?</li>
 <li><code>funcToProto</code>: <code>Boolean</code> - Should functions be copied into <code>prototype</code> of the <code>destination</code> object's <code>constructor</code>?</li>
 <li><code>processSymbol</code>: <code>Boolean</code> - Should symbol property keys be processed?</li>
-<li><code>overwrite</code>: <code>Boolean</code> - Should a field/function be overwritten when it exists in the <code>destination</code> object?</li>
+<li><code>overwrite</code>: <code>Boolean | Function | RegExp</code> - Specifies whether a field/function should be overwritten when it exists in the target object.</li>
 <li><code>recursive</code>: <code>Boolean</code> - Should this function be called recursively when field's value of the <code>destination</code> and <code>source</code> object is an object?</li>
 <li><code>mixFromArray</code>: <code>Boolean</code> - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?</li>
 <li><code>mixToArray</code>: <code>Boolean</code> - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?</li>
@@ -312,7 +335,7 @@ obj.update({a: 2, b: &quot;&quot;});</code></pre><h3>.getSettings();</h3><p>Retu
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2020-02-19T23:56:16+03:00
+		on 2020-02-20T23:01:36+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

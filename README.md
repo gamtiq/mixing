@@ -5,6 +5,27 @@ Supports processing of symbol property keys that are introduced in ECMAScript 20
 
 `mixing` is like an improved version of `Object.assign` and is compatible with ECMAScript 3+.
 
+### Features
+
+* Overwrite all or only some fields, or do not change existent fields (specified by `overwrite` setting).
+* Mix recursively objects and arrays (use `recursive` and `mixArray` settings).
+* Copy only own or all fields of a source object (`ownProperty` setting).
+* Selectively copy fields from a source object (`copy`, `except` and `filter` settings).
+* Rename fields of a source object that are added into the target object (`otherName` setting).
+* Change values that are copied into the target object (`change` setting).
+* Several helpful "shortcut" functions that can be used standalone or as methods.
+
+```js
+const obj = {a: 1, b: {c: "", d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true};
+...
+mixing(
+    obj,
+    {a: 3, b: {c: 1, c2: "abc"}, e: [{f2: -3}, {f1: 7, f2: null}, {f1: 10}], x: "way"},
+    {overwrite: true, recursive: true, mixArray: true}
+);
+// obj is {a: 3, b: {c: 1, d: false, c2: "abc"}, e: [{f1: 1, f2: -3}, {f1: 7, f3: 9, f2: null}, {f1: 10}], x: "way", z: true}
+```
+
 [![NPM version](https://badge.fury.io/js/mixing.png)](http://badge.fury.io/js/mixing)
 [![Build Status](https://travis-ci.org/gamtiq/mixing.png)](https://travis-ci.org/gamtiq/mixing)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
@@ -67,6 +88,12 @@ var copy = mixing.copy(source);   // Make a shallow copy of source
 var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
+// Overwrite only fields whose names are matching regular expression
+mixing(
+    {a: 1, b: 2, alfa: "omega", delta: "gamma", z: 100},
+    {a: "a", b: {c: true}, d: 4, delta: 3, z: false},
+    {overwrite: /^[a-c]$/}
+);   // Returns {a: "a", alfa: "omega", b: {c: true}, d: 4, delta: "gamma", z: 100}
 // Recursive mix
 mixing(
     {a: 1, b: {c: "", d: false}, e: [{f1: 1, f2: 2}, {f1: 0, f3: 9}], z: true},
@@ -145,6 +172,8 @@ obj.update(function(data) {
 });   // obj is {a: 2, b: 3, clone: ...}
 ```
 
+See additional examples in tests.
+
 ## API <a name="api"></a> [&#x2191;](#start)
 
 See `doc` directory for details.
@@ -159,7 +188,7 @@ Several settings are supported (see `doc/module-mixing.html` for details):
 * `copyFunc`: `Boolean` - Should functions be copied?
 * `funcToProto`: `Boolean` - Should functions be copied into `prototype` of the `destination` object's `constructor`?
 * `processSymbol`: `Boolean` - Should symbol property keys be processed?
-* `overwrite`: `Boolean` - Should a field/function be overwritten when it exists in the `destination` object?
+* `overwrite`: `Boolean | Function | RegExp` - Specifies whether a field/function should be overwritten when it exists in the target object.
 * `recursive`: `Boolean` - Should this function be called recursively when field's value of the `destination` and `source` object is an object?
 * `mixFromArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied when the field's value is an array?
 * `mixToArray`: `Boolean` - Should in recursive mode contents of a field of the source object be copied into a field of the target object when the latest field's value is an array?

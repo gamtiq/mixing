@@ -63,13 +63,14 @@ module.exports = function(grunt) {
             }
         },
         
-        push: {
+        bump: {
             options: {
                 files: ["package.json", "bower.json", "component.json"],
                 commitMessage: "Release version %VERSION%",
                 commitFiles: ["-a"],
                 tagName: "%VERSION%",
-                tagMessage: "Version %VERSION%"
+                tagMessage: "Version %VERSION%",
+                pushTo: "origin"
             }
         }
         
@@ -81,7 +82,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-mocha-cli");
     grunt.loadNpmTasks("grunt-umd");
-    grunt.loadNpmTasks("grunt-push-release");
+    grunt.loadNpmTasks("grunt-bump");
     
     // Tasks
     grunt.registerTask("build", ["umd", "uglify"]);
@@ -90,7 +91,7 @@ module.exports = function(grunt) {
     grunt.registerTask("default", ["jshint", "mochacli"]);
     grunt.registerTask("all", ["default", "build", "doc"]);
     
-    grunt.registerTask("release", ["push"]);
-    grunt.registerTask("release-minor", ["push:minor"]);
-    grunt.registerTask("release-major", ["push:major"]);
+    grunt.registerTask("release", ["bump"]);
+    grunt.registerTask("release-minor", ["bump:minor"]);
+    grunt.registerTask("release-major", ["bump:major"]);
 };

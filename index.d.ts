@@ -28,11 +28,13 @@ declare namespace Mixing {
     export interface FieldData {
         field: string;
         value: any;
+        targetValue: any;
         target: Target;
         source: Source;
     }
 
     export type FilterFunc = (data: FieldData) => boolean;
+    export type OverwriteFunc = FilterFunc;
 
     export interface RenameMap {
         [field: string]: string;
@@ -44,7 +46,7 @@ declare namespace Mixing {
         copyFunc?: boolean;
         funcToProto?: boolean;
         processSymbol?: boolean;
-        overwrite?: boolean;
+        overwrite?: boolean | OverwriteFunc | RegExp;
         recursive?: boolean;
         mixFromArray?: boolean;
         mixToArray?: boolean;

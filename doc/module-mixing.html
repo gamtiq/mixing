@@ -261,9 +261,22 @@ As a result the target object may be modified.</p>
          </tr>
          <tr>
              <td><code>overwrite</code></td>
-             <td><code>Boolean</code></td>
+             <td><code>Boolean | Function | RegExp</code></td>
              <td><code>false</code></td>
-             <td>Should a field/function be overwritten when it exists in the target object?</td>
+             <td>
+                 Specifies whether a field/function should be overwritten when it exists in the target object.
+                 <br>
+                 If <code>true</code> then any existent field will be overwritten in the target object.
+                 <br>
+                 Function or regular expression can be used to select fields that should be overwritten.
+                 <br>
+                 If a regular expression is passed, only those fields will be overwritten
+                 whose names are matching the regular expression.
+                 <br>
+                 If specified function returns <code>true</code> for a field,
+                 the field will be overwritten in the target object.
+                 An object with contextual data is passed into the function (see details below).
+             </td>
          </tr>
          <tr>
              <td><code>recursive</code></td>
@@ -325,7 +338,7 @@ As a result the target object may be modified.</p>
          <tr>
              <td><code>copy</code></td>
              <td><code>Array | Object | RegExp | String | Symbol</code></td>
-             <td><code>""</code> (empty string)</td>
+             <td><code>&quot;&quot;</code> (empty string)</td>
              <td>
                  Array, object, regular expression or string/symbol that defines names of fields/functions that should be copied.
                  <br>
@@ -337,7 +350,7 @@ As a result the target object may be modified.</p>
          <tr>
              <td><code>except</code></td>
              <td><code>Array | Object | RegExp | String | Symbol</code></td>
-             <td><code>""</code> (empty string)</td>
+             <td><code>&quot;&quot;</code> (empty string)</td>
              <td>
                  Array, object, regular expression or string/symbol that defines names of fields/functions that shouldn't be copied.
                  <br>
@@ -358,13 +371,7 @@ As a result the target object may be modified.</p>
                  If specified function returns <code>true</code> for a field,
                  the field will be copied in the target object.
                  <br>
-                 An object having the following fields is passed into filter function:
-                 <ul>
-                 <li><code>field</code> - field name
-                 <li><code>value</code> - field value
-                 <li><code>target</code> - reference to the target object
-                 <li><code>source</code> - reference to the source object
-                 </ul>
+                 An object with contextual data is passed into function (see details below).
              </td>
          </tr>
          <tr>
@@ -384,7 +391,7 @@ As a result the target object may be modified.</p>
                  <br>
                  will return the following object
                  <br>
-                 <code>{prop: 1, method: "no-func"}</code>
+                 <code>{prop: 1, method: &quot;no-func&quot;}</code>
              </td>
          </tr>
          <tr>
@@ -399,16 +406,18 @@ As a result the target object may be modified.</p>
                  If a function is passed then value returned by the function for a field will be copied into the target object 
                  instead of original field's value.
                  <br>
-                 An object having the following fields is passed into change function:
-                 <ul>
-                 <li><code>field</code> - field name
-                 <li><code>value</code> - field value
-                 <li><code>target</code> - reference to the target object
-                 <li><code>source</code> - reference to the source object
-                 </ul>
+                 An object with contextual data is passed into function (see details below).
              </td>
          </tr>
      </table>
+     An object having the following fields is passed into <code>overwrite</code>, <code>filter</code> and <code>change</code> function:
+     <ul>
+         <li><code>field</code> - field name
+         <li><code>value</code> - field value from the source object
+         <li><code>targetValue</code> - field value from the target object
+         <li><code>target</code> - reference to the target object
+         <li><code>source</code> - reference to the source object
+     </ul>
      Default values of settings can be redefined by <a href="module-mixing.html#.setSettings">setSettings</a> method.
      <br>
      <code>copy</code>, <code>except</code> and <code>filter</code> settings can be used together.
@@ -458,7 +467,7 @@ As a result the target object may be modified.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-290">line 290</a>
+				 <a href="index.js.html#sunlight-1-line-313">line 313</a>
 			</li>
 		</ul>
 	</dd>
@@ -693,7 +702,7 @@ mixing(destination, Array.prototype.slice.call(arguments, 1), {overwrite: true, 
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-403">line 403</a>
+				 <a href="index.js.html#sunlight-1-line-426">line 426</a>
 			</li>
 		</ul>
 	</dd>
@@ -890,7 +899,7 @@ mixing(source, source, {change: change, overwrite: true, oneSource: true});
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-422">line 422</a>
+				 <a href="index.js.html#sunlight-1-line-445">line 445</a>
 			</li>
 		</ul>
 	</dd>
@@ -1070,7 +1079,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-478">line 478</a>
+				 <a href="index.js.html#sunlight-1-line-501">line 501</a>
 			</li>
 		</ul>
 	</dd>
@@ -1284,7 +1293,7 @@ var copy = mixing({}, source, settings);
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-441">line 441</a>
+				 <a href="index.js.html#sunlight-1-line-464">line 464</a>
 			</li>
 		</ul>
 	</dd>
@@ -1456,7 +1465,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-497">line 497</a>
+				 <a href="index.js.html#sunlight-1-line-520">line 520</a>
 			</li>
 		</ul>
 	</dd>
@@ -1568,7 +1577,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-565">line 565</a>
+				 <a href="index.js.html#sunlight-1-line-588">line 588</a>
 			</li>
 		</ul>
 	</dd>
@@ -1743,7 +1752,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-516">line 516</a>
+				 <a href="index.js.html#sunlight-1-line-539">line 539</a>
 			</li>
 		</ul>
 	</dd>
@@ -1959,7 +1968,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-537">line 537</a>
+				 <a href="index.js.html#sunlight-1-line-560">line 560</a>
 			</li>
 		</ul>
 	</dd>
@@ -2200,7 +2209,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-457">line 457</a>
+				 <a href="index.js.html#sunlight-1-line-480">line 480</a>
 			</li>
 		</ul>
 	</dd>
@@ -2380,7 +2389,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-579">line 579</a>
+				 <a href="index.js.html#sunlight-1-line-602">line 602</a>
 			</li>
 		</ul>
 	</dd>
@@ -2527,7 +2536,7 @@ It can be transferred to an object to use as a method.</p>
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-555">line 555</a>
+				 <a href="index.js.html#sunlight-1-line-578">line 578</a>
 			</li>
 		</ul>
 	</dd>
@@ -2634,7 +2643,7 @@ It can be transferred to an object to use as a method.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2020-02-19T23:56:16+03:00
+		on 2020-02-20T23:01:36+03:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

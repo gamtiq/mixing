@@ -369,6 +369,47 @@ describe("mixing", function() {
             });
         });
         
+        describe("mixing(destination, source, {overwrite: someFunction}])", function() {
+            it("should change field values in the destination object for which function returns true", function() {
+                var dest = {a: 1, b: str, c: 3, f: emptyFunc},
+                    settings = {
+                        overwrite: function overwrite(data) {
+                            var value = data.targetValue,
+                                sType = typeof value;
+                            return sType !== "function" && sType !== "string";
+                        }
+                    };
+                
+                expect( mixin({a: 1, b: "test", c: false, z: emptyFunc}, {a: "a", b: emptyObj, c: 3, d: 4, z: 100}, settings) )
+                    .eql({a: "a", b: "test", c: 3, d: 4, z: emptyFunc});
+                
+                expect( mixin(dest, {a: str, b: num, f: obj, m1: emptyFunc}, settings) )
+                    .eql({a: str, b: str, c: 3, f: emptyFunc, m1: emptyFunc});
+                
+                expect(dest)
+                    .have.property("a", str);
+                expect(dest)
+                    .have.property("b", str);
+                expect(dest)
+                    .have.property("c", 3);
+                expect(dest)
+                    .have.property("f", emptyFunc);
+                expect(dest)
+                    .have.property("m1", emptyFunc);
+            });
+        });
+        
+        describe("mixing(destination, source, {overwrite: /regular expression/}])", function() {
+            it("should change field values in the destination object whose field names are matching the regular expression", function() {
+                expect( mixin(
+                        {a: 1, b: 2, c: false, d: null, alfa: 0, e: 3, z: true, zetta: emptyFunc},
+                        {a: "a", b: emptyObj, c: 3, d: 4, alfa: 1, f: 4, z: false, zetta: 100},
+                        {overwrite: /^(?:[a-c]|z\w+)$/}
+                        ) )
+                    .eql({a: "a", b: emptyObj, c: 3, d: null, alfa: 0, e: 3, f: 4, z: true, zetta: 100});
+            });
+        });
+        
         describe("mixing(destination, source, {recursive: true}])", function() {
             var settings = {recursive: true};
             it("should copy fields recursively", function() {
@@ -559,6 +600,14 @@ describe("mixing", function() {
                     .eql({
                         a: [{b: 1, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 4, g: 5, h: 6}, {c: 0}],
                         b: {c: null, x: 5, d: 5} 
+                    });
+
+                expect( mixin({ a: [{b: 1, c: 2}, {d: 2}, {e: 3, f: 4, g: 5}], b: {c: null, d: 5} }, 
+                        { a: [{b: 11, d: 33}, {e: 1}, {f: 2, g: 4, h: 6}, {c: 0}], b: {x: 5, d: 2} }, 
+                        {overwrite: true, recursive: true, mixArray: true}) )
+                    .eql({
+                        a: [{b: 11, c: 2, d: 33}, {d: 2, e: 1}, {e: 3, f: 2, g: 4, h: 6}, {c: 0}],
+                        b: {c: null, x: 5, d: 2} 
                     });
             });
         });
