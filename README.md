@@ -87,7 +87,11 @@ define(["path/to/dist/mixing.js"], function(mixing) {
 var copy = mixing.copy(source);   // Make a shallow copy of source
 var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}
-mixing({a: 1, b: 2, z: 100}, {a: "a", b: {}, c: 3, d: 4}, {overwrite: true});   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
+mixing(
+    {a: 1, b: 2, z: 100},
+    {a: "a", b: {}, c: 3, d: 4},
+    {overwrite: true}
+);   // Returns {a: "a", b: {}, c: 3, d: 4, z: 100}
 // Overwrite only fields whose names are matching regular expression
 mixing(
     {a: 1, b: 2, alfa: "omega", delta: "gamma", z: 100},
@@ -101,11 +105,32 @@ mixing(
     {overwrite: true, recursive: true, mixArray: true}
 );   // Returns {a: 3, b: {c: 1, d: false, c2: "abc"}, e: [{f1: 1, f2: -3}, {f1: 7, f3: 9, f2: null}, {f1: 10}], x: "way", z: true}
 
-mixing({a: 1, b: 2, c: "", d: false}, {a: -1, b: null, c: true, d: "empty"}, {overwrite: true, except: {a: false, b: true, c: null, d: "yes"}});   // Returns {a: -1, b: 2, c: true, d: false}
-mixing({a: 1, b: 2}, {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"}, {except: /\d/});   // Returns {a: 1, b: 2, c: 3}
-mixing.copy({a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"}, {except: /a/, filter: /\W/});   // Returns {e: "-123"}
-mixing({x: 5}, {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4}, {copy: /a/, filter: /^\D/});   // Returns {x: 5, a3: "a3", delta: "plus"}
-mixing.assign({a: "start"}, {a: 1, b: 0}, {b: 2, c: 3, d: 4}, null, {e: "end"});   // Returns {a: 1, b: 2, c: 3, d: 4, e: "end"}
+mixing(
+    {a: 1, b: 2, c: "", d: false},
+    {a: -1, b: null, c: true, d: "empty"},
+    {overwrite: true, except: {a: false, b: true, c: null, d: "yes"}}
+);   // Returns {a: -1, b: 2, c: true, d: false}
+mixing(
+    {a: 1, b: 2},
+    {a3: 3, b: null, c4: "e5", d_97: new Date(), c: 3, "e-2": "empty"},
+    {except: /\d/}
+);   // Returns {a: 1, b: 2, c: 3}
+mixing.copy(
+    {a: 1, a2: 2, a3: "a3", b: 4, copy5: 5, d: "delta", e: "-123"},
+    {except: /a/, filter: /\W/}
+);   // Returns {e: "-123"}
+mixing(
+    {x: 5},
+    {a: 1, a2: "2man", a3: "a3", b: 4, copy5: 5, delta: "plus", e: 4},
+    {copy: /a/, filter: /^\D/}
+);   // Returns {x: 5, a3: "a3", delta: "plus"}
+mixing.assign(
+    {a: "start"},
+    {a: 1, b: 0},
+    {b: 2, c: 3, d: 4},
+    null,
+    {e: "end"}
+);   // Returns {a: 1, b: 2, c: 3, d: 4, e: "end"}
 
 // Change default settings
 mixing.setSettings({overwrite: true, oneSource: true});
@@ -132,12 +157,21 @@ mixing({},
            }
        });   // Returns {c: 3, e: 4, h: 49}
 
-mixing.change({a: 1, b: "abc", c: null, d: 4444, e: false},
-                {b: 22, c: 333, e: 55555});   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
+mixing.change(
+    {a: 1, b: "abc", c: null, d: 4444, e: false},
+    {b: 22, c: 333, e: 55555}
+);   // Returns {a: 1, b: 22, c: 333, d:4444, e: 55555}
 
 // Change items in array
-mixing.mixToItems([{a: 1, b: 2}, {b: 3}, 83, {}], {a: null, c: 9});   // Returns [{a: 1, b: 2, c: 9}, {a: null, b: 3, c: 9}, 83, {a: null, c: 9}]
-mixing.mixToItems([null, {a: 1, b: 2}, {b: 3, z: 0}, {}], {a: null, b: false}, {overwrite: true});   // Returns [null, {a: null, b: false}, {a: null, b: false, z: 0}, {a: null, b: false}]
+mixing.mixToItems(
+    [{a: 1, b: 2}, {b: 3}, 83, {}],
+    {a: null, c: 9}
+);   // Returns [{a: 1, b: 2, c: 9}, {a: null, b: 3, c: 9}, 83, {a: null, c: 9}]
+mixing.mixToItems(
+    [null, {a: 1, b: 2}, {b: 3, z: 0}, {}],
+    {a: null, b: false},
+    {overwrite: true}
+);   // Returns [null, {a: null, b: false}, {a: null, b: false, z: 0}, {a: null, b: false}]
 
 // Clone, filter, map, update
 var obj = {
