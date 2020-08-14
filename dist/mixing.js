@@ -308,7 +308,7 @@ function copy(destination, source, propName, settings) {
  *              </td>
  *          </tr>
  *      </table>
- *      An object having the following fields is passed into `overwrite`, `filter` or `change` function:
+ *      An object having the following fields is passed into `overwrite`, `filter` and `change` function:
  *      <ul>
  *          <li>`field` - field name
  *          <li>`value` - field value from the source object
