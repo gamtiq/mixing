@@ -60,15 +60,15 @@ declare namespace Mixing {
         change?: ChangeFunc | FieldMap;
     }
 
-    export declare function assign(destination: Target, ...source: Source[]): Target;
-    export declare function change(source: Source, change: ChangeFunc): Source;
-    export declare function copy(source: Source | Source[], settings?: Settings): object;
-    export declare function mixToItems(destinationList: Target[], source: Source | Source[], settings?: Settings): Target[];
-    export declare function clone(this: object, settings?: Settings): object;
-    export declare function filter(this: object, filter: FilterFunc | Settings): object;
-    export declare function map(this: object, change: ChangeFunc | Settings): object;
-    export declare function mix(this: object, source: Source | Source[], settings?: Settings): object;
-    export declare function update(this: object, change: ChangeFunc | FieldMap): object;
-    export declare function getSettings(): Settings | null | undefined;
-    export declare function setSettings(settings?: Settings | null): void;
+    export function assign(destination: Target, ...source: Source[]): Target;
+    export function change(source: Source, change: ChangeFunc): Source;
+    export function copy(source: Source | Source[], settings?: Settings): object;
+    export function mixToItems(destinationList: Target[], source: Source | Source[], settings?: Settings): Target[];
+    export function clone(this: object, settings?: Settings): object;
+    export function filter(this: object, filter: FilterFunc | Settings): object;
+    export function map(this: object, change: ChangeFunc | Settings): object;
+    export function mix(this: object, source: Source | Source[], settings?: Settings): object;
+    export function update(this: object, change: ChangeFunc | FieldMap): object;
+    export function getSettings(): Settings | null | undefined;
+    export function setSettings(settings?: Settings | null): void;
 }
