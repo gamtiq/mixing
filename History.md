@@ -1,3 +1,7 @@
+### 1.2.6 / 2020-08-14
+
+* fix `.d.ts` file
+
 ### 1.2.5 / 2020-02-20
 
 * a function or RegExp can be used as value for `overwrite` setting
