@@ -41,7 +41,7 @@ mixing(
 
     npm install mixing
 
-### [Ringo](http://ringojs.org)
+### [Ringo](https://ringojs.org)
 
     ringo-admin install gamtiq/mixing
 
@@ -84,6 +84,7 @@ define(["path/to/dist/mixing.js"], function(mixing) {
 ### Examples <a name="examples"></a> [&#x2191;](#start)
 
 ```js
+var source = {a: 1, b: 2};
 var copy = mixing.copy(source);   // Make a shallow copy of source
 var result = mixing({a: 1, b: 2}, {c: 3, d: 4});   // result is {a: 1, b: 2, c: 3, d: 4}
 mixing({a: 1, b: 2}, {a: "a", b: {}, c: 3, d: 4});   // Returns {a: 1, b: 2, c: 3, d: 4}

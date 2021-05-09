@@ -8,7 +8,7 @@
     "templates": {
         "outputSourceFiles": true,
         "systemName": "mixing",
-        "copyright": "Copyright (c) 2013-2020 Denis Sikuler",
+        "copyright": "Copyright (c) 2013-2021 Denis Sikuler",
         "theme": "spacelab",
         "linenums": true
     }

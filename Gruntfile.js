@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             dist: {
                 src: ["<%= src %>", "README.md"],
                 options: {
-                    destination: "doc",
+                    destination: "docs",
                     template: "node_modules/ink-docstrap/template",
                     configure: "jsdoc-conf.json"
                 }
@@ -94,4 +94,7 @@ module.exports = function(grunt) {
     grunt.registerTask("release", ["bump"]);
     grunt.registerTask("release-minor", ["bump:minor"]);
     grunt.registerTask("release-major", ["bump:major"]);
+    
+    // For Travis CI service
+    grunt.registerTask("travis", ["all"]);
 };
