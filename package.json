@@ -50,7 +50,8 @@
     "grunt-jsdoc": "2.4.1",
     "grunt-mocha-cli": "^7.0.0",
     "grunt-umd": "3.0.0",
-    "ink-docstrap": "1.3.2"
+    "ink-docstrap": "1.3.2",
+    "jsdoc-file": "^1.0.1"
   },
   "jspm": {
     "main": "dist/mixing.js",

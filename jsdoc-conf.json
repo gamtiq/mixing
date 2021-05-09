@@ -1,5 +1,19 @@
 {
-    "plugins": ["plugins/markdown"],
+    "source": {
+        "include": ["index.js"]
+    },
+
+    "opts": {
+        "destination": "docs",
+        "readme": "README.md",
+        "template": "node_modules/ink-docstrap/template",
+        "fileSet": ".nojekyll"
+    },
+
+    "plugins": [
+        "plugins/markdown",
+        "jsdoc-file"
+    ],
 
     "markdown": {
         "parser": "marked"
