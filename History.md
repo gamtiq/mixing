@@ -1,3 +1,8 @@
+### 1.3.0 / 2021-05-09
+
+* rename `doc` to `docs`
+* update dependencies to fix security alerts
+
 ### 1.2.6 / 2020-08-14
 
 * fix `.d.ts` file

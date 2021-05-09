@@ -1,6 +1,6 @@
 {
   "name": "mixing",
-  "version": "1.2.6",
+  "version": "1.3.0",
   "description": "Functions to mix, filter, change and copy/clone objects",
   "main": "index.js",
   "browser": "dist/mixing.min.js",
