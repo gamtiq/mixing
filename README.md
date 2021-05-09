@@ -211,7 +211,7 @@ See additional examples in tests.
 
 ## API <a name="api"></a> [&#x2191;](#start)
 
-See `doc` directory for details.
+See [`docs`](https://gamtiq.github.io/mixing/) for details.
 
 ### mixing(destination: Object, source: Array | Object, [settings: Object]);
 
