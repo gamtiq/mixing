@@ -434,10 +434,8 @@ describe("mixing", function() {
                 expect(dest)
                     .have.property("y")
                     .have.property("y1", num);
-                expect(dest)
-                    .have.property("y");
-                expect(dest)
-                    .have.deep.property("y.y2", couple);
+                expect(dest.y.y2)
+                    .equal(couple);
                 
                 checkDestination(addField({h: ""}, sym1, addField({u: 2}, sym2, "s2")),
                                     addField({h: "no", g: "yes"}, sym1, addField({k: 2}, sym2, "symbo", sym1, "s1")),
